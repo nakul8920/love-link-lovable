@@ -1,0 +1,224 @@
+import { motion } from "framer-motion";
+import FloatingHearts from "@/components/animations/FloatingHearts";
+import FloatingRoses from "@/components/animations/FloatingRoses";
+import SparkleOverlay from "@/components/animations/SparkleOverlay";
+import PhotoSlideshow from "@/components/animations/PhotoSlideshow";
+
+interface ValentineSuccessProps {
+  senderName: string;
+  receiverName: string;
+  message: string;
+  imageUrls: string[];
+}
+
+const ValentineSuccess = ({ senderName, receiverName, message, imageUrls }: ValentineSuccessProps) => {
+  return (
+    <div className="min-h-screen relative overflow-x-hidden bg-gradient-to-b from-pink-50 via-pink-100 to-pink-50 selection:bg-pink-300 selection:text-white">
+      {/* Background elements */}
+      <FloatingHearts />
+      <FloatingRoses />
+      <SparkleOverlay />
+
+      <main className="relative z-10 max-w-4xl mx-auto px-4 py-16 sm:py-24 flex flex-col items-center">
+        {/* Hero Section */}
+        <motion.div
+           initial={{ opacity: 0, y: 20 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ duration: 1 }}
+           className="flex flex-col items-center text-center mb-24 w-full"
+        >
+          <div className="bg-white/80 backdrop-blur-sm px-6 py-1.5 rounded-full mb-6 shadow-sm border border-pink-100">
+            <span className="text-pink-600 text-xs sm:text-sm font-bold tracking-[0.2em] uppercase">
+              Happy Valentine's Day
+            </span>
+          </div>
+          
+          <h1 className="text-5xl sm:text-7xl md:text-8xl font-display font-bold text-pink-900 mb-6 drop-shadow-sm px-4">
+            {receiverName}
+          </h1>
+          
+          <p className="text-sm sm:text-base md:text-lg text-pink-800/90 max-w-lg font-medium px-4">
+             Every word on this page is just for you, straight from the heart of <span className="font-bold text-pink-900">{senderName}</span>.
+          </p>
+        </motion.div>
+
+        {/* Letter Section */}
+        <motion.div
+           initial={{ opacity: 0, y: 40 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           viewport={{ once: true, margin: "-100px" }}
+           transition={{ duration: 1 }}
+           className="w-full mb-24 flex flex-col items-center px-2 sm:px-4"
+        >
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-display text-pink-800/90 mb-8 text-center drop-shadow-sm">
+            A Love Letter For You
+          </h2>
+          
+          <div className="w-full max-w-2xl bg-white/70 backdrop-blur-md p-8 sm:p-12 md:p-16 rounded-[2rem] shadow-xl shadow-pink-200/50 border border-white relative overflow-hidden">
+             {/* Decorative corner accents */}
+             <div className="absolute top-0 left-0 w-24 h-24 bg-gradient-to-br from-pink-200 to-transparent opacity-40 rounded-br-full pointer-events-none" />
+             <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-pink-200 to-transparent opacity-40 rounded-tl-full pointer-events-none" />
+             
+             <div className="relative z-10 flex flex-col">
+               <p className="text-pink-900/60 font-medium mb-6 text-lg">My Dearest,</p>
+               <p className="text-pink-900 leading-relaxed whitespace-pre-wrap font-body text-base sm:text-lg md:text-xl">
+                 {message}
+               </p>
+               <p className="text-right text-pink-500/80 text-xs sm:text-sm font-bold tracking-widest uppercase mt-12">
+                 WITH ALL MY LOVE.
+               </p>
+             </div>
+          </div>
+        </motion.div>
+
+        {/* Why I Love You */}
+        <motion.div
+           initial={{ opacity: 0, y: 40 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           viewport={{ once: true, margin: "-100px" }}
+           transition={{ duration: 1 }}
+           className="w-full max-w-3xl mb-24 flex flex-col items-center px-4"
+        >
+          <h2 className="text-3xl sm:text-4xl font-display text-pink-800 mb-12 text-center drop-shadow-sm">
+             Why I <span className="italic font-light">Love</span> You
+          </h2>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 w-full">
+            <div className="bg-white/80 backdrop-blur-md p-8 sm:p-10 rounded-[2rem] shadow-lg shadow-pink-200/40 border border-white relative text-center flex flex-col items-center justify-center transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-pink-200/60 group">
+               <div className="absolute -top-5 w-10 h-10 bg-pink-400 text-white rounded-full flex items-center justify-center text-base font-bold shadow-lg shadow-pink-300 group-hover:scale-110 transition-transform">1</div>
+               <span className="text-3xl mb-4 opacity-80 group-hover:scale-110 transition-transform">🤍</span>
+               <p className="text-pink-900 font-medium text-lg leading-relaxed">You are my forever Valentine, today and always! 💖</p>
+            </div>
+            
+            <div className="bg-white/80 backdrop-blur-md p-8 sm:p-10 rounded-[2rem] shadow-lg shadow-pink-200/40 border border-white relative text-center flex flex-col items-center justify-center transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-pink-200/60 group sm:translate-y-8">
+               <div className="absolute -top-5 w-10 h-10 bg-pink-400 text-white rounded-full flex items-center justify-center text-base font-bold shadow-lg shadow-pink-300 group-hover:scale-110 transition-transform">2</div>
+               <span className="text-3xl mb-4 opacity-80 group-hover:scale-110 transition-transform">🤍</span>
+               <p className="text-pink-900 font-medium text-lg leading-relaxed">With you, every day feels like Valentine's Day.</p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Our Memories Section */}
+        {imageUrls && imageUrls.length > 0 && (
+          <motion.div
+             initial={{ opacity: 0, y: 40 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true, margin: "-100px" }}
+             transition={{ duration: 1 }}
+             className="w-full mb-32 flex flex-col items-center px-4"
+          >
+            <h2 className="text-3xl sm:text-4xl font-display text-pink-800 mb-10 text-center drop-shadow-sm">
+              Our Journey Visualized
+            </h2>
+            <div className="w-full max-w-md bg-white/60 p-4 sm:p-5 rounded-[2.5rem] shadow-xl shadow-pink-200/50 backdrop-blur-md border border-white/60 transform rotate-1 hover:rotate-0 transition-transform duration-500">
+               <div className="overflow-hidden rounded-3xl">
+                 <PhotoSlideshow images={imageUrls} />
+               </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Our Journey Timeline */}
+        <motion.div
+           initial={{ opacity: 0, y: 40 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           viewport={{ once: true, margin: "-100px" }}
+           transition={{ duration: 1 }}
+           className="w-full max-w-3xl mb-32 flex flex-col items-center relative px-4"
+        >
+          <div className="relative mb-20 text-center w-full">
+            <h2 className="text-3xl sm:text-4xl font-display text-pink-800 relative z-10 drop-shadow-sm">Our Journey</h2>
+            <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-6xl sm:text-8xl md:text-9xl font-display text-pink-200/40 whitespace-nowrap z-0 pointer-events-none select-none">Love Story</span>
+          </div>
+
+          <div className="relative w-full">
+            {/* Vertical Line */}
+            <div className="absolute left-[36px] sm:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-pink-200 via-pink-300 to-pink-400 sm:-translate-x-1/2 rounded-full" />
+
+            {/* Timeline Item 1 */}
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center w-full mb-16 pl-24 sm:pl-0 group">
+               <div className="hidden sm:flex flex-1 justify-end pr-12">
+                 <div className="bg-white/90 backdrop-blur-md p-6 rounded-2xl rounded-tr-none shadow-md shadow-pink-200/40 border border-white text-right w-full max-w-sm group-hover:-translate-y-1 transition-transform">
+                   <p className="text-pink-900/80 text-sm md:text-base leading-relaxed">Sometimes I look at "HI" and "I love you", my heart quickly chose you... and it has never stopped since.</p>
+                 </div>
+               </div>
+               
+               <div className="absolute left-[16px] sm:left-1/2 sm:-translate-x-1/2 w-12 h-12 bg-pink-400 rounded-full border-4 border-pink-100 flex items-center justify-center shadow-lg shadow-pink-300/50 z-10 group-hover:scale-110 transition-transform duration-300">
+                 <span className="text-white text-sm">🤍</span>
+               </div>
+               
+               <div className="flex-1 sm:pl-12 w-full">
+                 <h3 className="text-pink-700 font-display text-xl sm:text-2xl mb-3">The Beginning</h3>
+                 <div className="sm:hidden bg-white/90 backdrop-blur-md p-5 rounded-2xl rounded-tl-none shadow-md shadow-pink-200/40 border border-white text-left w-full group-hover:-translate-y-1 transition-transform">
+                   <p className="text-pink-900/80 text-sm leading-relaxed">Sometimes I look at "HI" and "I love you", my heart quickly chose you... and it has never stopped since.</p>
+                 </div>
+               </div>
+            </div>
+
+            {/* Timeline Item 2 */}
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center w-full mb-16 pl-24 sm:pl-0 group">
+               <div className="hidden sm:flex flex-1 justify-end pr-12">
+                 <h3 className="text-pink-700 font-display text-xl sm:text-2xl mb-3 text-right">Magic Moments</h3>
+               </div>
+               
+               <div className="absolute left-[16px] sm:left-1/2 sm:-translate-x-1/2 w-12 h-12 bg-pink-400 rounded-full border-4 border-pink-100 flex items-center justify-center shadow-lg shadow-pink-300/50 z-10 group-hover:scale-110 transition-transform duration-300">
+                 <span className="text-white text-sm">🤍</span>
+               </div>
+               
+               <div className="flex-1 sm:pl-12 w-full">
+                 <h3 className="sm:hidden text-pink-700 font-display text-xl mb-3">Magic Moments</h3>
+                 <div className="bg-white/90 backdrop-blur-md p-6 rounded-2xl sm:rounded-tl-none shadow-md shadow-pink-200/40 border border-white text-left w-full max-w-sm group-hover:-translate-y-1 transition-transform">
+                   <p className="text-pink-900/80 text-sm md:text-base leading-relaxed">Late night talks, endless goofy laughs, staying up all night... all weaving the most beautiful story of us.</p>
+                 </div>
+               </div>
+            </div>
+
+            {/* Timeline Item 3 */}
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center w-full pl-24 sm:pl-0 group">
+               <div className="hidden sm:flex flex-1 justify-end pr-12">
+                 <div className="bg-white/90 backdrop-blur-md p-6 rounded-2xl rounded-br-none shadow-md shadow-pink-200/40 border border-white text-right w-full max-w-sm group-hover:-translate-y-1 transition-transform">
+                   <p className="text-pink-900/80 text-sm md:text-base leading-relaxed">Today is just one page, but my heart wants to write a whole library of "us" with you.</p>
+                 </div>
+               </div>
+               
+               <div className="absolute left-[16px] sm:left-1/2 sm:-translate-x-1/2 w-12 h-12 bg-pink-500 rounded-full border-4 border-pink-100 flex items-center justify-center shadow-xl shadow-pink-400/50 z-10 group-hover:scale-125 transition-transform duration-300">
+                 <span className="text-white text-sm">❤️</span>
+               </div>
+               
+               <div className="flex-1 sm:pl-12 w-full">
+                 <h3 className="text-pink-700 font-display text-xl sm:text-2xl mb-3">Forever</h3>
+                 <div className="sm:hidden bg-white/90 backdrop-blur-md p-5 rounded-2xl rounded-bl-none shadow-md shadow-pink-200/40 border border-white text-left w-full group-hover:-translate-y-1 transition-transform">
+                   <p className="text-pink-900/80 text-sm leading-relaxed">Today is just one page, but my heart wants to write a whole library of "us" with you.</p>
+                 </div>
+               </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Footer */}
+        <motion.div
+           initial={{ opacity: 0, scale: 0.9 }}
+           whileInView={{ opacity: 1, scale: 1 }}
+           viewport={{ once: true, margin: "-50px" }}
+           transition={{ duration: 0.8 }}
+           className="w-full flex flex-col items-center text-center mt-8 mb-12 px-4"
+        >
+          <h2 className="text-5xl sm:text-6xl md:text-7xl font-display text-pink-900 mb-6 drop-shadow-sm">I Love You,</h2>
+          <p className="text-sm sm:text-base md:text-lg text-pink-800/90 max-w-md mx-auto mb-10 font-medium leading-relaxed">
+            Happy Valentine's Day, my love! You complete me in every way 💖✨
+          </p>
+          
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-white/90 backdrop-blur-sm hover:bg-white text-pink-600 font-bold py-4 px-10 rounded-full shadow-xl shadow-pink-200/60 border border-pink-100 transition-colors flex items-center gap-3 text-lg"
+          >
+            <span className="animate-pulse">❤️</span> Forever Yours
+          </motion.button>
+        </motion.div>
+      </main>
+    </div>
+  );
+};
+
+export default ValentineSuccess;

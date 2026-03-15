@@ -7,6 +7,7 @@ import PhotoSlideshow from "@/components/animations/PhotoSlideshow";
 import HeartDivider from "@/components/animations/HeartDivider";
 import FloatingRoses from "@/components/animations/FloatingRoses";
 import SparkleOverlay from "@/components/animations/SparkleOverlay";
+import ValentineSuccess from "./ValentineSuccess";
 
 interface AnimatedTemplateProps {
   type: TemplateType;
@@ -18,6 +19,8 @@ interface AnimatedTemplateProps {
 
 const AnimatedTemplate = ({ type, senderName, receiverName, message, imageUrls }: AnimatedTemplateProps) => {
   const [showContent, setShowContent] = useState(false);
+  const [isAccepted, setIsAccepted] = useState(false);
+  const [noIndex, setNoIndex] = useState(1); // 0 = left, 1 = right
   const isValentine = type === "valentine";
 
   useEffect(() => {
@@ -26,8 +29,18 @@ const AnimatedTemplate = ({ type, senderName, receiverName, message, imageUrls }
   }, []);
 
   if (isValentine) {
+    if (isAccepted) {
+      return (
+        <ValentineSuccess
+          senderName={senderName}
+          receiverName={receiverName}
+          message={message}
+          imageUrls={imageUrls}
+        />
+      );
+    }
+
     // Simple playful \"No\" button that keeps dodging clicks
-    const [noIndex, setNoIndex] = useState(1); // 0 = left, 1 = right
 
     const swapNoPosition = () => {
       setNoIndex((prev) => (prev === 0 ? 1 : 0));
@@ -117,6 +130,7 @@ const AnimatedTemplate = ({ type, senderName, receiverName, message, imageUrls }
                             swapNoPosition();
                             return;
                           }
+                          setIsAccepted(true);
                         }}
                         className={
                           isNo
