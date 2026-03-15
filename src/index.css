@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 270 20% 98%;
+    --foreground: 270 40% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 270 40% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 270 40% 10%;
+
+    --primary: 340 82% 52%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 270 30% 94%;
+    --secondary-foreground: 270 40% 20%;
+
+    --muted: 270 15% 93%;
+    --muted-foreground: 270 10% 45%;
+
+    --accent: 32 95% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 270 15% 90%;
+    --input: 270 15% 90%;
+    --ring: 340 82% 52%;
+
+    --radius: 0.75rem;
+
+    --gradient-primary: linear-gradient(135deg, hsl(340, 82%, 52%), hsl(280, 70%, 55%));
+    --gradient-warm: linear-gradient(135deg, hsl(340, 82%, 52%), hsl(32, 95%, 55%));
+    --gradient-romantic: linear-gradient(135deg, hsl(340, 70%, 60%), hsl(310, 60%, 65%));
+    --gradient-birthday: linear-gradient(135deg, hsl(32, 95%, 55%), hsl(50, 90%, 55%));
+    --gradient-anniversary: linear-gradient(135deg, hsl(280, 70%, 55%), hsl(220, 80%, 60%));
+    --gradient-surprise: linear-gradient(135deg, hsl(170, 70%, 45%), hsl(200, 80%, 55%));
+    --gradient-hero: linear-gradient(160deg, hsl(340, 82%, 96%), hsl(270, 30%, 96%), hsl(32, 60%, 96%));
+
+    --shadow-glow: 0 0 40px -10px hsl(340 82% 52% / 0.3);
+    --shadow-card: 0 4px 24px -4px hsl(270 30% 50% / 0.08);
+    --shadow-card-hover: 0 8px 40px -8px hsl(270 30% 50% / 0.15);
+
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'DM Sans', sans-serif;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 270 30% 6%;
+    --foreground: 270 10% 95%;
+    --card: 270 25% 10%;
+    --card-foreground: 270 10% 95%;
+    --popover: 270 25% 10%;
+    --popover-foreground: 270 10% 95%;
+    --primary: 340 82% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 270 20% 15%;
+    --secondary-foreground: 270 10% 90%;
+    --muted: 270 15% 15%;
+    --muted-foreground: 270 10% 60%;
+    --accent: 32 90% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 270 15% 18%;
+    --input: 270 15% 18%;
+    --ring: 340 82% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+}
+
+@layer utilities {
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+  .gradient-warm {
+    background: var(--gradient-warm);
+  }
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+  .gradient-romantic {
+    background: var(--gradient-romantic);
+  }
+  .gradient-birthday {
+    background: var(--gradient-birthday);
+  }
+  .gradient-anniversary {
+    background: var(--gradient-anniversary);
+  }
+  .gradient-surprise {
+    background: var(--gradient-surprise);
+  }
+  .text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  .shadow-card-hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+}
