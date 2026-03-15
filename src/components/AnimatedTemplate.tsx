@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { TemplateType } from "@/types/wish";
 import FloatingHearts from "@/components/animations/FloatingHearts";
 import LoveLetterReveal from "@/components/animations/LoveLetterReveal";
@@ -18,11 +18,140 @@ interface AnimatedTemplateProps {
 
 const AnimatedTemplate = ({ type, senderName, receiverName, message, imageUrls }: AnimatedTemplateProps) => {
   const [showContent, setShowContent] = useState(false);
+  const isValentine = type === "valentine";
 
   useEffect(() => {
     const timer = setTimeout(() => setShowContent(true), 800);
     return () => clearTimeout(timer);
   }, []);
+
+  if (isValentine) {
+    // Simple playful \"No\" button that keeps dodging clicks
+    const [noIndex, setNoIndex] = useState(1); // 0 = left, 1 = right
+
+    const swapNoPosition = () => {
+      setNoIndex((prev) => (prev === 0 ? 1 : 0));
+    };
+
+    const buttons = [
+      {
+        key: "yes",
+        label: "Yes! 💖",
+        variant: "yes" as const,
+      },
+      {
+        key: "no",
+        label: "No 💔",
+        variant: "no" as const,
+      },
+    ];
+
+    const orderedButtons = noIndex === 0 ? [buttons[1], buttons[0]] : buttons;
+
+    return (
+      <div className="min-h-screen relative overflow-hidden bg-gradient-to-b from-pink-100 via-pink-50 to-pink-100">
+        <FloatingHearts />
+        <SparkleOverlay />
+
+        <AnimatePresence>
+          {showContent && (
+            <motion.main
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="relative z-10 min-h-screen flex items-center justify-center px-4"
+            >
+              <div className="w-full max-w-xl text-center">
+                <motion.h1
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-3xl sm:text-4xl md:text-5xl font-display font-semibold text-pink-700 mb-3"
+                >
+                  Will you be my valentine?
+                </motion.h1>
+
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.35, type: "spring" }}
+                  className="flex justify-center mb-5"
+                >
+                  <span className="text-3xl">❤️</span>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.45, type: "spring", stiffness: 120, damping: 14 }}
+                  className="mx-auto mb-6"
+                >
+                  <div className="relative inline-flex items-center justify-center rounded-full p-[4px] bg-gradient-to-br from-pink-300 to-pink-500 shadow-lg shadow-pink-300/60">
+                    <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden bg-white">
+                      <img
+                        src={imageUrls[0] || "https://love-link-creator.vercel.app/gif/200w.gif"}
+                        alt="valentine"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 }}
+                  className="flex items-center justify-center gap-3 sm:gap-4 mb-6"
+                >
+                  {orderedButtons.map((btn) => {
+                    const isNo = btn.variant === "no";
+                    return (
+                      <motion.button
+                        key={btn.key}
+                        whileHover={isNo ? { x: noIndex === 0 ? 30 : -30 } : { scale: 1.03 }}
+                        whileTap={isNo ? { x: noIndex === 0 ? 50 : -50 } : { scale: 0.97 }}
+                        onMouseEnter={isNo ? swapNoPosition : undefined}
+                        onClick={(e) => {
+                          if (isNo) {
+                            e.preventDefault();
+                            swapNoPosition();
+                            return;
+                          }
+                        }}
+                        className={
+                          isNo
+                            ? "px-6 sm:px-8 py-2.5 rounded-full text-sm sm:text-base font-semibold bg-pink-500 text-white shadow-md shadow-pink-400/60 border border-pink-400/70 cursor-pointer select-none transition-colors"
+                            : "px-6 sm:px-8 py-2.5 rounded-full text-sm sm:text-base font-semibold bg-sky-500 hover:bg-sky-600 text-white shadow-md shadow-sky-400/60 transition-all"
+                        }
+                      >
+                        {btn.label}
+                      </motion.button>
+                    );
+                  })}
+                </motion.div>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9 }}
+                  className="text-sm text-pink-700/80"
+                >
+                  From{" "}
+                  <span className="font-semibold">
+                    {senderName || "someone special"}
+                  </span>{" "}
+                  to{" "}
+                  <span className="font-semibold">
+                    {receiverName || "you"}
+                  </span>
+                </motion.p>
+              </div>
+            </motion.main>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-b from-[hsl(340,70%,15%)] via-[hsl(340,60%,20%)] to-[hsl(340,50%,10%)]">
