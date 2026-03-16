@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import React from "react";
 import FloatingHearts from "@/components/animations/FloatingHearts";
 import FloatingRoses from "@/components/animations/FloatingRoses";
 import SparkleOverlay from "@/components/animations/SparkleOverlay";
@@ -12,6 +13,8 @@ interface ValentineSuccessProps {
 }
 
 const ValentineSuccess = ({ senderName, receiverName, message, imageUrls }: ValentineSuccessProps) => {
+  const [isEnvelopeOpened, setIsEnvelopeOpened] = React.useState(false);
+
   return (
     <div className="min-h-screen relative overflow-x-hidden bg-gradient-to-b from-pink-50 via-pink-100 to-pink-50 selection:bg-pink-300 selection:text-white">
       {/* Background elements */}
@@ -42,33 +45,82 @@ const ValentineSuccess = ({ senderName, receiverName, message, imageUrls }: Vale
           </p>
         </motion.div>
 
-        {/* Letter Section */}
+        {/* Letter Section with Envelope Reveal */}
         <motion.div
-           initial={{ opacity: 0, y: 40 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           viewport={{ once: true, margin: "-100px" }}
-           transition={{ duration: 1 }}
-           className="w-full mb-24 flex flex-col items-center px-2 sm:px-4"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 1 }}
+          className="w-full mb-24 flex flex-col items-center px-2 sm:px-4"
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-display text-pink-800/90 mb-8 text-center drop-shadow-sm">
             A Love Letter For You
           </h2>
-          
-          <div className="w-full max-w-2xl bg-white/70 backdrop-blur-md p-8 sm:p-12 md:p-16 rounded-[2rem] shadow-xl shadow-pink-200/50 border border-white relative overflow-hidden">
-             {/* Decorative corner accents */}
-             <div className="absolute top-0 left-0 w-24 h-24 bg-gradient-to-br from-pink-200 to-transparent opacity-40 rounded-br-full pointer-events-none" />
-             <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-pink-200 to-transparent opacity-40 rounded-tl-full pointer-events-none" />
-             
-             <div className="relative z-10 flex flex-col">
-               <p className="text-pink-900/60 font-medium mb-6 text-lg">My Dearest,</p>
-               <p className="text-pink-900 leading-relaxed whitespace-pre-wrap font-body text-base sm:text-lg md:text-xl">
-                 {message}
-               </p>
-               <p className="text-right text-pink-500/80 text-xs sm:text-sm font-bold tracking-widest uppercase mt-12">
-                 WITH ALL MY LOVE.
-               </p>
-             </div>
-          </div>
+
+          {/* Closed envelope */}
+          {!isEnvelopeOpened && (
+            <motion.button
+              aria-label="Open the love letter"
+              onClick={() => setIsEnvelopeOpened(true)}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              initial={{ opacity: 0, y: 12, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -12, scale: 0.96 }}
+              transition={{ duration: 0.5, type: "spring", stiffness: 160, damping: 18 }}
+              className="relative w-full max-w-md aspect-[4/3] rounded-[1.75rem] shadow-xl shadow-pink-200/60 border border-white/70 overflow-hidden bg-gradient-to-br from-pink-200 via-pink-100 to-rose-200 flex items-center justify-center"
+            >
+              {/* Envelope body */}
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-100 via-rose-100 to-pink-200" />
+              {/* Envelope flap */}
+              <motion.div
+                initial={false}
+                animate={{ rotateX: 0, y: 0 }}
+                transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
+                className="absolute top-0 left-0 right-0 h-1/2 origin-top bg-gradient-to-b from-pink-300 to-pink-200 shadow-md"
+                style={{ clipPath: "polygon(0 0, 100% 0, 50% 100%)" }}
+              />
+              {/* Inner letter hint */}
+              <div className="absolute inset-x-6 top-8 h-16 rounded-2xl bg-white/90 shadow-md shadow-pink-200/60 border border-pink-100 flex flex-col items-center justify-center">
+                <span className="text-xs sm:text-sm font-semibold tracking-[0.25em] uppercase text-pink-500">
+                  Open this
+                </span>
+                <span className="mt-1 text-[10px] sm:text-xs text-pink-400">
+                  A special message is waiting inside
+                </span>
+              </div>
+              {/* Envelope edges */}
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute inset-4 border border-white/70 rounded-[1.5rem]" />
+              </div>
+            </motion.button>
+          )}
+
+          {/* Revealed letter */}
+          {isEnvelopeOpened && (
+            <motion.div
+              initial={{ opacity: 0, y: 16, scale: 0.98 }}
+              animate={{ opacity: 1, y: -4, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.1, type: "spring", stiffness: 140, damping: 18 }}
+              className="w-full max-w-2xl mt-4"
+            >
+              <div className="bg-white/75 backdrop-blur-md p-6 sm:p-10 md:p-12 rounded-[2rem] shadow-xl shadow-pink-200/50 border border-white relative">
+                {/* Decorative corner accents */}
+                <div className="absolute top-0 left-0 w-24 h-24 bg-gradient-to-br from-pink-200 to-transparent opacity-40 rounded-br-full pointer-events-none" />
+                <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-pink-200 to-transparent opacity-40 rounded-tl-full pointer-events-none" />
+
+                <div className="relative z-10 flex flex-col">
+                  <p className="text-pink-900/60 font-medium mb-6 text-lg">My Dearest,</p>
+                  <p className="text-pink-900 leading-relaxed whitespace-pre-wrap font-body text-base sm:text-lg md:text-xl">
+                    {message}
+                  </p>
+                  <p className="text-right text-pink-500/80 text-xs sm:text-sm font-bold tracking-widest uppercase mt-12">
+                    WITH ALL MY LOVE.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
         </motion.div>
 
         {/* Why I Love You */}
