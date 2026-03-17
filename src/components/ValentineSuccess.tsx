@@ -50,6 +50,58 @@ const ValentineSuccess = ({ senderName, receiverName, message, imageUrls }: Vale
     []
   );
 
+  React.useEffect(() => {
+    const title = receiverName?.trim()
+      ? `${receiverName} — A Valentine from ${senderName || "someone special"}`
+      : "A Valentine for You";
+
+    const baseDescription =
+      message?.trim()
+        ? message.trim().replace(/\s+/g, " ")
+        : `A sweet valentine page from ${senderName || "someone special"}.`;
+
+    const description = baseDescription.length > 160 ? `${baseDescription.slice(0, 157)}...` : baseDescription;
+
+    document.title = title;
+
+    const upsertMeta = (selector: string, attrs: Record<string, string>) => {
+      const head = document.head;
+      let el = head.querySelector(selector) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement("meta");
+        Object.entries(attrs).forEach(([k, v]) => el!.setAttribute(k, v));
+        head.appendChild(el);
+      }
+      return el;
+    };
+
+    // Standard meta
+    const desc = document.head.querySelector('meta[name="description"]') as HTMLMetaElement | null;
+    if (desc) desc.setAttribute("content", description);
+    else upsertMeta('meta[name="description"]', { name: "description", content: description });
+
+    const author = document.head.querySelector('meta[name="author"]') as HTMLMetaElement | null;
+    if (author) author.setAttribute("content", senderName || "Wishlink Express");
+    else upsertMeta('meta[name="author"]', { name: "author", content: senderName || "Wishlink Express" });
+
+    // OpenGraph + Twitter
+    const ogTitle = document.head.querySelector('meta[property="og:title"]') as HTMLMetaElement | null;
+    if (ogTitle) ogTitle.setAttribute("content", title);
+    else upsertMeta('meta[property="og:title"]', { property: "og:title", content: title });
+
+    const ogDesc = document.head.querySelector('meta[property="og:description"]') as HTMLMetaElement | null;
+    if (ogDesc) ogDesc.setAttribute("content", description);
+    else upsertMeta('meta[property="og:description"]', { property: "og:description", content: description });
+
+    const twTitle = document.head.querySelector('meta[name="twitter:title"]') as HTMLMetaElement | null;
+    if (twTitle) twTitle.setAttribute("content", title);
+    else upsertMeta('meta[name="twitter:title"]', { name: "twitter:title", content: title });
+
+    const twDesc = document.head.querySelector('meta[name="twitter:description"]') as HTMLMetaElement | null;
+    if (twDesc) twDesc.setAttribute("content", description);
+    else upsertMeta('meta[name="twitter:description"]', { name: "twitter:description", content: description });
+  }, [receiverName, senderName, message]);
+
   return (
     <div className="min-h-screen relative overflow-x-hidden bg-gradient-to-b from-pink-50 via-pink-100 to-pink-50 selection:bg-pink-300 selection:text-white">
       {/* Background elements */}
