@@ -14,6 +14,41 @@ interface ValentineSuccessProps {
 
 const ValentineSuccess = ({ senderName, receiverName, message, imageUrls }: ValentineSuccessProps) => {
   const [isEnvelopeOpened, setIsEnvelopeOpened] = React.useState(false);
+  const [lightboxIndex, setLightboxIndex] = React.useState<number | null>(null);
+
+  const isLightboxOpen = lightboxIndex !== null && imageUrls.length > 0;
+  const safeIndex =
+    !isLightboxOpen || lightboxIndex === null
+      ? 0
+      : ((lightboxIndex % imageUrls.length) + imageUrls.length) % imageUrls.length;
+
+  React.useEffect(() => {
+    if (!isLightboxOpen) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightboxIndex(null);
+      if (e.key === "ArrowLeft") setLightboxIndex((prev) => (prev === null ? 0 : prev - 1));
+      if (e.key === "ArrowRight") setLightboxIndex((prev) => (prev === null ? 0 : prev + 1));
+    };
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [isLightboxOpen]);
+
+  const openLightbox = (idx: number) => setLightboxIndex(idx);
+  const closeLightbox = () => setLightboxIndex(null);
+  const prevImage = () => setLightboxIndex((prev) => (prev === null ? 0 : prev - 1));
+  const nextImage = () => setLightboxIndex((prev) => (prev === null ? 0 : prev + 1));
+
+  const captions = React.useMemo(
+    () => ["Every moment with you", "Your beautiful smile", "You light up my life", "My favorite memory", "Always, you", "Us, forever"],
+    []
+  );
 
   return (
     <div className="min-h-screen relative overflow-x-hidden bg-gradient-to-b from-pink-50 via-pink-100 to-pink-50 selection:bg-pink-300 selection:text-white">
@@ -162,10 +197,42 @@ const ValentineSuccess = ({ senderName, receiverName, message, imageUrls }: Vale
             <h2 className="text-3xl sm:text-4xl font-display text-pink-800 mb-10 text-center drop-shadow-sm">
               Our Journey Visualized
             </h2>
-            <div className="w-full max-w-md bg-white/60 p-4 sm:p-5 rounded-[2.5rem] shadow-xl shadow-pink-200/50 backdrop-blur-md border border-white/60 transform rotate-1 hover:rotate-0 transition-transform duration-500">
-               <div className="overflow-hidden rounded-3xl">
-                 <PhotoSlideshow images={imageUrls} />
-               </div>
+            <div className="w-full max-w-5xl">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+                {imageUrls.slice(0, 12).map((src, idx) => (
+                  <motion.button
+                    key={`${src}-polaroid-${idx}`}
+                    type="button"
+                    onClick={() => openLightbox(idx)}
+                    whileHover={{ y: -3, rotate: idx % 2 === 0 ? -0.6 : 0.6 }}
+                    whileTap={{ scale: 0.99 }}
+                    className={[
+                      "group w-full text-left focus:outline-none",
+                      "rounded-[1.75rem] bg-white/90 border border-white shadow-xl shadow-pink-200/40",
+                      "p-3 sm:p-3.5",
+                      idx % 3 === 0 ? "rotate-[-0.6deg]" : idx % 3 === 1 ? "rotate-[0.4deg]" : "rotate-[-0.2deg]",
+                    ].join(" ")}
+                    aria-label={`Open memory ${idx + 1}`}
+                  >
+                    <div className="overflow-hidden rounded-[1.25rem] bg-pink-50">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={src}
+                        alt={`Memory ${idx + 1}`}
+                        className="w-full h-56 sm:h-52 lg:h-56 object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+                    <div className="pt-4 pb-2 px-2">
+                      <p className="font-display text-lg sm:text-base lg:text-lg text-pink-900/80">
+                        {captions[idx % captions.length]}
+                      </p>
+                      <p className="mt-1 text-xs text-pink-500/70 font-medium">Tap to view</p>
+                    </div>
+                  </motion.button>
+                ))}
+              </div>
             </div>
           </motion.div>
         )}
@@ -269,6 +336,76 @@ const ValentineSuccess = ({ senderName, receiverName, message, imageUrls }: Vale
           </motion.button>
         </motion.div>
       </main>
+
+      {/* Lightbox */}
+      {isLightboxOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[60] flex items-center justify-center px-4 py-6"
+          aria-modal="true"
+          role="dialog"
+        >
+          <button
+            type="button"
+            aria-label="Close image viewer"
+            onClick={closeLightbox}
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+          />
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ type: "spring", stiffness: 160, damping: 20 }}
+            className="relative w-full max-w-5xl"
+          >
+            <div className="relative rounded-[2rem] bg-white/90 border border-white shadow-2xl shadow-black/30 overflow-hidden">
+              <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={closeLightbox}
+                  className="rounded-full bg-white/85 hover:bg-white text-pink-600 border border-pink-100 shadow-md shadow-pink-200/40 px-3 py-2 text-sm font-bold"
+                >
+                  Close
+                </button>
+              </div>
+
+              <div className="bg-black/5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={imageUrls[safeIndex]}
+                  alt={`Memory ${safeIndex + 1}`}
+                  className="w-full max-h-[72vh] object-contain bg-black/5"
+                  decoding="async"
+                />
+              </div>
+
+              <div className="flex items-center justify-between gap-3 p-4 sm:p-5">
+                <button
+                  type="button"
+                  onClick={prevImage}
+                  className="rounded-full bg-white hover:bg-white text-pink-700 border border-pink-100 shadow-md shadow-pink-200/40 px-4 py-2 text-sm font-bold"
+                  aria-label="Previous image"
+                >
+                  ← Prev
+                </button>
+                <p className="text-xs sm:text-sm text-pink-700/80 font-medium">
+                  {safeIndex + 1} / {imageUrls.length}
+                </p>
+                <button
+                  type="button"
+                  onClick={nextImage}
+                  className="rounded-full bg-white hover:bg-white text-pink-700 border border-pink-100 shadow-md shadow-pink-200/40 px-4 py-2 text-sm font-bold"
+                  aria-label="Next image"
+                >
+                  Next →
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   );
 };
