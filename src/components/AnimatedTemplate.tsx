@@ -85,29 +85,16 @@ const AnimatedTemplate = ({ type, senderName, receiverName, message, imageUrls }
                 </motion.h1>
 
                 <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.35, type: "spring" }}
-                  className="flex justify-center mb-5"
-                >
-                  <span className="text-3xl">❤️</span>
-                </motion.div>
-
-                <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.45, type: "spring", stiffness: 120, damping: 14 }}
                   className="mx-auto mb-6"
                 >
-                  <div className="relative inline-flex items-center justify-center rounded-full p-[4px] bg-gradient-to-br from-pink-300 to-pink-500 shadow-lg shadow-pink-300/60">
-                    <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden bg-white">
-                      <img
-                        src={imageUrls[0] || "https://love-link-creator.vercel.app/gif/200w.gif"}
-                        alt="valentine"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
+                  <img
+                    src="/cat.gif"
+                    alt="cute cat"
+                    className="mx-auto w-56 h-56 sm:w-64 sm:h-64 object-contain"
+                  />
                 </motion.div>
 
                 <motion.div
