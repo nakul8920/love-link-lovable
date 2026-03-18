@@ -4,6 +4,7 @@ import { ArrowLeft, User, ExternalLink, RefreshCw, Copy, Check, Heart, Sparkles,
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { WishPage } from "@/types/wish";
+import { API_BASE_URL } from "@/config";
 
 interface UserProfile {
   username: string;
@@ -32,7 +33,7 @@ const Profile = () => {
     try {
       setLoading(true);
       // Fetch User Info
-      const userRes = await fetch("http://localhost:5000/api/auth/profile", {
+      const userRes = await fetch(`${API_BASE_URL}/api/auth/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (userRes.ok) {
@@ -43,7 +44,7 @@ const Profile = () => {
       }
 
       // Fetch User Pages
-      const pagesRes = await fetch("http://localhost:5000/api/page/user", {
+      const pagesRes = await fetch(`${API_BASE_URL}/api/page/user`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (pagesRes.ok) {

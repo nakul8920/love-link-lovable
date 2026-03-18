@@ -10,6 +10,7 @@ import { TemplateType } from "@/types/wish";
 import { generateSlug } from "@/lib/generateSlug";
 import { savePage } from "@/lib/store";
 import { toast } from "sonner";
+import { API_BASE_URL } from "@/config";
 
 const steps = ["Template", "Details", "Photos", "Payment"];
 
@@ -47,14 +48,14 @@ const CreatePage = () => {
       for (const file of images) {
         const formData = new FormData();
         formData.append("image", file);
-        const res = await fetch("http://localhost:5000/api/upload", {
+        const res = await fetch(`${API_BASE_URL}/api/upload`, {
           method: "POST",
           body: formData,
         });
         if (res.ok) {
           const text = await res.text();
           // The backend returns a path like "/uploads/..."
-          uploadedImageUrls.push(`http://localhost:5000${text}`);
+          uploadedImageUrls.push(`${API_BASE_URL}${text}`);
         }
       }
 
@@ -79,7 +80,7 @@ const CreatePage = () => {
       // Save to backend
       const token = localStorage.getItem("token");
       if (token) {
-        await fetch("http://localhost:5000/api/page", {
+        await fetch(`${API_BASE_URL}/api/page`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
