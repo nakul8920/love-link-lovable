@@ -33,14 +33,58 @@ const LandingPage = () => {
           <Heart className="w-6 h-6 text-primary fill-primary" />
           <span className="font-display text-xl font-bold text-foreground">WishLink</span>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => navigate("/admin")}
-          className="rounded-full border-border text-muted-foreground hover:text-foreground"
-        >
-          Admin
-        </Button>
+        <div className="flex items-center gap-3">
+          {localStorage.getItem("token") ? (
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate("/create")}
+                className="rounded-full border-border text-muted-foreground hover:text-foreground"
+              >
+                Dashboard
+              </Button>
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  navigate("/login");
+                }}
+                className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate("/login")}
+                className="rounded-full text-muted-foreground hover:text-foreground"
+              >
+                Login
+              </Button>
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => navigate("/signup")}
+                className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
+              >
+                Sign up
+              </Button>
+            </>
+          )}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate("/admin")}
+            className="rounded-full border-border text-muted-foreground hover:text-foreground"
+          >
+            Admin
+          </Button>
+        </div>
       </nav>
 
       {/* Hero */}

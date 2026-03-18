@@ -9,6 +9,8 @@ import WishViewer from "./pages/WishViewer.tsx";
 import SuccessPage from "./pages/SuccessPage.tsx";
 import AdminPage from "./pages/AdminPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import Login from "./pages/auth/Login.tsx";
+import Signup from "./pages/auth/Signup.tsx";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +22,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/create" element={<CreatePage />} />
           <Route path="/p/:slug" element={<WishViewer />} />
           <Route path="/success/:slug" element={<SuccessPage />} />
