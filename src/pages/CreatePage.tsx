@@ -36,31 +36,78 @@ const CreatePage = () => {
     if (field === "message") setMessage(value);
   };
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     setProcessing(true);
 
-    // Simulate payment + page creation
-    setTimeout(() => {
+    try {
       const slug = generateSlug();
-      const imageUrls = images.map((f) => URL.createObjectURL(f));
+      const uploadedImageUrls: string[] = [];
 
-      savePage({
+      // Upload images to backend
+      for (const file of images) {
+        const formData = new FormData();
+        formData.append("image", file);
+        const res = await fetch("http://localhost:5000/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+        if (res.ok) {
+          const text = await res.text();
+          // The backend returns a path like "/uploads/..."
+          uploadedImageUrls.push(`http://localhost:5000${text}`);
+        }
+      }
+
+      const finalImages = uploadedImageUrls.length > 0 ? uploadedImageUrls : images.map((f) => URL.createObjectURL(f));
+
+      const pageData = {
         id: slug,
         slug,
         templateType: templateType!,
         senderName,
         receiverName,
         message,
-        imageUrls,
+        imageUrls: finalImages,
         createdAt: new Date().toISOString(),
-        paymentStatus: "success",
+        paymentStatus: "success" as const,
         orderId: `order_${Date.now()}`,
-      });
+      };
+
+      // Save to local storage for backward compatibility
+      savePage(pageData);
+
+      // Save to backend
+      const token = localStorage.getItem("token");
+      if (token) {
+        await fetch("http://localhost:5000/api/page", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            customUrlData: slug,
+            content: {
+              templateType: templateType!,
+              senderName,
+              receiverName,
+              message,
+              paymentStatus: "success",
+              orderId: pageData.orderId,
+            },
+            images: finalImages,
+          }),
+        });
+      }
 
       setProcessing(false);
       toast.success("Your wish page is ready!");
       navigate(`/success/${slug}`);
-    }, 2000);
+    } catch (error) {
+      console.error(error);
+      setProcessing(false);
+      toast.error("Failed to create page");
+    }
   };
 
   return (

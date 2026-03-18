@@ -39,10 +39,10 @@ const LandingPage = () => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => navigate("/create")}
+                onClick={() => navigate("/profile")}
                 className="rounded-full border-border text-muted-foreground hover:text-foreground"
               >
-                Dashboard
+                Profile
               </Button>
               <Button
                 variant="default"

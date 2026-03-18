@@ -7,11 +7,14 @@ const createOrUpdatePage = async (req, res) => {
   const { customUrlData, content, images } = req.body;
 
   try {
-    let page = await Page.findOne({ user: req.user._id });
+    let page = await Page.findOne({ customUrlData });
 
     if (page) {
+      if (page.user.toString() !== req.user._id.toString()) {
+        return res.status(401).json({ message: 'Not authorized to edit this page' });
+      }
+      
       // Update existing page
-      page.customUrlData = customUrlData || page.customUrlData;
       page.content = content || page.content;
       page.images = images || page.images;
 
@@ -51,5 +54,16 @@ const getPageByUrl = async (req, res) => {
   }
 };
 
+// @desc    Get all pages for logged in user
+// @route   GET /api/page/user
+// @access  Private
+const getUserPages = async (req, res) => {
+  try {
+    const pages = await Page.find({ user: req.user._id }).sort({ createdAt: -1 });
+    res.json(pages);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
-module.exports = { createOrUpdatePage, getPageByUrl };
+module.exports = { createOrUpdatePage, getPageByUrl, getUserPages };
