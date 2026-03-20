@@ -10,7 +10,8 @@ const uploadRoutes = require('./routes/uploadRoutes');
 const pageRoutes = require('./routes/pageRoutes');
 
 // Load environment variables
-dotenv.config();
+// Important: use an explicit path so production start command from repo root works.
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 // Connect to database
 // NOTE: Application will crash if MONGO_URI is invalid when connection is attempted.

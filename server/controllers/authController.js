@@ -2,6 +2,11 @@ const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
 const { OAuth2Client } = require('google-auth-library');
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+
+const escapeRegExp = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const normalizeEmail = (email) => email.trim().toLowerCase();
+const sha256 = (value) => crypto.createHash('sha256').update(value).digest('hex');
 
 // @desc    Register a new user
 // @route   POST /api/auth/register
@@ -57,6 +62,10 @@ const authUser = async (req, res) => {
 
     if (!user) {
       return res.status(404).json({ message: 'User does not exist with this email address' });
+    }
+
+    if (!user.password) {
+      return res.status(400).json({ message: 'This account does not have a password. Please login with Google.' });
     }
 
     if (user && (await user.matchPassword(password))) {
@@ -132,32 +141,51 @@ const googleAuth = async (req, res) => {
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
   try {
-    const user = await User.findOne({ email });
+    if (!email) return res.status(400).json({ message: 'Email is required' });
+
+    const normalizedEmail = normalizeEmail(email);
+    // Case-insensitive email match (real-world: users may type different casing/spaces)
+    const user = await User.findOne({
+      email: { $regex: `^${escapeRegExp(normalizedEmail)}$`, $options: 'i' },
+    });
     if (!user) {
       return res.status(404).json({ message: 'No account found with this email address' });
     }
 
     // Generate 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otp = crypto.randomInt(100000, 1000000).toString(); // 6 digits
+    const otpHash = sha256(otp);
     
     // Valid for 10 minutes
-    user.resetPasswordOtp = otp;
+    user.resetPasswordOtp = otpHash;
     user.resetPasswordExpires = Date.now() + 10 * 60 * 1000; 
     await user.save();
 
     // Send email
+    const emailUser = process.env.EMAIL_USER;
+    const emailPass = process.env.EMAIL_APP_PASSWORD;
+    if (!emailUser || !emailPass) {
+      throw new Error('Missing EMAIL_USER or EMAIL_APP_PASSWORD in environment variables');
+    }
+
+    const port = Number(process.env.EMAIL_PORT) || 465;
+    const secure = process.env.EMAIL_SECURE ? process.env.EMAIL_SECURE === 'true' : port === 465;
+
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_APP_PASSWORD,
-      },
+      host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+      port,
+      secure,
+      auth: { user: emailUser, pass: emailPass },
     });
+
+    // Fail fast if SMTP credentials/config are wrong (helps prod debugging)
+    await transporter.verify();
 
     const mailOptions = {
       from: `"Wishlink Support" <${process.env.EMAIL_USER}>`,
       to: user.email,
       subject: 'Your Wishlink Password Reset Code',
+      text: `Your Wishlink password reset OTP is: ${otp}. This code is valid for 10 minutes.`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 10px; background-color: #f9f9f9;">
           <h2 style="color: #4F46E5; text-align: center;">Wishlink Magic</h2>
@@ -187,9 +215,14 @@ const forgotPassword = async (req, res) => {
 const verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
   try {
+    if (!email || !otp) return res.status(400).json({ message: 'Email and OTP are required' });
+
+    const normalizedEmail = normalizeEmail(email);
+    const otpHash = sha256(String(otp).trim());
+
     const user = await User.findOne({ 
-      email,
-      resetPasswordOtp: otp,
+      email: { $regex: `^${escapeRegExp(normalizedEmail)}$`, $options: 'i' },
+      resetPasswordOtp: otpHash,
       resetPasswordExpires: { $gt: Date.now() },
     });
 
@@ -209,9 +242,16 @@ const verifyOtp = async (req, res) => {
 const resetPassword = async (req, res) => {
   const { email, otp, newPassword } = req.body;
   try {
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ message: 'Email, OTP, and new password are required' });
+    }
+
+    const normalizedEmail = normalizeEmail(email);
+    const otpHash = sha256(String(otp).trim());
+
     const user = await User.findOne({ 
-      email,
-      resetPasswordOtp: otp,
+      email: { $regex: `^${escapeRegExp(normalizedEmail)}$`, $options: 'i' },
+      resetPasswordOtp: otpHash,
       resetPasswordExpires: { $gt: Date.now() },
     });
 
