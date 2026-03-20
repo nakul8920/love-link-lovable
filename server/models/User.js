@@ -15,7 +15,13 @@ const userSchema = mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      // Removed required: true to allow Google Auth logins which don't have passwords
+    },
+    resetPasswordOtp: {
+      type: String,
+    },
+    resetPasswordExpires: {
+      type: Date,
     },
   },
   {
@@ -23,9 +29,9 @@ const userSchema = mongoose.Schema(
   }
 );
 
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
-    next();
+userSchema.pre('save', async function () {
+  if (!this.isModified('password') || !this.password) {
+    return;
   }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);

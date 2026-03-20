@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, User, ExternalLink, RefreshCw, Copy, Check, Heart, Sparkles, Image as ImageIcon } from "lucide-react";
+import { ArrowLeft, User, ExternalLink, RefreshCw, Copy, Check, Heart, Sparkles, Image as ImageIcon, KeyRound, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { WishPage } from "@/types/wish";
 import { API_BASE_URL } from "@/config";
@@ -17,6 +18,13 @@ const Profile = () => {
   const [pages, setPages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
+
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [passwordLoading, setPasswordLoading] = useState(false);
 
   useEffect(() => {
     fetchProfileData();
@@ -75,6 +83,38 @@ const Profile = () => {
     setTimeout(() => setCopiedSlug(null), 2000);
   };
 
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newPassword) return toast.error("New password is required");
+
+    try {
+      setPasswordLoading(true);
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${API_BASE_URL}/api/auth/profile/password`, {
+        method: "PUT",
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}` 
+        },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+      const data = await res.json();
+      
+      if (res.ok) {
+        toast.success("Password updated successfully");
+        setShowPasswordDialog(false);
+        setCurrentPassword("");
+        setNewPassword("");
+      } else {
+        toast.error(data.message || "Failed to update password");
+      }
+    } catch (error) {
+      toast.error("Network error");
+    } finally {
+      setPasswordLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex justify-center items-center">
@@ -97,9 +137,78 @@ const Profile = () => {
             <User className="w-5 h-5 text-primary" />
             <span className="font-display font-semibold text-foreground">My Profile</span>
           </button>
-          <Button variant="outline" size="sm" onClick={handleLogout}>
-            Logout
-          </Button>
+          <div className="flex gap-3">
+            <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <KeyRound className="w-4 h-4 hidden sm:inline" /> <span className="hidden sm:inline">Change</span> Password
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Change Password</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleChangePassword} className="space-y-4 mt-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center mb-1">
+                      <label className="text-sm font-medium">Current Password</label>
+                      <span 
+                        onClick={() => {
+                          setShowPasswordDialog(false);
+                          navigate("/forgot-password");
+                        }}
+                        className="text-xs text-primary hover:text-primary/80 hover:underline cursor-pointer"
+                      >
+                        Forgot Password?
+                      </span>
+                    </div>
+                    <div className="relative">
+                      <input 
+                        type={showCurrentPassword ? "text" : "password"} 
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        className="w-full px-3 py-2 border rounded-md pr-10"
+                        placeholder="Enter if you have one"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      >
+                        {showCurrentPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">New Password</label>
+                    <div className="relative">
+                      <input 
+                        type={showNewPassword ? "text" : "password"} 
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none pr-10"
+                        placeholder="••••••••"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      >
+                        {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+                  <Button type="submit" className="w-full gradient-primary" disabled={passwordLoading}>
+                    {passwordLoading ? "Updating..." : "Update Password"}
+                  </Button>
+                </form>
+              </DialogContent>
+            </Dialog>
+            <Button variant="outline" size="sm" onClick={handleLogout}>
+              Logout
+            </Button>
+          </div>
         </div>
       </div>
 
