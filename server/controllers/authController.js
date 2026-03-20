@@ -180,10 +180,21 @@ const forgotPassword = async (req, res) => {
       connectionTimeout: 10000,
       greetingTimeout: 10000,
       socketTimeout: 20000,
+      // Ensure STARTTLS is attempted on 587.
+      requireTLS: !secure,
     });
 
-    // Fail fast if SMTP credentials/config are wrong (helps prod debugging)
-    await transporter.verify();
+    // Some SMTP providers can fail `verify()` even when `sendMail()` would work.
+    // So verify ko "warn + continue" mode me rakha hai.
+    try {
+      await transporter.verify();
+    } catch (verifyError) {
+      console.warn('SMTP verify failed (continuing):', {
+        message: verifyError?.message,
+        code: verifyError?.code,
+        responseCode: verifyError?.responseCode,
+      });
+    }
 
     const mailOptions = {
       from: `"Wishlink Support" <${process.env.EMAIL_USER}>`,
@@ -218,6 +229,8 @@ const forgotPassword = async (req, res) => {
 
     res.status(500).json({
       message: error?.message || 'Failed to send OTP',
+      code: error?.code,
+      responseCode: error?.responseCode,
     });
   }
 };
