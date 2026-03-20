@@ -164,8 +164,13 @@ const forgotPassword = async (req, res) => {
     // Send email
     const emailUser = process.env.EMAIL_USER;
     const emailPass = process.env.EMAIL_APP_PASSWORD;
-    if (!emailUser || !emailPass) {
-      throw new Error('Missing EMAIL_USER or EMAIL_APP_PASSWORD in environment variables');
+    const missing = [];
+    if (!emailUser) missing.push('EMAIL_USER');
+    if (!emailPass) missing.push('EMAIL_APP_PASSWORD');
+    if (missing.length) {
+      throw new Error(
+        `Missing ${missing.join(', ')} on server. Set these in your hosting environment variables (Render dashboard).`
+      );
     }
 
     const port = Number(process.env.EMAIL_PORT) || 465;
@@ -220,15 +225,20 @@ const forgotPassword = async (req, res) => {
     res.json({ message: 'OTP sent to email successfully' });
   } catch (error) {
     // Nodemailer errors sometimes don't stringify well; log the useful fields.
+    const message =
+      error instanceof Error
+        ? error.message
+        : error?.message || error?.toString?.() || 'Failed to send OTP';
     console.error('Error sending OTP:', {
-      message: error?.message,
+      message,
       code: error?.code,
       responseCode: error?.responseCode,
       command: error?.command,
+      stack: error?.stack,
     });
 
     res.status(500).json({
-      message: error?.message || 'Failed to send OTP',
+      message,
       code: error?.code,
       responseCode: error?.responseCode,
     });
