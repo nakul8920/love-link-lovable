@@ -31,7 +31,7 @@ const Login = () => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userInfo", JSON.stringify(data));
         toast.success("Login successful!");
-        navigate("/create");
+        navigate("/");
       } else {
         toast.error(data.message || "Invalid email or password");
       }
@@ -55,7 +55,7 @@ const Login = () => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userInfo", JSON.stringify(data));
         toast.success("Login successful!");
-        navigate("/create");
+        navigate("/");
       } else {
         toast.error(data.error ? `Google Error: ${data.error}` : "Google Login failed");
       }
@@ -74,7 +74,7 @@ const Login = () => {
       <div className="w-full h-full lg:h-[85dvh] lg:max-h-[650px] lg:max-w-5xl flex flex-col lg:grid lg:grid-cols-2 lg:bg-white lg:rounded-3xl lg:shadow-2xl overflow-hidden relative border-0 lg:border border-gray-100">
         
         {/* Mobile Hero */}
-        <div className="lg:hidden w-full h-[25%] bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 relative flex flex-col justify-center items-center p-4 overflow-hidden flex-shrink-0">
+        <div className="lg:hidden w-full pt-8 pb-10 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 relative flex flex-col justify-center items-center px-4 overflow-hidden flex-shrink-0">
           <div className="absolute top-0 right-0 -mr-10 -mt-10 w-32 h-32 rounded-full bg-white opacity-10 blur-xl"></div>
           <div className="absolute bottom-0 left-0 -ml-10 -mb-10 w-32 h-32 rounded-full bg-blue-400 opacity-20 blur-xl"></div>
           <div className="relative z-10 flex flex-col items-center text-center">
@@ -132,10 +132,10 @@ const Login = () => {
         </div>
 
         {/* Right Side: Auth Forms */}
-        <div className="h-[75%] lg:h-full w-full flex flex-col bg-white rounded-t-3xl lg:rounded-none -mt-4 lg:mt-0 p-5 lg:p-12 relative z-20 shadow-[0_-8px_30px_rgb(0,0,0,0.08)] lg:shadow-none justify-center">
-          <div className="max-w-sm w-full mx-auto flex flex-col h-full justify-center">
+        <div className="flex-1 overflow-y-auto lg:h-full w-full flex flex-col bg-white rounded-t-3xl lg:rounded-none -mt-5 lg:mt-0 px-5 py-2 lg:p-12 relative z-20 shadow-[0_-8px_30px_rgb(0,0,0,0.08)] lg:shadow-none">
+          <div className="max-w-sm w-full mx-auto flex flex-col my-auto py-4 lg:justify-center">
             {/* Center handle for bottom sheet feel on mobile */}
-            <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-4 lg:hidden shrink-0"></div>
+            <div className="w-10 h-1.5 bg-gray-200 rounded-full mx-auto mb-6 lg:hidden shrink-0"></div>
             
             <div className="w-full text-center lg:text-left mb-4 shrink-0">
               <h1 className="text-2xl lg:text-3xl font-extrabold text-gray-900 tracking-tight mb-1">Sign In</h1>

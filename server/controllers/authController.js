@@ -107,8 +107,9 @@ const googleAuth = async (req, res) => {
     let user = await User.findOne({ email });
     if (!user) {
       // Create user if not exists
+      const baseName = name ? name.replace(/\s+/g, '').toLowerCase() : email.split('@')[0].toLowerCase();
       user = await User.create({
-        username: name.replace(/\s+/g, '').toLowerCase() + Math.floor(Math.random() * 10000),
+        username: baseName + Math.floor(Math.random() * 10000),
         email,
       });
     }
@@ -154,16 +155,29 @@ const forgotPassword = async (req, res) => {
     });
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: `"Wishlink Support" <${process.env.EMAIL_USER}>`,
       to: user.email,
-      subject: 'WishLink Password Reset OTP',
-      text: `Your OTP for password reset is: ${otp}\nThis OTP is valid for 10 minutes.`,
+      subject: 'Your Wishlink Password Reset Code',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 10px; background-color: #f9f9f9;">
+          <h2 style="color: #4F46E5; text-align: center;">Wishlink Magic</h2>
+          <p style="font-size: 16px; color: #333;">Hello,</p>
+          <p style="font-size: 16px; color: #333;">We received a request to reset your password. Use the OTP code below to securely change your password:</p>
+          <div style="text-align: center; margin: 30px 0;">
+            <span style="font-size: 32px; font-weight: bold; padding: 10px 20px; background-color: #4F46E5; color: #fff; border-radius: 8px; letter-spacing: 5px;">${otp}</span>
+          </div>
+          <p style="font-size: 14px; color: #666; text-align: center;">This code is valid for 10 minutes. If you did not request a password reset, please ignore this email.</p>
+          <hr style="border: none; border-top: 1px solid #eaeaea; margin: 20px 0;" />
+          <p style="font-size: 12px; color: #aaa; text-align: center;">Wishlink Support Team<br>Keeping your digital envelopes safe.</p>
+        </div>
+      `,
     };
 
     await transporter.sendMail(mailOptions);
     res.json({ message: 'OTP sent to email successfully' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error sending OTP:', error);
+    res.status(500).json({ message: error.message || 'Failed to send OTP' });
   }
 };
 
