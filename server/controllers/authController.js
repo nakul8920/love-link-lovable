@@ -176,6 +176,10 @@ const forgotPassword = async (req, res) => {
       port,
       secure,
       auth: { user: emailUser, pass: emailPass },
+      // Prevent SMTP calls from hanging forever on production platforms.
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 20000,
     });
 
     // Fail fast if SMTP credentials/config are wrong (helps prod debugging)
