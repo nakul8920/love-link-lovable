@@ -24,7 +24,15 @@ const ForgotPassword = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-      const data = await res.json();
+      // Backend kabhi-kabhi non-JSON error body bhej sakta hai.
+      // Isliye JSON parse ko safely handle karte hain.
+      let data: any = null;
+      try {
+        data = await res.json();
+      } catch {
+        const text = await res.text();
+        data = { message: text || "Failed to send OTP" };
+      }
       if (res.ok) {
         toast.success("OTP sent to your email");
         setStep(2);
