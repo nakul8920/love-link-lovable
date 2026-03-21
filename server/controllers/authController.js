@@ -185,9 +185,9 @@ const forgotPassword = async (req, res) => {
           requireTLS: !secure,
         }
       : {
-          // Gmail service mode is more reliable on platforms like Render
-          // when host/port are not explicitly configured.
-          service: 'gmail',
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
           auth: { user: emailUser, pass: emailPass },
         };
 
@@ -197,6 +197,11 @@ const forgotPassword = async (req, res) => {
       connectionTimeout: 10000,
       greetingTimeout: 10000,
       socketTimeout: 20000,
+      // Force IPv4 to prevent ENETUNREACH errors on IPv6 servers like Render
+      family: 4,
+      tls: {
+          rejectUnauthorized: false
+      }
     });
 
     // Some SMTP providers can fail `verify()` even when `sendMail()` would work.
