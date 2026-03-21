@@ -7,9 +7,6 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
-    headers: {
-      "Cross-Origin-Opener-Policy": "same-origin-allow-popups",
-    },
     hmr: {
       overlay: false,
     },

@@ -134,6 +134,7 @@ const Signup = () => {
                     theme="filled_black"
                     shape="pill"
                     text="signup_with"
+                    width={320}
                   />
                 </div>
               </div>
