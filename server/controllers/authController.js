@@ -173,20 +173,30 @@ const forgotPassword = async (req, res) => {
       );
     }
 
+    const configuredHost = process.env.EMAIL_HOST?.trim();
     const port = Number(process.env.EMAIL_PORT) || 465;
     const secure = process.env.EMAIL_SECURE ? process.env.EMAIL_SECURE === 'true' : port === 465;
+    const transportConfig = configuredHost
+      ? {
+          host: configuredHost,
+          port,
+          secure,
+          auth: { user: emailUser, pass: emailPass },
+          requireTLS: !secure,
+        }
+      : {
+          // Gmail service mode is more reliable on platforms like Render
+          // when host/port are not explicitly configured.
+          service: 'gmail',
+          auth: { user: emailUser, pass: emailPass },
+        };
 
     const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-      port,
-      secure,
-      auth: { user: emailUser, pass: emailPass },
+      ...transportConfig,
       // Prevent SMTP calls from hanging forever on production platforms.
       connectionTimeout: 10000,
       greetingTimeout: 10000,
       socketTimeout: 20000,
-      // Ensure STARTTLS is attempted on 587.
-      requireTLS: !secure,
     });
 
     // Some SMTP providers can fail `verify()` even when `sendMail()` would work.

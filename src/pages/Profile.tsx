@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, User, ExternalLink, RefreshCw, Copy, Check, Heart, Sparkles, Image as ImageIcon, KeyRound, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { WishPage } from "@/types/wish";
 import { API_BASE_URL } from "@/config";
@@ -147,6 +147,9 @@ const Profile = () => {
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                   <DialogTitle>Change Password</DialogTitle>
+                  <DialogDescription>
+                    Update your account password. If this account was created using Google, you can set a new password here.
+                  </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleChangePassword} className="space-y-4 mt-4">
                   <div className="space-y-2">
