@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
+const { sendTransactionalEmail } = require('../utils/sendTransactionalEmail');
 const { OAuth2Client } = require('google-auth-library');
-const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 
 const escapeRegExp = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -161,68 +161,9 @@ const forgotPassword = async (req, res) => {
     user.resetPasswordExpires = Date.now() + 10 * 60 * 1000; 
     await user.save();
 
-    // Send email
-    const emailUser = process.env.EMAIL_USER;
-    const emailPass = process.env.EMAIL_APP_PASSWORD;
-    const missing = [];
-    if (!emailUser) missing.push('EMAIL_USER');
-    if (!emailPass) missing.push('EMAIL_APP_PASSWORD');
-    if (missing.length) {
-      throw new Error(
-        `Missing ${missing.join(', ')} on server. Set these in your hosting environment variables (Render dashboard).`
-      );
-    }
-
-    const configuredHost = process.env.EMAIL_HOST?.trim();
-    const port = Number(process.env.EMAIL_PORT) || 465;
-    const secure = process.env.EMAIL_SECURE ? process.env.EMAIL_SECURE === 'true' : port === 465;
-    const transportConfig = configuredHost
-      ? {
-          host: configuredHost,
-          port,
-          secure,
-          auth: { user: emailUser, pass: emailPass },
-          requireTLS: !secure,
-        }
-      : {
-          host: 'smtp.gmail.com',
-          port: 587,
-          secure: false, // upgrade later with STARTTLS
-          requireTLS: true,
-          auth: { user: emailUser, pass: emailPass },
-        };
-
-    const transporter = nodemailer.createTransport({
-      ...transportConfig,
-      // Prevent SMTP calls from hanging forever on production platforms.
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 20000,
-      // Force IPv4 to prevent ENETUNREACH errors on IPv6 servers like Render
-      family: 4,
-      tls: {
-          rejectUnauthorized: false
-      }
-    });
-
-    // Some SMTP providers can fail `verify()` even when `sendMail()` would work.
-    // So verify ko "warn + continue" mode me rakha hai.
-    try {
-      await transporter.verify();
-    } catch (verifyError) {
-      console.warn('SMTP verify failed (continuing):', {
-        message: verifyError?.message,
-        code: verifyError?.code,
-        responseCode: verifyError?.responseCode,
-      });
-    }
-
-    const mailOptions = {
-      from: `"Wishlink Support" <${process.env.EMAIL_USER}>`,
-      to: user.email,
-      subject: 'Your Wishlink Password Reset Code',
-      text: `Your Wishlink password reset OTP is: ${otp}. This code is valid for 10 minutes.`,
-      html: `
+    const subject = 'Your Wishlink Password Reset Code';
+    const text = `Your Wishlink password reset OTP is: ${otp}. This code is valid for 10 minutes.`;
+    const html = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 10px; background-color: #f9f9f9;">
           <h2 style="color: #4F46E5; text-align: center;">Wishlink Magic</h2>
           <p style="font-size: 16px; color: #333;">Hello,</p>
@@ -234,10 +175,14 @@ const forgotPassword = async (req, res) => {
           <hr style="border: none; border-top: 1px solid #eaeaea; margin: 20px 0;" />
           <p style="font-size: 12px; color: #aaa; text-align: center;">Wishlink Support Team<br>Keeping your digital envelopes safe.</p>
         </div>
-      `,
-    };
+      `;
 
-    await transporter.sendMail(mailOptions);
+    await sendTransactionalEmail({
+      to: user.email,
+      subject,
+      text,
+      html,
+    });
     res.json({ message: 'OTP sent to email successfully' });
   } catch (error) {
     // Nodemailer errors sometimes don't stringify well; log the useful fields.
