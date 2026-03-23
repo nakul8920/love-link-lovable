@@ -14,17 +14,14 @@ const pageRoutes = require('./routes/pageRoutes');
 dotenv.config({ path: path.join(__dirname, '.env') });
 
 // Render / production use process.env from the dashboard; .env is usually not uploaded (gitignored).
-const _resend = Boolean(process.env.RESEND_API_KEY?.trim());
 const _smtp = Boolean(
   process.env.EMAIL_USER?.trim() && process.env.EMAIL_APP_PASSWORD?.trim()
 );
-if (_resend) {
-  console.log('[email] Resend enabled (RESEND_API_KEY set) — forgot-password uses Resend first.');
-} else if (_smtp) {
-  console.log('[email] Gmail SMTP enabled (EMAIL_USER + EMAIL_APP_PASSWORD).');
+if (_smtp) {
+  console.log('[email] SMTP enabled (Configured for Brevo or Custom Mailer).');
 } else {
   console.warn(
-    '[email] No email env detected on this process. Add EMAIL_USER + EMAIL_APP_PASSWORD (or RESEND_API_KEY) in your host’s Environment tab — local server/.env is not deployed to Render.'
+    '[email] No email env detected. Add EMAIL_USER & EMAIL_APP_PASSWORD in your host’s Environment tab.'
   );
 }
 
