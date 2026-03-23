@@ -1,51 +1,48 @@
-const nodemailer = require('nodemailer');
+const https = require('https');
 
-function buildSmtpTransport() {
-  const emailUser = process.env.EMAIL_USER?.trim();
-  const emailPass = process.env.EMAIL_APP_PASSWORD?.trim();
-  
-  if (!emailUser || !emailPass) {
-    const err = new Error('Email not configured: Please set EMAIL_USER and EMAIL_APP_PASSWORD.');
-    err.code = 'EMAIL_NOT_CONFIGURED';
-    throw err;
-  }
-
-  // Default to Brevo host if not explicitly provided
-  const host = process.env.EMAIL_HOST?.trim() || 'smtp-relay.brevo.com';
-  const port = Number(process.env.EMAIL_PORT) || 587;
-  const secure = process.env.EMAIL_SECURE ? process.env.EMAIL_SECURE === 'true' : port === 465;
-
-  return nodemailer.createTransport({
-    host,
-    port,
-    secure,
-    requireTLS: !secure,
-    auth: {
-      user: emailUser,
-      pass: emailPass,
-    },
-    connectionTimeout: 15000,
-    greetingTimeout: 15000,
-    socketTimeout: 45000,
-  });
-}
-
-/**
- * Production-friendly transactional email via SMTP (Brevo or generic).
- * @param {{ to: string, subject: string, text: string, html: string }} opts
- */
 async function sendTransactionalEmail({ to, subject, text, html }) {
-  const transporter = buildSmtpTransport();
-  
-  const rawFrom = process.env.EMAIL_FROM?.trim() || process.env.EMAIL_USER?.trim() || 'no-reply@wishlink.com';
-  const fromAddr = rawFrom.includes('<') ? rawFrom : `"Wishlink Support" <${rawFrom}>`;
-  
-  await transporter.sendMail({
-    from: fromAddr,
-    to,
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  if (!apiKey) throw new Error('RESEND_API_KEY not set in environment variables');
+
+  const payload = JSON.stringify({
+    from: process.env.EMAIL_FROM?.trim() || 'onboarding@resend.dev',
+    to: [to],
     subject,
     text,
     html,
+  });
+
+  return new Promise((resolve, reject) => {
+    const req = https.request({
+      hostname: 'api.resend.com',
+      port: 443,
+      path: '/emails',
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload),
+      },
+    }, (res) => {
+      let data = '';
+      res.on('data', c => data += c);
+      res.on('end', () => {
+        try {
+          const parsed = JSON.parse(data || '{}');
+          if (res.statusCode >= 200 && res.statusCode < 300) {
+            resolve(parsed);
+          } else {
+            reject(new Error(parsed.message || `Resend failed (${res.statusCode})`));
+          }
+        } catch (e) {
+          reject(new Error('Invalid response from Resend'));
+        }
+      });
+    });
+    req.on('error', reject);
+    req.setTimeout(30000, () => req.destroy(new Error('Resend timeout')));
+    req.write(payload);
+    req.end();
   });
 }
 
