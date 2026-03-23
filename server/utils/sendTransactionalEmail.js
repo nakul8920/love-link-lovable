@@ -105,8 +105,9 @@ function buildSmtpTransport() {
   return nodemailer.createTransport({
     ...base,
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+    port: 587,
+    secure: false,
+    requireTLS: true,
   });
 }
 
