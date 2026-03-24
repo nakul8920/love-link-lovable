@@ -107,6 +107,14 @@ export default {
           "0%, 100%": { opacity: "0", transform: "scale(0)" },
           "50%": { opacity: "1", transform: "scale(1)" },
         },
+        "marquee": {
+          "from": { transform: "translateX(0)" },
+          "to": { transform: "translateX(-50%)" },
+        },
+        "gradient-x": {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -118,6 +126,8 @@ export default {
         "heart-beat": "heart-beat 1.5s ease-in-out infinite",
         "confetti-fall": "confetti-fall 3s linear infinite",
         "sparkle": "sparkle 2s ease-in-out infinite",
+        "marquee": "marquee 20s linear infinite",
+        "gradient-x": "gradient-x 3s ease infinite",
       },
     },
   },
