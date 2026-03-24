@@ -104,7 +104,9 @@ const Login = () => {
             
             <div className="w-full text-center lg:text-left mb-8 shrink-0">
               <h1 className="text-2xl lg:text-3xl font-extrabold text-gray-900 tracking-tight mb-2">Join the Magic</h1>
-              <p className="text-gray-500 text-sm lg:text-base font-medium leading-snug">Sign in or create an account using your authentic Google account to get started.</p>
+              <p className="text-gray-500 text-sm lg:text-base font-medium leading-snug">
+                Select your registered Gmail account if you already have one. New users can simply log in with their Gmail to automatically create an account!
+              </p>
             </div>
 
             {/* Google Signup Box */}
@@ -118,7 +120,7 @@ const Login = () => {
                 </div>
                 <h3 className="text-gray-900 font-bold text-lg text-center mb-1">Continue with Google</h3>
                 <p className="text-xs text-gray-500 text-center mb-5 max-w-[200px] leading-snug font-medium">
-                  We require a real Google email to keep our platform completely spam-free and secure.
+                  Secure, fast, and completely spam-free logging in with Google.
                 </p>
                 
                 <div className="w-full flex justify-center">
