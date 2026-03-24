@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, User, ExternalLink, RefreshCw, Copy, Check, Heart, Sparkles, Image as ImageIcon } from "lucide-react";
+import { ArrowLeft, User, ExternalLink, RefreshCw, Copy, Check, Heart, Sparkles, Image as ImageIcon, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { WishPage } from "@/types/wish";
@@ -11,13 +11,17 @@ interface UserProfile {
   email: string;
 }
 
+// Neo-Brutalist utility classes
+const brutalBorder = "border-[3px] border-black";
+const brutalShadow = "shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]";
+const brutalShadowHover = "hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[4px] hover:translate-y-[4px]";
+
 const Profile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [pages, setPages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
-
 
   useEffect(() => {
     fetchProfileData();
@@ -76,12 +80,10 @@ const Profile = () => {
     setTimeout(() => setCopiedSlug(null), 2000);
   };
 
-
-
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex justify-center items-center">
-        <RefreshCw className="w-8 h-8 text-primary animate-spin" />
+      <div className="min-h-screen bg-[#FFFDF7] flex justify-center items-center">
+        <RefreshCw className="w-12 h-12 text-black animate-spin" />
       </div>
     );
   }
@@ -92,134 +94,157 @@ const Profile = () => {
   const totalSpent = paidLinks * 49;
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="border-b border-border">
-        <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-          <button onClick={() => navigate("/")} className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            <User className="w-5 h-5 text-primary" />
-            <span className="font-display font-semibold text-foreground">My Profile</span>
+    <div className="min-h-screen bg-[#FFFDF7] font-body text-black selection:bg-[#ff90e8] selection:text-black">
+      {/* Background Dot Texture */}
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-20" style={{ backgroundImage: "radial-gradient(#000 1px, transparent 1px)", backgroundSize: "32px 32px" }}></div>
+
+      {/* Neo-brutalist Header */}
+      <nav className={`relative z-10 w-full bg-[#c4b5fd] ${brutalBorder} border-t-0 border-l-0 border-r-0`}>
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <button 
+            onClick={() => navigate("/")} 
+            className={`flex items-center gap-2 bg-white px-4 py-2 ${brutalBorder} ${brutalShadowHover} transition-all duration-200 cursor-pointer text-black`}
+          >
+            <ArrowLeft className="w-5 h-5 font-bold" />
+            <span className="font-display font-black text-xl tracking-tight uppercase">Home</span>
           </button>
-          <div className="flex gap-3">
-            <Button variant="outline" size="sm" onClick={handleLogout}>
+          
+          <div className="flex gap-4">
+            <Button 
+               onClick={() => navigate("/create")}
+               className={`hidden md:flex bg-[#fde047] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-12 px-6`}
+            >
+              <Sparkles className="w-5 h-5 mr-2" /> CREATE NEW
+            </Button>
+            <Button 
+               onClick={handleLogout}
+               className={`bg-white text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-12 px-6`}
+            >
               Logout
             </Button>
           </div>
         </div>
-      </div>
+      </nav>
 
-      <div className="max-w-5xl mx-auto px-6 py-8">
-        {/* User Stats Card */}
-        <div className="bg-card rounded-2xl p-6 md:p-8 shadow-card border border-border mb-10 overflow-hidden relative">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
-          
-          <div className="flex flex-col md:flex-row gap-8 items-start md:items-center justify-between relative z-10">
-            <div className="flex items-center gap-5">
-              <div className="w-20 h-20 rounded-full gradient-primary flex items-center justify-center p-1 shadow-glow">
-                <div className="w-full h-full rounded-full bg-card flex items-center justify-center">
-                  <User className="w-10 h-10 text-primary" />
-                </div>
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-12">
+        {/* User Stats Brutalist Block */}
+        <div className={`bg-[#ff90e8] p-8 md:p-12 mb-16 ${brutalBorder} ${brutalShadow} relative overflow-hidden`}>
+           {/* Decorative corner element */}
+           <div className={`absolute -right-10 -top-10 w-32 h-32 bg-[#fde047] rounded-full ${brutalBorder}`}></div>
+
+           <div className="flex flex-col md:flex-row gap-10 items-start md:items-center justify-between relative z-10">
+            <div className="flex items-center gap-6">
+              <div className={`w-24 h-24 bg-white ${brutalBorder} ${brutalShadow} flex items-center justify-center rotate-3`}>
+                <User className="w-12 h-12 text-black" />
               </div>
-              <div>
-                <h1 className="text-3xl font-display font-bold text-foreground mb-1">{user?.username}</h1>
-                <p className="text-muted-foreground">{user?.email}</p>
+              <div className="bg-white/50 backdrop-blur-sm p-4 w-fit border-2 border-black border-dashed">
+                <h1 className="text-4xl font-black uppercase tracking-tighter mb-1" style={{ textShadow: "2px 2px 0px #fff" }}>{user?.username}</h1>
+                <p className="font-bold text-lg">{user?.email}</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-6 w-full md:w-auto">
-              <div className="bg-background/50 backdrop-blur-sm rounded-xl p-4 border border-border text-center">
-                <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider mb-1">Total Links</p>
-                <p className="text-2xl font-bold text-foreground">{totalLinks}</p>
-              </div>
-              <div className="bg-background/50 backdrop-blur-sm rounded-xl p-4 border border-border text-center">
-                <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider mb-1">Paid Links</p>
-                <p className="text-2xl font-bold text-foreground">{paidLinks}</p>
-              </div>
-              <div className="bg-background/50 backdrop-blur-sm rounded-xl p-4 border border-border text-center">
-                <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider mb-1">Amount Spent</p>
-                <p className="text-2xl font-bold text-foreground">₹{totalSpent}</p>
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full md:w-auto">
+              {[
+                { label: "Total Links", value: totalLinks, bg: "bg-white", rotate: "-rotate-2" },
+                { label: "Paid Links", value: paidLinks, bg: "bg-[#86efac]", rotate: "rotate-2" },
+                { label: "Amount Spent", value: `₹${totalSpent}`, bg: "bg-[#93c5fd]", rotate: "-rotate-1" }
+              ].map((stat, i) => (
+                <div key={i} className={`${stat.bg} ${brutalBorder} p-4 text-center ${brutalShadow} ${stat.rotate} transition-transform hover:rotate-0`}>
+                  <p className="text-sm font-black uppercase tracking-widest mb-2 px-2 border-b-2 border-black pb-1">{stat.label}</p>
+                  <p className="text-3xl font-black">{stat.value}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Links Section */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-display font-bold text-foreground flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-primary" /> My Created Links
+        {/* Links Section Header */}
+        <div className="flex items-center justify-between mb-10">
+          <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter flex items-center gap-4" style={{ textShadow: "3px 3px 0px #000", color: "#fde047" }}>
+             <Flame className="w-10 h-10 fill-current text-current" /> 
+             My Magic Links
           </h2>
-          <Button onClick={() => navigate("/create")} className="gradient-primary text-primary-foreground font-medium rounded-full hidden sm:flex">
-            Create New Link
+          <Button 
+            onClick={() => navigate("/create")} 
+            className={`md:hidden bg-[#fde047] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none`}
+          >
+            CREATE
           </Button>
         </div>
 
+        {/* Empty State vs Grid */}
         {pages.length === 0 ? (
-          <div className="text-center py-20 text-muted-foreground bg-card rounded-2xl border border-border shadow-card flex flex-col items-center justify-center">
-            <div className="w-24 h-24 mb-6 rounded-full bg-primary/10 flex items-center justify-center">
-              <Heart className="w-12 h-12 text-primary opacity-80" />
+          <div className={`bg-[#93c5fd] p-16 text-center flex flex-col items-center justify-center ${brutalBorder} ${brutalShadow}`}>
+            <div className={`w-32 h-32 mb-8 bg-white ${brutalBorder} ${brutalShadow} flex items-center justify-center -rotate-6`}>
+              <Heart className="w-16 h-16 text-black fill-[#ff0844]" />
             </div>
-            <h3 className="text-xl font-bold text-foreground mb-2">No links created yet</h3>
-            <p className="max-w-md mx-auto mb-8">Share beautiful moments with your loved ones by creating your very first WishLink.</p>
-            <Button size="lg" className="gradient-primary" onClick={() => navigate("/create")}>
-              Create Your First Link
+            <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tighter mb-4" style={{ textShadow: "2px 2px 0px #fff" }}>No links created yet!</h3>
+            <p className="text-xl font-bold max-w-md mx-auto mb-10">Start sharing beautiful, personalized web pages with your loved ones.</p>
+            <Button size="lg" className={`bg-[#fde047] text-black text-xl font-black uppercase tracking-widest rounded-none h-16 px-10 ${brutalBorder} ${brutalShadow} ${brutalShadowHover}`} onClick={() => navigate("/create")}>
+               CREATE YOUR FIRST LINK
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {pages.map((page) => {
               const thumbnail = page.images && page.images.length > 0 ? page.images[0] : null;
+              
+              const isPaid = page.content?.paymentStatus === 'success';
 
               return (
-                <div key={page._id} className="bg-card border border-border rounded-xl overflow-hidden shadow-card hover:shadow-glow transition-all duration-300 flex flex-col group">
+                <div key={page._id} className={`bg-white ${brutalBorder} ${brutalShadow} transition-all duration-300 flex flex-col group`}>
                   {/* Card Image Area */}
-                  <div className="h-40 relative bg-secondary overflow-hidden w-full">
+                  <div className={`h-48 relative overflow-hidden w-full ${brutalBorder} border-t-0 border-l-0 border-r-0`}>
                     {thumbnail ? (
-                      <img src={thumbnail} alt="Thumbnail" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <img src={thumbnail} alt="Thumbnail" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                     ) : (
-                      <div className="w-full h-full gradient-hero opacity-80 flex items-center justify-center">
-                        <ImageIcon className="w-10 h-10 text-muted-foreground opacity-50" />
+                      <div className="w-full h-full bg-[#c4b5fd] flex items-center justify-center">
+                        <ImageIcon className="w-16 h-16 text-black opacity-30" />
                       </div>
                     )}
-                    <div className="absolute top-3 right-3 flex flex-col gap-2">
-                      <span className={`px-2.5 py-1 text-xs font-semibold rounded-full shadow-sm backdrop-blur-md ${
-                        page.content?.paymentStatus === 'success' 
-                          ? 'bg-green-500/90 text-white' 
-                          : 'bg-yellow-500/90 text-white'
+                    
+                    {/* Tags */}
+                    <div className="absolute top-4 right-4 flex flex-col gap-2">
+                      <span className={`px-4 py-1 text-sm font-black uppercase ${brutalBorder} ${
+                        isPaid ? 'bg-[#86efac] text-black' : 'bg-[#fde047] text-black'
                       }`}>
-                        {page.content?.paymentStatus === 'success' ? 'Paid' : 'Pending'}
+                        {isPaid ? 'Paid' : 'Pending'}
                       </span>
                     </div>
-                    <div className="absolute top-3 left-3">
-                       <span className="px-3 py-1 text-xs font-bold uppercase rounded-full bg-background/90 backdrop-blur-md text-foreground shadow-sm">
+                    <div className="absolute top-4 left-4">
+                       <span className={`px-4 py-1 text-sm font-black uppercase ${brutalBorder} bg-white text-black`}>
                          {page.content?.templateType || 'Standard'}
                        </span>
                     </div>
                   </div>
                   
                   {/* Card Content */}
-                  <div className="p-5 flex flex-col flex-1">
-                    <h3 className="font-display font-bold text-lg text-foreground line-clamp-1 mb-1" title={`${page.content?.senderName || 'Someone'} → ${page.content?.receiverName || 'Someone Special'}`}>
-                      {page.content?.senderName || 'Someone'} <span className="text-muted-foreground text-sm font-normal mx-1">to</span> {page.content?.receiverName || 'Someone Special'}
+                  <div className="p-6 flex flex-col flex-1 bg-[#FFFDF7]">
+                    <h3 className="font-display font-black text-2xl uppercase tracking-tight text-black line-clamp-1 mb-2">
+                      {page.content?.senderName || 'Someone'} <span className="text-xl text-black font-bold mx-1 lowercase">to</span> {page.content?.receiverName || 'Someone Special'}
                     </h3>
                     
-                    <p className="text-sm text-muted-foreground line-clamp-2 mt-2 mb-4 italic flex-1">
+                    <div className="w-full h-1 bg-black mb-4"></div>
+
+                    <p className="text-lg font-bold text-black/80 line-clamp-2 mt-2 mb-8 bg-white p-3 border-2 border-dashed border-black">
                       "{page.content?.message || 'No message provided.'}"
                     </p>
 
-                    <div className="flex items-center gap-2 mt-auto pt-4 border-t border-border">
-                      <Button size="sm" className="flex-1 rounded-full text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20" onClick={() => window.open(`/p/${page.customUrlData}`, "_blank")}>
-                        <ExternalLink className="w-3 h-3 mr-1.5" /> View
+                    <div className="flex items-center gap-4 mt-auto">
+                      <Button 
+                         className={`flex-1 h-12 bg-white text-black font-black uppercase tracking-widest rounded-none ${brutalBorder} hover:bg-[#86efac] transition-colors`} 
+                         onClick={() => window.open(`/p/${page.customUrlData}`, "_blank")}
+                      >
+                         <ExternalLink className="w-5 h-5 mr-2" /> View
                       </Button>
                       <Button 
-                        size="sm" 
-                        variant="outline" 
-                        className={`flex-1 rounded-full text-xs font-medium transition-colors ${copiedSlug === page.customUrlData ? 'bg-green-50 text-green-700 border-green-200' : ''}`}
+                        className={`flex-1 h-12 text-black font-black uppercase tracking-widest rounded-none transition-colors ${brutalBorder} ${copiedSlug === page.customUrlData ? 'bg-[#86efac]' : 'bg-[#93c5fd] hover:bg-[#fde047]'}`}
                         onClick={() => handleCopy(page.customUrlData)}
                       >
                         {copiedSlug === page.customUrlData ? (
-                          <><Check className="w-3 h-3 mr-1.5 text-green-600" /> Copied</>
+                          <><Check className="w-5 h-5 mr-2" /> Copied</>
                         ) : (
-                          <><Copy className="w-3 h-3 mr-1.5" /> Copy Link</>
+                          <><Copy className="w-5 h-5 mr-2" /> Copy</>
                         )}
                       </Button>
                     </div>
