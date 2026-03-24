@@ -42,7 +42,7 @@ const LandingPage = () => {
                 <Button
                   variant="ghost"
                   onClick={() => navigate("/profile")}
-                  className="hidden sm:flex font-bold text-lg hover:underline decoration-4 underline-offset-4 decoration-black bg-transparent hover:bg-transparent text-black"
+                  className="flex font-bold text-base sm:text-lg hover:underline decoration-4 underline-offset-4 decoration-black bg-transparent hover:bg-transparent text-black px-2 sm:px-4"
                 >
                   Profile
                 </Button>
@@ -51,7 +51,7 @@ const LandingPage = () => {
                     localStorage.removeItem("token");
                     navigate("/login");
                   }}
-                  className={`bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-12 px-6`}
+                  className={`bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 sm:h-12 px-4 sm:px-6 text-sm sm:text-base`}
                 >
                   Logout
                 </Button>
@@ -61,13 +61,13 @@ const LandingPage = () => {
                 <Button
                   variant="ghost"
                   onClick={() => navigate("/login")}
-                  className="hidden sm:flex font-bold text-lg hover:underline decoration-4 underline-offset-4 decoration-black bg-transparent hover:bg-transparent text-black"
+                  className="flex font-bold text-base sm:text-lg hover:underline decoration-4 underline-offset-4 decoration-black bg-transparent hover:bg-transparent text-black px-2 sm:px-4"
                 >
                   Login
                 </Button>
                 <Button
                   onClick={() => navigate("/signup")}
-                  className={`bg-[#ff90e8] text-black font-bold uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-12 px-6`}
+                  className={`bg-[#ff90e8] text-black font-bold uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 sm:h-12 px-4 sm:px-6 text-sm sm:text-base`}
                 >
                   Sign Up
                 </Button>
@@ -96,7 +96,7 @@ const LandingPage = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-6xl sm:text-7xl lg:text-[7rem] font-black leading-[0.9] tracking-tighter uppercase"
+            className="text-5xl sm:text-7xl lg:text-[7rem] font-black leading-[0.9] tracking-tighter uppercase"
             style={{ textShadow: "4px 4px 0px #000" }}
           >
             <span className="text-[#ff90e8]">Don't text.</span>

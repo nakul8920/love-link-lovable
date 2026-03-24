@@ -132,18 +132,18 @@ const Profile = () => {
            {/* Decorative corner element */}
            <div className={`absolute -right-10 -top-10 w-32 h-32 bg-[#fde047] rounded-full ${brutalBorder}`}></div>
 
-           <div className="flex flex-col md:flex-row gap-10 items-start md:items-center justify-between relative z-10">
-            <div className="flex items-center gap-6">
-              <div className={`w-24 h-24 bg-white ${brutalBorder} ${brutalShadow} flex items-center justify-center rotate-3`}>
-                <User className="w-12 h-12 text-black" />
+           <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start md:items-center justify-between relative z-10">
+            <div className="flex items-center gap-4 sm:gap-6">
+              <div className={`w-20 sm:w-24 h-20 sm:h-24 bg-white ${brutalBorder} ${brutalShadow} flex items-center justify-center rotate-3`}>
+                <User className="w-10 sm:w-12 h-10 sm:h-12 text-black" />
               </div>
-              <div className="bg-white/50 backdrop-blur-sm p-4 w-fit border-2 border-black border-dashed">
-                <h1 className="text-4xl font-black uppercase tracking-tighter mb-1" style={{ textShadow: "2px 2px 0px #fff" }}>{user?.username}</h1>
-                <p className="font-bold text-lg">{user?.email}</p>
+              <div className="bg-white/50 backdrop-blur-sm p-3 sm:p-4 w-fit border-2 border-black border-dashed">
+                <h1 className="text-3xl sm:text-4xl font-black uppercase tracking-tighter mb-1" style={{ textShadow: "2px 2px 0px #fff" }}>{user?.username}</h1>
+                <p className="font-bold text-base sm:text-lg">{user?.email}</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full md:w-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 w-full md:w-auto">
               {[
                 { label: "Total Links", value: totalLinks, bg: "bg-white", rotate: "-rotate-2" },
                 { label: "Paid Links", value: paidLinks, bg: "bg-[#86efac]", rotate: "rotate-2" },
@@ -159,14 +159,14 @@ const Profile = () => {
         </div>
 
         {/* Links Section Header */}
-        <div className="flex items-center justify-between mb-10">
-          <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter flex items-center gap-4" style={{ textShadow: "3px 3px 0px #000", color: "#fde047" }}>
-             <Flame className="w-10 h-10 fill-current text-current" /> 
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0 mb-10">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tighter flex items-center gap-3" style={{ textShadow: "2px 2px 0px #000", color: "#fde047" }}>
+             <Flame className="w-8 md:w-10 h-8 md:h-10 fill-current text-current shrink-0" /> 
              My Magic Links
           </h2>
           <Button 
             onClick={() => navigate("/create")} 
-            className={`md:hidden bg-[#fde047] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none`}
+            className={`w-full sm:w-auto md:hidden bg-[#fde047] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none`}
           >
             CREATE
           </Button>
@@ -226,11 +226,11 @@ const Profile = () => {
                     
                     <div className="w-full h-1 bg-black mb-4"></div>
 
-                    <p className="text-lg font-bold text-black/80 line-clamp-2 mt-2 mb-8 bg-white p-3 border-2 border-dashed border-black">
+                    <p className="text-base sm:text-lg font-bold text-black/80 line-clamp-2 mt-2 mb-6 sm:mb-8 bg-white p-3 border-2 border-dashed border-black">
                       "{page.content?.message || 'No message provided.'}"
                     </p>
 
-                    <div className="flex items-center gap-4 mt-auto">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mt-auto">
                       <Button 
                          className={`flex-1 h-12 bg-white text-black font-black uppercase tracking-widest rounded-none ${brutalBorder} hover:bg-[#86efac] transition-colors`} 
                          onClick={() => window.open(`/p/${page.customUrlData}`, "_blank")}
