@@ -17,12 +17,6 @@ const userSchema = mongoose.Schema(
       type: String,
       // Removed required: true to allow Google Auth logins which don't have passwords
     },
-    resetPasswordOtp: {
-      type: String,
-    },
-    resetPasswordExpires: {
-      type: Date,
-    },
   },
   {
     timestamps: true,
