@@ -2,19 +2,6 @@ const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
 const { OAuth2Client } = require('google-auth-library');
 
-// @desc    Register a new user (Disabled)
-// @route   POST /api/auth/register
-// @access  Public
-const registerUser = async (req, res) => {
-  res.status(400).json({ message: "Direct sign up is disabled. Please click 'Continue with Google' to create your profile securely without a password." });
-};
-
-// @desc    Auth user & get token (Disabled)
-// @route   POST /api/auth/login
-// @access  Public
-const authUser = async (req, res) => {
-  res.status(400).json({ message: "Email and password login is disabled. Please click 'Continue with Google' to access your profile securely." });
-};
 
 // @desc    Get user profile
 // @route   GET /api/auth/profile
@@ -68,4 +55,4 @@ const googleAuth = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, authUser, getUserProfile, googleAuth };
+module.exports = { getUserProfile, googleAuth };

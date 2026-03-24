@@ -1,47 +1,12 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { GoogleLogin } from "@react-oauth/google";
-import { Eye, EyeOff, Sparkles, Heart, Shield, ArrowRight } from "lucide-react";
+import { Sparkles, Heart, Shield } from "lucide-react";
 import { API_BASE_URL } from "@/config";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !password) {
-      toast.error("Please fill in all fields");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userInfo", JSON.stringify(data));
-        toast.success("Login successful!");
-        navigate("/");
-      } else {
-        toast.error(data.message || "Invalid email or password");
-      }
-    } catch (error) {
-      toast.error("Network error.");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
     try {
@@ -79,7 +44,7 @@ const Login = () => {
           <div className="absolute bottom-0 left-0 -ml-10 -mb-10 w-32 h-32 rounded-full bg-blue-400 opacity-20 blur-xl"></div>
           <div className="relative z-10 flex flex-col items-center text-center">
             <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-lg flex items-center justify-center font-black text-xl text-white mb-2 shadow-lg border border-white/20">W</div>
-            <h2 className="text-xl font-extrabold text-white tracking-tight">Welcome Back</h2>
+            <h2 className="text-xl font-extrabold text-white tracking-tight">Welcome to Wishlink</h2>
           </div>
         </div>
 
@@ -95,7 +60,7 @@ const Login = () => {
                 <span className="font-bold text-lg tracking-wide">Wishlink</span>
               </div>
               <h2 className="text-4xl font-extrabold leading-tight tracking-tight">
-                Welcome Back <br /> To The Magic
+                Welcome To <br /> The Magic
               </h2>
             </div>
             
@@ -123,7 +88,7 @@ const Login = () => {
 
             <div className="backdrop-blur-md bg-white/10 border border-white/20 p-4 rounded-xl shadow-lg mt-8">
               <div className="flex space-x-1 mb-2">
-                {[1,2,3,4,5].map(i => <Sparkles key={i} className="w-3 h-3 text-yellow-300" fill="currentColor" />)}
+                {[1, 2, 3, 4, 5].map(i => <Sparkles key={i} className="w-3 h-3 text-yellow-300" fill="currentColor" />)}
               </div>
               <p className="text-white font-medium italic text-sm leading-snug">"The easiest way to send authentic digital gifts safely to my friends. Period."</p>
               <p className="text-white/70 text-xs mt-2 font-semibold">— Rohan K.</p>
@@ -137,76 +102,41 @@ const Login = () => {
             {/* Center handle for bottom sheet feel on mobile */}
             <div className="w-10 h-1.5 bg-gray-200 rounded-full mx-auto mb-6 lg:hidden shrink-0"></div>
             
-            <div className="w-full text-center lg:text-left mb-4 shrink-0">
-              <h1 className="text-2xl lg:text-3xl font-extrabold text-gray-900 tracking-tight mb-1">Sign In</h1>
-              <p className="text-gray-500 text-xs lg:text-sm font-medium">Enter your credentials to access your account.</p>
+            <div className="w-full text-center lg:text-left mb-8 shrink-0">
+              <h1 className="text-2xl lg:text-3xl font-extrabold text-gray-900 tracking-tight mb-2">Join the Magic</h1>
+              <p className="text-gray-500 text-sm lg:text-base font-medium leading-snug">Sign in or create an account using your authentic Google account to get started.</p>
             </div>
 
-            <form onSubmit={handleLogin} className="space-y-3 shrink-0">
-              <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Email Address</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-gray-50 rounded-lg border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:border-transparent outline-none text-sm"
-                  placeholder="you@example.com"
-                  required
-                />
-              </div>
-
-              <div>
-                <div className="flex justify-between items-center mb-1">
-                  <label className="block text-xs font-semibold text-gray-700">Password</label>
-                  <Link to="/forgot-password" className="text-[11px] text-indigo-600 font-bold hover:underline">Forgot?</Link>
+            {/* Google Signup Box */}
+            <div className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-6 hover:shadow-lg transition-all flex flex-col items-center justify-center space-y-4 mb-6 relative overflow-hidden shrink-0">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-100 rounded-full mix-blend-multiply filter blur-xl opacity-50"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-pink-100 rounded-full mix-blend-multiply filter blur-xl opacity-50"></div>
+              
+              <div className="relative z-10 flex flex-col items-center w-full">
+                <div className="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center border border-gray-100 mb-3">
+                  <img src="https://www.google.com/favicon.ico" alt="Google" className="w-7 h-7 object-contain" />
                 </div>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-gray-50 rounded-lg border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:border-transparent outline-none pr-9 text-sm"
-                    placeholder="••••••••"
-                    required
+                <h3 className="text-gray-900 font-bold text-lg text-center mb-1">Continue with Google</h3>
+                <p className="text-xs text-gray-500 text-center mb-5 max-w-[200px] leading-snug font-medium">
+                  We require a real Google email to keep our platform completely spam-free and secure.
+                </p>
+                
+                <div className="w-full flex justify-center">
+                  <GoogleLogin
+                    onSuccess={handleGoogleSuccess}
+                    onError={handleGoogleError}
+                    theme="filled_black"
+                    shape="pill"
+                    text="continue_with"
+                    width={320}
                   />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
                 </div>
               </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className={`w-full py-2.5 mt-2 rounded-lg text-white font-bold text-sm transition-all shadow-md ${loading ? "bg-gray-400 cursor-not-allowed shadow-none" : "bg-gradient-to-r from-indigo-600 to-purple-600"}`}
-              >
-                {loading ? "Signing in..." : "Sign In"}
-              </button>
-            </form>
-
-            <div className="mt-4 mb-4 flex items-center justify-center space-x-3 shrink-0">
-              <div className="h-px bg-gray-200 flex-1"></div>
-              <span className="text-gray-400 text-[10px] font-semibold tracking-wide uppercase">Or</span>
-              <div className="h-px bg-gray-200 flex-1"></div>
             </div>
 
-            <div className="w-full flex justify-center shrink-0 mb-4">
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={handleGoogleError}
-                theme="outline"
-                shape="rectangular"
-                text="signin_with"
-                width={320}
-              />
-            </div>
-
-            <div className="w-full text-center mt-auto pb-1 shrink-0">
-              <p className="text-gray-600 font-medium text-xs">
-                New to Wishlink?{" "}
-                <Link to="/signup" className="text-indigo-600 font-bold hover:underline inline-flex items-center">
-                  Create an account <ArrowRight className="w-3 h-3 ml-1" />
-                </Link>
+            <div className="w-full text-center mt-auto pb-2 shrink-0">
+              <p className="text-[10px] text-gray-400 font-medium">
+                By joining, you agree to our Terms of Service & Privacy Policy.
               </p>
             </div>
           </div>
