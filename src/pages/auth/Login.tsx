@@ -12,6 +12,7 @@ const Login = () => {
     try {
       const res = await fetch(`${API_BASE_URL}/api/auth/google`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ credential: credentialResponse.credential }),
       });

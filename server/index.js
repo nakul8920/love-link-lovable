@@ -25,6 +25,7 @@ app.use(cors({
   origin: [
     'https://love-link-lovable.vercel.app',
     'http://localhost:5173',
+    'http://localhost:8080',
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
