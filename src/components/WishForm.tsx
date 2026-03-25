@@ -10,41 +10,45 @@ interface Props {
   onChange: (field: string, value: string) => void;
 }
 
+const brutalBorder = "border-4 border-black";
+const brutalShadow = "shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]";
+const brutalInput = `h-14 bg-white text-black font-bold uppercase tracking-wide rounded-none ${brutalBorder} ${brutalShadow} focus:outline-none focus:ring-0 focus:-translate-y-1 focus:-translate-x-1 focus:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all`;
+
 const WishForm = ({ senderName, receiverName, message, onChange }: Props) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-5"
+      className="space-y-6"
     >
-      <div className="space-y-2">
-        <Label htmlFor="senderName" className="text-sm font-medium text-foreground">Your Name</Label>
+      <div className="space-y-3">
+        <Label htmlFor="senderName" className="text-xl font-black uppercase tracking-widest text-black bg-white px-2 py-1 border-2 border-black inline-block -rotate-1">Your Name</Label>
         <Input
           id="senderName"
-          placeholder="Enter your name"
+          placeholder="Who are you?"
           value={senderName}
           onChange={(e) => onChange("senderName", e.target.value)}
-          className="h-12 rounded-xl bg-secondary/50 border-border focus:border-primary"
+          className={brutalInput}
         />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="receiverName" className="text-sm font-medium text-foreground">Receiver's Name</Label>
+      <div className="space-y-3">
+        <Label htmlFor="receiverName" className="text-xl font-black uppercase tracking-widest text-black bg-white px-2 py-1 border-2 border-black inline-block rotate-1">Receiver's Name</Label>
         <Input
           id="receiverName"
           placeholder="Who is this for?"
           value={receiverName}
           onChange={(e) => onChange("receiverName", e.target.value)}
-          className="h-12 rounded-xl bg-secondary/50 border-border focus:border-primary"
+          className={brutalInput}
         />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="message" className="text-sm font-medium text-foreground">Your Message</Label>
+      <div className="space-y-3">
+        <Label htmlFor="message" className="text-xl font-black uppercase tracking-widest text-black bg-white px-2 py-1 border-2 border-black inline-block -rotate-1">Your Message</Label>
         <Textarea
           id="message"
-          placeholder="Write your heartfelt message..."
+          placeholder="Write something nice..."
           value={message}
           onChange={(e) => onChange("message", e.target.value)}
-          className="min-h-[120px] rounded-xl bg-secondary/50 border-border focus:border-primary resize-none"
+          className={`min-h-[160px] bg-white text-black font-bold uppercase tracking-wide rounded-none ${brutalBorder} ${brutalShadow} focus:outline-none focus:ring-0 focus:-translate-y-1 focus:-translate-x-1 focus:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all resize-none p-4`}
         />
       </div>
     </motion.div>

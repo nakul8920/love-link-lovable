@@ -121,7 +121,7 @@ const LandingPage = () => {
           >
             <Button
               size="lg"
-              onClick={() => navigate("/create")}
+              onClick={() => { document.getElementById('templates')?.scrollIntoView({ behavior: 'smooth' }); }}
               className={`w-full sm:w-auto h-16 px-10 bg-[#86efac] text-black text-xl font-black uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200 group`}
             >
               Start Creating
@@ -198,7 +198,7 @@ const LandingPage = () => {
               <div
                 key={i}
                 className={`group relative ${t.bg} ${brutalBorder} ${brutalShadow} ${t.available ? brutalShadowHover : 'opacity-70 grayscale'} p-8 transition-all duration-200 cursor-pointer flex flex-col items-center justify-center min-h-[300px] text-center`}
-                onClick={() => t.available && navigate("/create")}
+                onClick={() => t.available && navigate(`/create?theme=${t.label.toLowerCase()}`)}
               >
                 {!t.available && (
                   <div className={`absolute -top-4 -right-4 bg-black text-white px-4 py-2 font-black uppercase tracking-widest text-sm ${brutalBorder} rotate-12`}>
@@ -260,7 +260,7 @@ const LandingPage = () => {
               </p>
               <Button
                 size="lg"
-                onClick={() => navigate("/create")}
+                onClick={() => { document.getElementById('templates')?.scrollIntoView({ behavior: 'smooth' }); }}
                 className={`h-20 px-12 bg-[#fde047] text-black text-2xl font-black uppercase tracking-widest rounded-none ${brutalBorder} shadow-[8px_8px_0px_#fff] hover:shadow-[2px_2px_0px_#fff] hover:translate-x-[6px] hover:translate-y-[6px] transition-all duration-200`}
               >
                 CREATE FOR FREE NOW
