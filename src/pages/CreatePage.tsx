@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, Heart, CreditCard, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Heart, CreditCard, Sparkles, Smile } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import WishForm from "@/components/WishForm";
 import ImageUploader from "@/components/ImageUploader";
@@ -13,10 +13,9 @@ import { API_BASE_URL } from "@/config";
 
 const steps = ["Details", "Photos", "Payment"];
 
-// Neo-Brutalist utility classes
-const brutalShadow = "shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]";
-const brutalShadowHover = "hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[4px] hover:translate-y-[4px]";
-const brutalBorder = "border-[3px] border-black";
+// Responsive brutal classes for mobile only
+const brutalBorder = "border-[3px] border-black md:border-[4px]";
+const brutalShadowHover = "hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px]";
 
 const CreatePage = () => {
   const navigate = useNavigate();
@@ -50,7 +49,6 @@ const CreatePage = () => {
       const slug = generateSlug();
       const uploadedImageUrls: string[] = [];
 
-      // Upload images to backend
       for (const file of images) {
         const formData = new FormData();
         formData.append("image", file);
@@ -60,7 +58,6 @@ const CreatePage = () => {
         });
         if (res.ok) {
           const text = await res.text();
-          // The backend returns a path like "/uploads/..."
           uploadedImageUrls.push(`${API_BASE_URL}${text}`);
         }
       }
@@ -80,10 +77,8 @@ const CreatePage = () => {
         orderId: `order_${Date.now()}`,
       };
 
-      // Save to local storage for backward compatibility
       savePage(pageData);
 
-      // Save to backend
       const token = localStorage.getItem("token");
       if (token) {
         await fetch(`${API_BASE_URL}/api/page`, {
@@ -108,7 +103,6 @@ const CreatePage = () => {
       }
 
       setProcessing(false);
-      toast.success("YOUR MAGIC IS READY! 🚀");
       navigate(`/success/${slug}`);
     } catch (error) {
       console.error(error);
@@ -118,138 +112,283 @@ const CreatePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFDF7] text-black font-body selection:bg-[#ff90e8] selection:text-black overflow-x-hidden pb-20">
-      {/* Background Texture */}
-      <div className="fixed inset-0 z-0 pointer-events-none opacity-20" style={{ backgroundImage: "radial-gradient(#000 1px, transparent 1px)", backgroundSize: "32px 32px" }}></div>
+    <>
+      <div className="min-h-[100dvh] bg-[#FFFDF7] text-black font-body selection:bg-[#ff90e8] selection:text-black overflow-x-hidden flex flex-col lg:hidden">
+        {/* MOBILE ONLY LAYOUT (Identical to before) */}
+        
+        {/* Background Texture globally on mobile */}
+        <div className="fixed inset-0 z-0 pointer-events-none opacity-20" style={{ backgroundImage: "radial-gradient(#000 1.5px, transparent 1.5px)", backgroundSize: "32px 32px" }}></div>
 
-      {/* Brutalist Header */}
-      <div className={`relative z-10 bg-[#c4b5fd] ${brutalBorder} border-t-0 border-l-0 border-r-0`}>
-        <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Sleek Mobile Brutalist Header */}
+        <div className={`relative z-10 w-full bg-[#c4b5fd] border-b-[3px] border-black py-3 px-4 flex justify-between items-center`}>
           <button 
             onClick={() => navigate("/")} 
-            className={`flex items-center gap-2 bg-white px-4 py-2 font-black uppercase text-sm ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200`}
+            className={`flex items-center gap-1 bg-white px-3 py-1.5 font-black uppercase text-xs border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all`}
           >
-            <ArrowLeft className="w-5 h-5 mr-1" />
-            <Heart className="w-5 h-5 text-black fill-[#ff90e8]" />
-            <span className="font-display tracking-widest hidden sm:inline">WishLink</span>
+            <ArrowLeft className="w-4 h-4 mr-0.5" />
+            <Heart className="w-4 h-4 text-black fill-[#ff0844]" />
+            <span className="hidden sm:inline">HOME</span>
           </button>
           
-          <div className="bg-black text-white px-4 py-2 font-black uppercase text-sm tracking-widest flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-[#fde047]" />
-            CREATING {templateType.toUpperCase()}
+          <div className="bg-black text-white px-3 py-1 font-black uppercase text-[10px] tracking-widest flex items-center gap-1.5 rotate-1">
+            <Sparkles className="w-3 h-3 text-[#fde047]" />
+            <span>{templateType}</span>
           </div>
+        </div>
+
+        {/* Main Content Area - Mobile */}
+        <div className="relative z-10 flex-1 flex flex-col max-w-2xl mx-auto w-full px-4 py-6">
+          
+          <div className="flex justify-between items-center mb-6 w-full">
+            <div className="bg-white border-[3px] border-black font-black uppercase tracking-widest text-sm px-4 py-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center gap-2">
+              <span className="bg-black text-white px-2 py-0.5 text-xs">STEP {step + 1}</span>
+              <span>{steps[step]}</span>
+            </div>
+            
+            <div className="flex gap-1.5">
+              {steps.map((_, i) => (
+                <div 
+                  key={i} 
+                  className={`h-3 w-8 border-2 border-black transition-colors ${
+                    i < step ? 'bg-[#86efac]' : i === step ? 'bg-[#ff90e8]' : 'bg-white'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="flex-1">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={step}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.25 }}
+              >
+                {step === 0 && (
+                  <div className="animate-in fade-in slide-in-from-bottom-4">
+                    <h2 className="text-3xl font-black uppercase tracking-tighter mb-1 bg-[#fde047] inline-block px-3 py-1 border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -rotate-1">
+                      THE DETAILS
+                    </h2>
+                    <p className="text-sm font-bold mt-4 mb-6 text-gray-800 ml-1">
+                      Who is this masterpiece for?
+                    </p>
+                    <div className="w-full">
+                      <WishForm senderName={senderName} receiverName={receiverName} message={message} onChange={handleFormChange} />
+                    </div>
+                  </div>
+                )}
+
+                {step === 1 && (
+                  <div className="animate-in fade-in slide-in-from-bottom-4">
+                    <h2 className="text-3xl font-black uppercase tracking-tighter mb-1 bg-[#93c5fd] inline-block px-3 py-1 border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rotate-1">
+                      THE VISUALS
+                    </h2>
+                    <p className="text-sm font-bold mt-4 mb-6 text-gray-800 ml-1">
+                      Upload your best moments.
+                    </p>
+                    <div className="w-full">
+                      <ImageUploader images={images} onChange={setImages} />
+                    </div>
+                  </div>
+                )}
+
+                {step === 2 && (
+                  <div className="animate-in fade-in slide-in-from-bottom-4 flex flex-col items-center pt-4 text-center w-full max-w-md mx-auto">
+                    <div className={`w-20 h-20 bg-[#86efac] ${brutalBorder} shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center mb-6 rotate-3`}>
+                      <CreditCard className="w-10 h-10 text-black" />
+                    </div>
+                    <h2 className="text-4xl font-black uppercase tracking-tighter mb-3 leading-none" style={{ textShadow: "2px 2px 0px #ff90e8" }}>
+                      SEAL THE DEAL.
+                    </h2>
+                    <p className="text-sm font-bold mb-6">One-time payment. Infinite magic.</p>
+                    
+                    <div className={`bg-black text-white px-8 py-3 font-black text-3xl uppercase tracking-widest border-4 border-white shadow-[6px_6px_0px_0px_#fde047] mb-6`}>
+                      ₹49
+                    </div>
+                    
+                    <p className="text-xs font-bold uppercase text-gray-500 mb-8 w-full max-w-xs mx-auto">
+                      *Razorpay integration required. Demo mode active.
+                    </p>
+                    
+                    <Button
+                      size="lg"
+                      onClick={handlePayment}
+                      disabled={processing}
+                      className={`w-full h-16 bg-[#ff90e8] text-black text-lg font-black uppercase tracking-widest rounded-none ${brutalBorder} shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${brutalShadowHover} transition-all`}
+                    >
+                      {processing ? "MAKING IT..." : "PAY & PUBLISH"}
+                    </Button>
+                  </div>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {step < 2 && (
+            <div className="mt-8 pt-4 border-t-4 border-black border-dashed flex justify-between items-center w-full relative bottom-0">
+              <Button
+                variant="outline"
+                onClick={() => setStep(Math.max(0, step - 1))}
+                disabled={step === 0}
+                className={`h-12 px-6 bg-white text-black font-black uppercase tracking-widest rounded-none border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all disabled:opacity-50 disabled:shadow-none disabled:translate-y-0 disabled:translate-x-0`}
+              >
+                BACK
+              </Button>
+              <Button
+                onClick={() => setStep(step + 1)}
+                disabled={!canNext()}
+                className={`h-12 px-8 bg-[#86efac] text-black font-black uppercase tracking-widest rounded-none border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all disabled:opacity-50 disabled:shadow-none disabled:translate-y-0 disabled:translate-x-0 flex items-center`}
+              >
+                NEXT <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="relative z-10 max-w-3xl mx-auto px-6 pt-12">
+      {/* 
+        ========================================
+        DESKTOP LAYOUT (Hidden on Mobile)
+        Epic Cinematic Horizontal Carousel Flow
+        ========================================
+      */}
+      <div className="hidden lg:block w-full h-screen overflow-hidden bg-black text-black font-body selection:bg-[#ff0844] selection:text-white relative">
         
-        {/* Progress Tracker (Brutalist style) */}
-        <div className="flex items-center gap-2 mb-12">
-          {steps.map((s, i) => (
-            <div key={s} className="flex items-center gap-2 flex-1">
-              <div className={`w-10 h-10 flex items-center justify-center font-black text-lg transition-colors border-4 border-black ${
-                i <= step ? "bg-[#ff90e8] text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-x-[-2px] translate-y-[-2px]" : "bg-white text-black opacity-50"
-              }`}>
-                {i + 1}
-              </div>
-              <span className={`text-sm sm:text-base font-black uppercase tracking-widest hidden sm:block ${i <= step ? "text-black" : "text-gray-400"}`}>
-                {s}
-              </span>
-              {i < steps.length - 1 && <div className={`flex-1 h-2 border-y-2 border-black ${i < step ? "bg-[#86efac]" : "bg-white opacity-50"}`} />}
-            </div>
-          ))}
+        {/* Floating Top Nav (Glassmorphism + Brutal) */}
+        <div className="absolute top-8 left-8 right-8 z-50 flex justify-between items-center pointer-events-none">
+          <button 
+            onClick={() => navigate("/")} 
+            className="pointer-events-auto flex items-center gap-2 font-black uppercase tracking-widest text-lg bg-white border-4 border-black px-6 py-3 shadow-[6px_6px_0px_0px_#ff90e8] hover:translate-y-1 hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#ff90e8] transition-all"
+          >
+            <ArrowLeft className="w-6 h-6" />
+            HOME
+          </button>
+
+          <div className="pointer-events-auto flex gap-4">
+             {steps.map((label, index) => (
+                <div key={index} className={`flex items-center gap-3 px-6 py-3 border-4 border-black font-black uppercase tracking-widest text-lg transition-colors ${
+                  index === step ? 'bg-white shadow-[6px_6px_0px_0px_#fde047]' : 
+                  index < step ? 'bg-[#ff90e8] opacity-100' : 'bg-gray-800 text-gray-500 border-gray-600'
+                }`}>
+                   <span className={`w-8 h-8 flex items-center justify-center border-2 border-black ${index === step ? 'bg-black text-white' : 'bg-transparent'}`}>{index + 1}</span>
+                   {label}
+                </div>
+             ))}
+          </div>
         </div>
 
-        {/* Form Container */}
-        <div className={`bg-white ${brutalBorder} ${brutalShadow} p-8 sm:p-12 min-h-[400px]`}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={step}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              {step === 0 && (
-                <div>
-                  <div className="mb-8 border-b-4 border-black pb-4">
-                    <h2 className="text-4xl sm:text-5xl font-black uppercase tracking-tighter" style={{ textShadow: "2px 2px 0px #86efac" }}>THE DETAILS.</h2>
-                    <p className="text-xl font-bold mt-2">Who is this masterpiece for?</p>
-                  </div>
-                  
-                  <div className="bg-[#fde047] p-6 border-4 border-black mb-8 transform -rotate-1">
-                    <WishForm senderName={senderName} receiverName={receiverName} message={message} onChange={handleFormChange} />
-                  </div>
-                </div>
-              )}
-
-              {step === 1 && (
-                <div>
-                  <div className="mb-8 border-b-4 border-black pb-4">
-                    <h2 className="text-4xl sm:text-5xl font-black uppercase tracking-tighter" style={{ textShadow: "2px 2px 0px #93c5fd" }}>THE VISUALS.</h2>
-                    <p className="text-xl font-bold mt-2">Upload your best moments.</p>
-                  </div>
-
-                  <div className="bg-[#e9d5ff] p-6 border-4 border-black mb-8 transform rotate-1">
-                    <ImageUploader images={images} onChange={setImages} />
-                  </div>
-                </div>
-              )}
-
-              {step === 2 && (
-                <div className="text-center py-8 flex flex-col items-center">
-                  <div className={`w-24 h-24 bg-[#86efac] ${brutalBorder} ${brutalShadow} flex items-center justify-center mb-8 rotate-3 hover:rotate-12 transition-transform`}>
-                    <CreditCard className="w-12 h-12 text-black" />
-                  </div>
-                  <h2 className="text-4xl sm:text-5xl font-black uppercase tracking-tighter mb-4" style={{ textShadow: "2px 2px 0px #ff90e8" }}>SEAL THE DEAL.</h2>
-                  <p className="text-xl font-bold mb-6">One-time payment. Infinite magic.</p>
-                  
-                  <div className={`bg-black text-white px-8 py-4 font-black text-4xl uppercase tracking-widest ${brutalBorder} border-white shadow-[6px_6px_0px_#fde047] mb-8`}>
-                    ₹49
-                  </div>
-                  
-                  <p className="text-sm font-bold uppercase text-gray-500 mb-8 max-w-sm">
-                    *Razorpay integration required for production. Demo mode active.
+        {/* Massive Horizontal Sliding Track */}
+        <motion.div 
+          className="flex h-full w-[300vw]"
+          animate={{ x: `-${step * 100}vw` }}
+          transition={{ type: "spring", stiffness: 70, damping: 20, mass: 1 }}
+        >
+          {/* SLIDE 1: Details */}
+          <div className="w-[100vw] h-full bg-[#c4b5fd] flex items-center justify-center relative">
+             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(#000 2px, transparent 2px)", backgroundSize: "40px 40px" }} />
+             
+             <div className="w-full max-w-5xl flex gap-16 relative z-10">
+                <div className="flex-1 flex flex-col justify-center">
+                  <span className="text-[#ff0844] font-black tracking-widest text-2xl mb-4">STEP 01</span>
+                  <h1 className="text-8xl font-black uppercase tracking-tighter leading-[0.85] mb-8" style={{ textShadow: "6px 6px 0px #FFFDF7" }}>
+                    WHO IS<br/>THIS FOR?
+                  </h1>
+                  <p className="text-2xl font-bold border-l-[8px] border-black pl-8 py-2 w-4/5 text-gray-800">
+                    Type out their name, your name, and a heartfelt message. We'll handle making it look spectacular.
                   </p>
-                  
-                  <Button
-                    size="lg"
-                    onClick={handlePayment}
-                    disabled={processing}
-                    className={`h-16 px-10 bg-[#ff90e8] text-black text-xl font-black uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200 w-full sm:w-auto`}
-                  >
-                    {processing ? "MAKING IT..." : "PAY & PUBLISH"}
-                  </Button>
                 </div>
-              )}
-            </motion.div>
-          </AnimatePresence>
-        </div>
+                
+                <div className="w-[500px] bg-white border-[6px] border-black p-10 shadow-[16px_16px_0px_0px_#fde047] rotate-1">
+                   <WishForm senderName={senderName} receiverName={receiverName} message={message} onChange={handleFormChange} />
+                </div>
+             </div>
+          </div>
 
-        {/* Navigation Controls */}
+          {/* SLIDE 2: Photos */}
+          <div className="w-[100vw] h-full bg-[#ff90e8] flex items-center justify-center relative">
+             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000)", backgroundSize: "60px 60px" }} />
+             
+             <div className="w-full max-w-6xl flex gap-12 relative z-10">
+                <div className="flex-1 flex flex-col justify-center text-right border-r-[8px] border-black pr-12 pb-8">
+                  <span className="text-[#fde047] font-black tracking-widest text-2xl mb-4 block">STEP 02</span>
+                  <h1 className="text-8xl font-black uppercase tracking-tighter leading-[0.85] mb-8" style={{ textShadow: "-6px 6px 0px #FFFDF7" }}>
+                    VISUALS<br/>MATTER.
+                  </h1>
+                  <p className="text-2xl font-bold w-4/5 ml-auto text-gray-800">
+                    Drop up to 10 photos of your best memories together. They will be animated smoothly into your magic link.
+                  </p>
+                </div>
+                
+                <div className="w-[550px] bg-[#FFFDF7] border-[6px] border-black p-10 shadow-[-16px_16px_0px_0px_#86efac] -rotate-1">
+                   <ImageUploader images={images} onChange={setImages} />
+                </div>
+             </div>
+          </div>
+
+          {/* SLIDE 3: Payment */}
+          <div className="w-[100vw] h-full bg-[#fde047] flex items-center justify-center relative">
+             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(#000 2px, transparent 2px)", backgroundSize: "40px 40px" }} />
+             
+             <div className="w-full max-w-4xl relative z-10 text-center flex flex-col items-center">
+                <div className={`w-36 h-36 bg-[#86efac] border-[6px] border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center mb-12 rotate-6`}>
+                   <CreditCard className="w-16 h-16 text-black" />
+                </div>
+                <h1 className="text-[9rem] font-black uppercase tracking-tighter leading-[0.8] mb-12" style={{ textShadow: "8px 8px 0px #ff90e8" }}>
+                  SEAL IT.
+                </h1>
+                
+                <div className="flex items-center gap-6 mb-12 bg-white border-[6px] border-black px-10 py-6 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] -rotate-1 tracking-widest">
+                   <span className="text-4xl font-bold uppercase">PAY JUST</span>
+                   <span className="text-6xl font-black bg-black text-white px-6 py-2">₹49</span>
+                   <span className="text-4xl font-bold uppercase">FOREVER.</span>
+                </div>
+
+                <Button
+                  size="lg"
+                  onClick={handlePayment}
+                  disabled={processing}
+                  className={`min-w-[400px] h-28 bg-black text-white text-4xl font-black uppercase tracking-widest rounded-none border-[6px] border-black hover:bg-[#ff0844] hover:text-white transition-colors shadow-[12px_12px_0px_0px_rgba(255,255,255,1)] hover:translate-x-[6px] hover:translate-y-[6px] hover:shadow-none`}
+                >
+                  {processing ? "PROCESSING..." : "PAY & DEPLOY"}
+                </Button>
+                
+                <p className="mt-8 text-xl font-bold uppercase tracking-widest text-[#ff0844] bg-white px-4 border-2 border-black inline-block rotate-2">
+                  *Demonstration Mode Active
+                </p>
+             </div>
+          </div>
+        </motion.div>
+
+        {/* Floating Bottom Navigator (Mac-like dock but brutalist) */}
         {step < 2 && (
-          <div className="flex justify-between items-center mt-8">
+          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-50 flex items-center gap-6 bg-white border-4 border-black p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
             <Button
               variant="outline"
               onClick={() => setStep(Math.max(0, step - 1))}
               disabled={step === 0}
-              className={`h-14 px-8 bg-white text-black font-black uppercase tracking-widest rounded-none ${brutalBorder} shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`h-16 px-10 bg-white text-black text-2xl font-black uppercase tracking-widest rounded-none border-[4px] border-black transition-all disabled:opacity-30 disabled:border-2 hover:bg-black hover:text-white`}
             >
-              <ArrowLeft className="w-5 h-5 mr-2" /> Back
+              BACK
             </Button>
+
+            <div className="px-8 font-black text-2xl uppercase tracking-widest border-x-[4px] border-black h-16 flex items-center justify-center">
+               <Smile className="w-8 h-8 mr-3 text-[#ff90e8] fill-[#ff90e8]" />
+               ALMOST THERE
+            </div>
             
             <Button
               onClick={() => setStep(step + 1)}
               disabled={!canNext()}
-              className={`h-14 px-10 bg-[#86efac] text-black font-black uppercase tracking-widest rounded-none ${brutalBorder} shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center`}
+              className={`h-16 px-12 bg-[#86efac] text-black text-2xl font-black uppercase tracking-widest rounded-none border-[4px] border-black transition-all disabled:opacity-30 disabled:border-2 hover:bg-[#4ade80] flex items-center group`}
             >
-              NEXT <ArrowRight className="w-5 h-5 ml-2" />
+              NEXT <ArrowRight className="w-8 h-8 ml-4 group-hover:translate-x-3 transition-transform" />
             </Button>
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 };
 
