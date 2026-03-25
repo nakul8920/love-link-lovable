@@ -155,29 +155,77 @@ const LandingPage = () => {
         </div>
 
         {/* Hardcore Features Section */}
-        <section id="features" className="max-w-7xl mx-auto px-6 mb-32">
-          <div className="mb-16">
-            <h2 className="text-5xl sm:text-7xl font-black uppercase tracking-tighter" style={{ textShadow: "3px 3px 0px #000" }}><span className="text-[#fde047]">KILLER</span> FEATURES.</h2>
+        <section id="features" className="max-w-7xl mx-auto px-4 sm:px-6 mb-20 sm:mb-32">
+          <div className="mb-10 sm:mb-16">
+            <motion.h2 
+              initial={{ rotate: -2 }}
+              whileInView={{ rotate: 0 }}
+              className="text-5xl sm:text-7xl font-black uppercase tracking-tighter leading-none" 
+              style={{ textShadow: "3px 3px 0px #000" }}
+            >
+              <span className="text-[#fde047]">KILLER</span><br className="sm:hidden" /> FEATURES.
+            </motion.h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          {/* Desktop: Creative Bento Box. Mobile: Compact staggered list */}
+          <div className="flex flex-col lg:grid lg:grid-cols-3 lg:grid-rows-2 gap-4 lg:gap-8 relative">
+            
             {[
-              { icon: <Palette className="w-12 h-12" />, title: "LOUD DESIGNS", desc: "No boring minimalist crap. Every theme is designed to grab attention and melt hearts.", bg: "bg-[#ff90e8]" },
-              { icon: <Zap className="w-12 h-12" />, title: "BLAZING FAST", desc: "Our engine renders your magical page in milliseconds. It's so fast it's basically time travel.", bg: "bg-[#86efac]" },
-              { icon: <Camera className="w-12 h-12" />, title: "PHOTO BOMBS", desc: "Upload massive raw photos. We optimize them on the fly to keep the experience buttery smooth.", bg: "bg-[#93c5fd]" }
-            ].map((f, i) => (
+              { 
+                icon: Palette, 
+                title: "LOUD DESIGNS", 
+                desc: "No boring minimalist crap. Every theme is designed to grab attention and melt hearts.", 
+                bg: "bg-[#ff90e8]",
+                layoutClass: "lg:col-span-2 lg:row-span-1 lg:flex-row lg:items-center",
+                sticker: "RAD",
+                iconSize: "lg:w-28 lg:h-28",
+                iconSvg: "lg:w-14 lg:h-14"
+              },
+              { 
+                icon: Zap, 
+                title: "BLAZING FAST", 
+                desc: "Our engine renders your magical page in milliseconds. It's so fast it's basically time travel.", 
+                bg: "bg-[#86efac]",
+                layoutClass: "lg:col-span-1 lg:row-span-2 lg:flex-col lg:justify-center lg:items-center lg:text-center",
+                sticker: "WOW",
+                iconSize: "lg:w-32 lg:h-32 mb-0 lg:mb-8",
+                iconSvg: "lg:w-16 lg:h-16"
+              },
+              { 
+                icon: Camera, 
+                title: "PHOTO BOMBS", 
+                desc: "Upload massive raw photos. We optimize them on the fly to keep the experience buttery smooth.", 
+                bg: "bg-[#93c5fd]",
+                layoutClass: "lg:col-span-2 lg:row-span-1 lg:flex-row lg:items-center",
+                sticker: "PRO",
+                iconSize: "lg:w-28 lg:h-28",
+                iconSvg: "lg:w-14 lg:h-14"
+              }
+            ].map((f, i) => {
+              const Icon = f.icon;
+              return (
               <motion.div
                 key={i}
-                whileHover={{ y: -8, rotate: i % 2 === 0 ? 2 : -2 }}
-                className={`relative ${f.bg} ${brutalBorder} ${brutalShadow} p-8 flex flex-col transition-transform duration-200`}
+                whileHover={{ y: -8, scale: 1.02 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.4, delay: i * 0.1, type: "spring" }}
+                className={`group relative z-10 ${f.bg} ${brutalBorder} ${brutalShadow} p-4 sm:p-6 lg:p-10 flex flex-row items-start gap-4 lg:gap-8 hover:z-20 rounded-xl lg:rounded-none ${f.layoutClass}`}
               >
-                <div className={`w-20 h-20 bg-white ${brutalBorder} flex items-center justify-center mb-8`}>
-                  {f.icon}
+                <div className={`shrink-0 w-14 h-14 sm:w-16 sm:h-16 ${f.iconSize} bg-white ${brutalBorder} rounded-full lg:rounded-none flex items-center justify-center ${i % 2 === 0 ? "rotate-3" : "-rotate-3"} group-hover:rotate-12 transition-transform shadow-[4px_4px_0px_#000]`}>
+                  <Icon className={`w-6 h-6 sm:w-8 sm:h-8 ${f.iconSvg} text-black fill-transparent group-hover:scale-110 transition-transform`} />
                 </div>
-                <h3 className="text-3xl font-black uppercase tracking-tight mb-4">{f.title}</h3>
-                <p className="text-lg font-bold leading-relaxed">{f.desc}</p>
+                <div className="flex flex-col pt-1 lg:pt-0">
+                  <h3 className={`text-xl sm:text-2xl lg:text-4xl font-black uppercase tracking-tight mb-0.5 lg:mb-4 leading-none ${f.layoutClass.includes("flex-col") ? "lg:text-center" : ""}`}>{f.title}</h3>
+                  <p className={`text-xs sm:text-sm lg:text-xl font-bold leading-tight lg:leading-relaxed opacity-90 ${f.layoutClass.includes("flex-col") ? "lg:text-center mt-2" : ""}`}>{f.desc}</p>
+                </div>
+                {/* Decorative Sticker visible on all devices now */}
+                <div className={`absolute -top-3 lg:-top-5 -right-2 lg:-right-4 bg-black text-white text-[10px] lg:text-sm uppercase font-black px-2 lg:px-4 py-0.5 lg:py-1 border-2 border-white ${i % 2 === 0 ? "-rotate-6" : "rotate-12"} shadow-[2px_2px_0px_#fff]`}>
+                  {f.sticker}
+                </div>
               </motion.div>
-            ))}
+            )})}
           </div>
         </section>
 
