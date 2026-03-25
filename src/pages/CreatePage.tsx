@@ -46,68 +46,133 @@ const CreatePage = () => {
     setProcessing(true);
 
     try {
-      const slug = generateSlug();
-      const uploadedImageUrls: string[] = [];
-
-      for (const file of images) {
-        const formData = new FormData();
-        formData.append("image", file);
-        const res = await fetch(`${API_BASE_URL}/api/upload`, {
-          method: "POST",
-          body: formData,
-        });
-        if (res.ok) {
-          const text = await res.text();
-          uploadedImageUrls.push(`${API_BASE_URL}${text}`);
-        }
+      // 1. Create Order via our backend
+      const orderRes = await fetch(`${API_BASE_URL}/api/payment/create-order`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+      });
+      
+      if (!orderRes.ok) {
+        throw new Error("Failed to create order");
       }
+      const order = await orderRes.json();
 
-      const finalImages = uploadedImageUrls.length > 0 ? uploadedImageUrls : images.map((f) => URL.createObjectURL(f));
+      // 2. Open Razorpay Checkout Modal
+      const options = {
+        key: order.key_id,
+        amount: order.amount,
+        currency: order.currency,
+        name: "Wishlink Express",
+        description: "One-time magic link payment",
+        order_id: order.id,
+        handler: async function (response: any) {
+          // 3. Verify Payment
+          const verifyRes = await fetch(`${API_BASE_URL}/api/payment/verify`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            })
+          });
 
-      const pageData = {
-        id: slug,
-        slug,
-        templateType: templateType!,
-        senderName,
-        receiverName,
-        message,
-        imageUrls: finalImages,
-        createdAt: new Date().toISOString(),
-        paymentStatus: "success" as const,
-        orderId: `order_${Date.now()}`,
-      };
+          if (!verifyRes.ok) {
+            toast.error("Payment verification failed.");
+            setProcessing(false);
+            return;
+          }
 
-      savePage(pageData);
+          // 4. On Success -> Upload Images and Create Page
+          try {
+            const slug = generateSlug();
+            const uploadedImageUrls: string[] = [];
 
-      const token = localStorage.getItem("token");
-      if (token) {
-        await fetch(`${API_BASE_URL}/api/page`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            customUrlData: slug,
-            content: {
+            for (const file of images) {
+              const formData = new FormData();
+              formData.append("image", file);
+              const res = await fetch(`${API_BASE_URL}/api/upload`, {
+                method: "POST",
+                body: formData,
+              });
+              if (res.ok) {
+                const text = await res.text();
+                uploadedImageUrls.push(`${API_BASE_URL}${text}`);
+              }
+            }
+
+            const finalImages = uploadedImageUrls.length > 0 ? uploadedImageUrls : images.map((f) => URL.createObjectURL(f));
+
+            const pageData = {
+              id: slug,
+              slug,
               templateType: templateType!,
               senderName,
               receiverName,
               message,
-              paymentStatus: "success",
-              orderId: pageData.orderId,
-            },
-            images: finalImages,
-          }),
-        });
-      }
+              imageUrls: finalImages,
+              createdAt: new Date().toISOString(),
+              paymentStatus: "success" as const,
+              orderId: response.razorpay_order_id,
+            };
 
-      setProcessing(false);
-      navigate(`/success/${slug}`);
+            savePage(pageData);
+
+            const token = localStorage.getItem("token");
+            if (token) {
+              await fetch(`${API_BASE_URL}/api/page`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                  customUrlData: slug,
+                  content: {
+                    templateType: templateType!,
+                    senderName,
+                    receiverName,
+                    message,
+                    paymentStatus: "success",
+                    orderId: pageData.orderId,
+                  },
+                  images: finalImages,
+                }),
+              });
+            }
+
+            setProcessing(false);
+            navigate(`/success/${slug}`);
+          } catch (err) {
+            console.error(err);
+            setProcessing(false);
+            toast.error("Failed to create page after payment.");
+          }
+        },
+        prefill: {
+          name: senderName,
+        },
+        theme: {
+          color: "#000000"
+        },
+        modal: {
+          ondismiss: function() {
+            setProcessing(false);
+            toast.error("Payment cancelled.");
+          }
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on('payment.failed', function (response: any){
+        console.error(response.error.description);
+        toast.error("Payment failed. Please try again.");
+      });
+      rzp.open();
     } catch (error) {
       console.error(error);
       setProcessing(false);
-      toast.error("Failed to create page. Try again.");
+      toast.error("Failed to initiate payment. Try again.");
     }
   };
 
