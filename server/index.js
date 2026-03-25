@@ -25,6 +25,7 @@ const app = express();
 app.use(cors({
   origin: [
     'https://love-link-lovable.vercel.app',
+    'https://love-link-creator.vercel.app',
     'http://localhost:5173',
     'http://localhost:8080',
   ],
