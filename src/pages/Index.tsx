@@ -219,7 +219,7 @@ const LandingPage = () => {
             initial={{ opacity: 0, y: -20, rotate: -3 }}
             animate={{ opacity: 1, y: 0, rotate: 3 }}
             transition={{ duration: 0.5, type: "spring", bounce: 0.5 }}
-            className={`inline-flex items-center gap-2 px-4 sm:px-6 py-1.5 sm:py-2 bg-[#fde047] ${brutalBorder} ${brutalShadow} font-bold text-xs sm:text-sm uppercase tracking-wider mb-5 sm:mb-8 -rotate-3`}
+            className={`inline-flex items-center gap-2 px-3 sm:px-6 py-1.5 sm:py-2 bg-[#fde047] ${brutalBorder} ${brutalShadow} font-bold text-[10px] sm:text-xs uppercase tracking-wider mb-5 sm:mb-8 -rotate-3`}
           >
             <Flame className="w-5 h-5 text-black fill-black" />
             The internet's most delightful gifting app
@@ -229,12 +229,17 @@ const LandingPage = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-6xl lg:text-[7rem] font-black leading-[0.9] tracking-tighter uppercase"
-            style={{ textShadow: "4px 4px 0px #000" }}
+            className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-[7rem] font-black leading-[1.2] sm:leading-[0.9] tracking-tighter uppercase"
+            style={{ 
+              fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+              textShadow: "1px 1px 0px #000, 2px 2px 0px rgba(0,0,0,0.5)",
+              WebkitFontSmoothing: "antialiased",
+              MozOsxFontSmoothing: "grayscale",
+              transform: "translateZ(0)"
+            }}
           >
-            <span className="text-[#ff90e8]">Don't text.</span>
-            <br />
-            <span className="text-black">Send Magic.</span>
+            <span className="text-[#ff90e8] block mb-2 sm:mb-0">Don't text</span>
+            <span className="text-black block">Send Magic.</span>
           </motion.h1>
 
           <motion.p
