@@ -250,7 +250,7 @@ const LandingPage = () => {
             <Button
               size="lg"
               onClick={() => { document.getElementById('templates')?.scrollIntoView({ behavior: 'smooth' }); }}
-              className={`w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-10 bg-[#86efac] text-lg sm:text-xl font-black uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200 group`}
+              className={`w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-10 bg-[#86efac] text-black hover:text-black text-lg sm:text-xl font-black uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200 group`}
             >
               Start Creating
               <MoveRight className="w-5 h-5 sm:w-6 sm:h-6 ml-3 group-hover:translate-x-2 transition-transform" />
