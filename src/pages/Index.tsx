@@ -234,7 +234,7 @@ const LandingPage = () => {
           >
             <span className="text-[#ff90e8]">Don't text.</span>
             <br />
-            <span className="text-white">Send Magic.</span>
+            <span className="text-black">Send Magic.</span>
           </motion.h1>
 
           <motion.p
@@ -250,12 +250,12 @@ const LandingPage = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.3, type: "spring", bounce: 0.6 }}
-            className="mt-8 sm:mt-12 flex flex-col sm:flex-row gap-4 sm:gap-6 w-full sm:w-auto"
+            className="mt-8 sm:mt-12 flex flex-row gap-3 sm:gap-6 w-full"
           >
             <Button
               size="lg"
               onClick={() => { document.getElementById('templates')?.scrollIntoView({ behavior: 'smooth' }); }}
-              className={`w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-10 bg-[#86efac] text-black hover:text-black text-lg sm:text-xl font-black uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200 group`}
+              className={`w-1/2 sm:w-auto h-12 sm:h-16 px-6 sm:px-10 bg-[#86efac] text-black hover:text-black text-base sm:text-xl font-black uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200 group`}
             >
               Start Creating
               <MoveRight className="w-5 h-5 sm:w-6 sm:h-6 ml-3 group-hover:translate-x-2 transition-transform" />
@@ -263,7 +263,7 @@ const LandingPage = () => {
             <Button
               variant="outline"
               size="lg"
-              className={`w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-10 bg-white text-lg sm:text-xl font-bold uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200`}
+              className={`w-1/2 sm:w-auto h-12 sm:h-16 px-6 sm:px-10 bg-white text-base sm:text-xl font-bold uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200`}
             >
               <PlayCircle className="w-5 h-5 sm:w-6 sm:h-6 mr-3" />
               Watch Demo
@@ -420,7 +420,7 @@ const LandingPage = () => {
         <section id="how" className="max-w-6xl mx-auto px-4 sm:px-6 mb-28 sm:mb-36">
           <div className="mb-10 sm:mb-14">
             <h2
-              className="text-4xl sm:text-6xl font-black uppercase tracking-tighter text-white leading-none"
+              className="text-4xl sm:text-6xl font-black uppercase tracking-tighter text-[#fde047] leading-none"
               style={{ textShadow: "4px 4px 0px #000" }}
             >
               HOW IT WORKS.
@@ -517,23 +517,23 @@ const LandingPage = () => {
         </section>
 
         {/* Wild CTA Section */}
-        <section className="max-w-6xl mx-auto px-6 mb-20">
-          <div className={`bg-black text-white ${brutalBorder} p-12 sm:p-24 text-center relative overflow-hidden`}>
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 mb-16 sm:mb-20">
+          <div className={`bg-black text-white ${brutalBorder} p-8 sm:p-12 md:p-16 lg:p-24 text-center relative overflow-hidden`}>
             <div className="absolute top-0 left-0 w-full h-full opacity-20" style={{ backgroundImage: "repeating-linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff)", backgroundSize: "40px 40px" }}></div>
 
             <div className="relative z-10 flex flex-col items-center">
-              <h2 className="text-5xl sm:text-[6rem] font-black uppercase tracking-tighter leading-none mb-8 text-[#ff90e8]" style={{ textShadow: "4px 4px 0px #fff" }}>
+              <h2 className="text-4xl sm:text-[4.5rem] md:text-[6rem] font-black uppercase tracking-tighter leading-none mb-6 text-[#ff90e8]" style={{ textShadow: "4px 4px 0px #fff" }}>
                 Ready to<br />go viral?
               </h2>
-              <p className="text-2xl font-bold max-w-2xl mb-12">
+              <p className="text-base sm:text-xl md:text-2xl font-bold max-w-2xl mb-8 sm:mb-10">
                 Join the hundreds of thousands of people creating digital magic.
               </p>
               <Button
                 size="lg"
                 onClick={() => { document.getElementById('templates')?.scrollIntoView({ behavior: 'smooth' }); }}
-                className={`h-20 px-12 bg-[#fde047] text-black text-2xl font-black uppercase tracking-widest rounded-none ${brutalBorder} shadow-[8px_8px_0px_#fff] hover:shadow-[2px_2px_0px_#fff] hover:translate-x-[6px] hover:translate-y-[6px] transition-all duration-200`}
+                className={`h-14 sm:h-20 px-8 sm:px-12 bg-[#fde047] text-black text-lg sm:text-2xl font-black uppercase tracking-widest rounded-none ${brutalBorder} shadow-[8px_8px_0px_#fff] hover:shadow-[2px_2px_0px_#fff] hover:translate-x-[6px] hover:translate-y-[6px] transition-all duration-200`}
               >
-                CREATE FOR FREE NOW
+                CREATE NOW
               </Button>
             </div>
           </div>
@@ -542,7 +542,11 @@ const LandingPage = () => {
       </main>
 
       {/* Brutalist Footer */}
-      <footer className={`${brutalBorder} border-b-0 border-l-0 border-r-0 bg-white`}>
+      <footer className={`${brutalBorder} border-b-0 border-l-0 border-r-0 bg-[#FFFDF7] relative overflow-hidden`}>
+        <div
+          className="absolute inset-0 opacity-10 pointer-events-none"
+          style={{ backgroundImage: "radial-gradient(#000 1px, transparent 1px)", backgroundSize: "28px 28px" }}
+        />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
             {/* Brand */}
