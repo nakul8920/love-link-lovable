@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Heart, ArrowRight, Sparkles, Gift, Star, Zap, Camera, MoveRight, Flame, PlayCircle, Palette } from "lucide-react";
+import { Heart, ArrowRight, Sparkles, Gift, Star, Zap, Camera, MoveRight, Flame, PlayCircle, Palette, Menu, X } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +12,7 @@ const brutalBorder = "border-[3px] border-black";
 const LandingPage = () => {
   const navigate = useNavigate();
   const isLoggedIn = !!localStorage.getItem("token");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#FFFDF7] text-black font-body overflow-x-hidden selection:bg-[#ff90e8] selection:text-black">
@@ -37,45 +39,166 @@ const LandingPage = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            {isLoggedIn ? (
-              <>
+            {/* Desktop auth buttons */}
+            <div className="hidden md:flex items-center gap-4">
+              {isLoggedIn ? (
+                <>
+                  <Button
+                    variant="ghost"
+                    onClick={() => navigate("/profile")}
+                    className="flex font-bold text-base sm:text-lg hover:underline decoration-4 underline-offset-4 decoration-black bg-transparent hover:bg-transparent text-black px-2 sm:px-4"
+                  >
+                    Profile
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      localStorage.removeItem("token");
+                      navigate("/login");
+                    }}
+                    className={`bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 sm:h-12 px-4 sm:px-6 text-sm sm:text-base`}
+                  >
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    onClick={() => navigate("/login")}
+                    className={`bg-[#ff90e8] text-black font-bold uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 sm:h-12 px-4 sm:px-6 text-sm sm:text-base`}
+                  >
+                    <span className="block leading-none">Login</span>
+                    <span className="block text-[10px] sm:text-xs leading-none opacity-95 tracking-widest font-bold -mt-0.5">
+                      / Sign Up
+                    </span>
+                  </Button>
+                </>
+              )}
+            </div>
+
+            {/* Mobile hamburger */}
+            <div className="md:hidden flex items-center gap-2">
+              {isLoggedIn ? (
                 <Button
-                  variant="ghost"
                   onClick={() => navigate("/profile")}
-                  className="flex font-bold text-base sm:text-lg hover:underline decoration-4 underline-offset-4 decoration-black bg-transparent hover:bg-transparent text-black px-2 sm:px-4"
+                  className={`bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadowHover} transition-all rounded-none h-10 px-3 text-sm`}
                 >
                   Profile
                 </Button>
+              ) : (
                 <Button
-                  onClick={() => {
-                    localStorage.removeItem("token");
-                    navigate("/login");
-                  }}
-                  className={`bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 sm:h-12 px-4 sm:px-6 text-sm sm:text-base`}
-                >
-                  Logout
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  variant="ghost"
                   onClick={() => navigate("/login")}
-                  className="flex font-bold text-base sm:text-lg hover:underline decoration-4 underline-offset-4 decoration-black bg-transparent hover:bg-transparent text-black px-2 sm:px-4"
+                  className={`bg-[#ff90e8] text-black font-bold uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 px-3 text-sm`}
                 >
                   Login
                 </Button>
-                <Button
-                  onClick={() => navigate("/signup")}
-                  className={`bg-[#ff90e8] text-black font-bold uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 sm:h-12 px-4 sm:px-6 text-sm sm:text-base`}
-                >
-                  Sign Up
-                </Button>
-              </>
-            )}
+              )}
+
+              <Button
+                onClick={() => setMobileMenuOpen((v) => !v)}
+                aria-label="Open menu"
+                className={`bg-white text-black ${brutalBorder} ${brutalShadow} ${brutalShadowHover} rounded-none w-12 h-10 p-0`}
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </Button>
+            </div>
           </div>
         </div>
       </nav>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-[60]">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.18 }}
+            className="relative mx-4 mt-20 mb-6 bg-white border border-gray-100 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.25)] overflow-hidden"
+          >
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <Heart className="w-5 h-5 text-black fill-[#ff90e8]" />
+                <span className="font-black tracking-tight">WishLink</span>
+              </div>
+              <Button
+                onClick={() => setMobileMenuOpen(false)}
+                className={`bg-[#ff90e8] text-black font-bold uppercase tracking-widest ${brutalBorder} ${brutalShadow} rounded-none h-9 px-3`}
+              >
+                Close
+              </Button>
+            </div>
+
+            <div className="p-4 space-y-3">
+              <a
+                href="#features"
+                className="block px-3 py-2 font-bold uppercase tracking-widest hover:underline decoration-4 underline-offset-4 decoration-black"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Features
+              </a>
+              <a
+                href="#templates"
+                className="block px-3 py-2 font-bold uppercase tracking-widest hover:underline decoration-4 underline-offset-4 decoration-black"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Templates
+              </a>
+              <a
+                href="#how"
+                className="block px-3 py-2 font-bold uppercase tracking-widest hover:underline decoration-4 underline-offset-4 decoration-black"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                How it works
+              </a>
+
+              <div className="pt-2 border-t border-gray-100" />
+
+              {isLoggedIn ? (
+                <div className="space-y-3">
+                  <Button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      navigate("/profile");
+                    }}
+                    className={`w-full bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadowHover} transition-all rounded-none h-12`}
+                  >
+                    Profile
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      localStorage.removeItem("token");
+                      setMobileMenuOpen(false);
+                      navigate("/login");
+                    }}
+                    className={`w-full bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-12`}
+                  >
+                    Logout
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    navigate("/login");
+                  }}
+                  className={`w-full bg-[#ff90e8] text-black font-bold uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-12`}
+                >
+                  <span className="block leading-none">Login</span>
+                  <span className="block text-[10px] leading-none opacity-95 tracking-widest font-bold -mt-0.5">
+                    / Sign Up
+                  </span>
+                </Button>
+              )}
+            </div>
+          </motion.div>
+        </div>
+      )}
 
       <main className="relative z-10 pt-32 pb-20">
 
@@ -89,7 +212,7 @@ const LandingPage = () => {
             className={`inline-flex items-center gap-2 px-6 py-2 bg-[#fde047] ${brutalBorder} ${brutalShadow} font-bold text-sm sm:text-base uppercase tracking-wider mb-8 -rotate-3`}
           >
             <Flame className="w-5 h-5 text-black fill-black" />
-            The internet's funnest gifting app
+            The internet's most delightful gifting app
           </motion.div>
 
           <motion.h1
