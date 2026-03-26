@@ -229,10 +229,10 @@ const LandingPage = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-[7rem] font-black leading-[1.2] sm:leading-[0.9] tracking-tighter uppercase"
+            className="text-4xl xs:text-5xl sm:text-5xl md:text-6xl lg:text-[7rem] font-black leading-[1.2] sm:leading-[0.9] tracking-tighter uppercase"
             style={{ 
               fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-              textShadow: "1px 1px 0px #000, 2px 2px 0px rgba(0,0,0,0.5)",
+              textShadow: "none",
               WebkitFontSmoothing: "antialiased",
               MozOsxFontSmoothing: "grayscale",
               transform: "translateZ(0)"
@@ -300,8 +300,11 @@ const LandingPage = () => {
             <motion.h2 
               initial={{ rotate: -2 }}
               whileInView={{ rotate: 0 }}
-              className="text-5xl sm:text-7xl font-black uppercase tracking-tighter leading-none" 
-              style={{ textShadow: "3px 3px 0px #000" }}
+              className="text-3xl sm:text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none" 
+              style={{ 
+                textShadow: "none",
+                fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+              }}
             >
               <span className="text-[#fde047]">KILLER</span><br className="sm:hidden" /> FEATURES.
             </motion.h2>
@@ -376,8 +379,11 @@ const LandingPage = () => {
         >
           <div className="text-center mb-12 sm:mb-16">
             <h2
-              className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tighter text-white"
-              style={{ textShadow: "4px 4px 0px #000" }}
+              className="text-3xl sm:text-5xl lg:text-6xl md:text-7xl font-black uppercase tracking-tighter text-white"
+              style={{ 
+                textShadow: "none",
+                fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+              }}
             >
               PICK YOUR POISON.
             </h2>
@@ -427,8 +433,11 @@ const LandingPage = () => {
         <section id="how" className="max-w-6xl mx-auto px-4 sm:px-6 mb-28 sm:mb-36">
           <div className="mb-10 sm:mb-14">
             <h2
-              className="text-4xl sm:text-6xl font-black uppercase tracking-tighter text-[#fde047] leading-none"
-              style={{ textShadow: "4px 4px 0px #000" }}
+              className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tighter text-[#fde047] leading-none"
+              style={{ 
+                textShadow: "none",
+                fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+              }}
             >
               HOW IT WORKS.
             </h2>
@@ -437,7 +446,7 @@ const LandingPage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
             {[
               {
                 n: "1",
@@ -470,7 +479,7 @@ const LandingPage = () => {
                   key={s.n}
                   className={`relative group ${brutalBorder} ${brutalShadow} bg-[#FFFDF7] overflow-hidden transition-all duration-300 hover:-translate-y-1`}
                 >
-                  <div className={`h-1.5 ${s.bg}`} />
+                  <div className={`h-1 ${s.bg}`} />
 
                   {/* Subtle texture (removes "blank white" feel) */}
                   <div
@@ -496,24 +505,24 @@ const LandingPage = () => {
                     />
                   )}
 
-                  <div className="relative p-5 sm:p-6">
-                    <div className="absolute right-3 top-2 text-6xl sm:text-7xl font-black text-black/10 leading-none select-none">
+                  <div className="relative p-3 sm:p-4 lg:p-6">
+                    <div className="absolute right-2 top-1 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-black/10 leading-none select-none">
                       {s.n}
                     </div>
 
-                    <div className="flex items-start justify-between gap-4">
-                      <div className={`inline-flex items-center gap-2 px-3 py-1 ${s.bg} ${brutalBorder}`}>
-                        <span className="font-black uppercase tracking-widest text-[11px]">Step {s.n}</span>
+                    <div className="flex items-start justify-between gap-2 sm:gap-4">
+                      <div className={`inline-flex items-center gap-2 px-2 py-1 ${s.bg} ${brutalBorder}`}>
+                        <span className="font-black uppercase tracking-widest text-[10px]">Step {s.n}</span>
                       </div>
-                      <div className={`w-11 h-11 ${brutalBorder} ${s.bg} flex items-center justify-center shadow-[3px_3px_0px_#000]`}>
-                        <Icon className="w-5 h-5 text-black" />
+                      <div className={`w-8 h-8 sm:w-10 sm:h-10 ${brutalBorder} ${s.bg} flex items-center justify-center shadow-[3px_3px_0px_#000]`}>
+                        <Icon className="w-4 h-4 text-black" />
                       </div>
                     </div>
 
-                    <h3 className="mt-5 text-[1.35rem] sm:text-2xl font-black uppercase tracking-tight leading-tight max-w-[90%]">
+                    <h3 className="mt-3 sm:mt-5 text-lg sm:text-xl lg:text-2xl font-black uppercase tracking-tight leading-tight max-w-[90%]">
                       {s.t}
                     </h3>
-                    <p className="mt-3 text-sm sm:text-[15px] font-bold leading-relaxed text-black/85 pr-2">
+                    <p className="mt-2 sm:mt-3 text-xs sm:text-sm font-bold leading-relaxed text-black/85 pr-2">
                       {s.d}
                     </p>
                   </div>
@@ -529,7 +538,10 @@ const LandingPage = () => {
             <div className="absolute top-0 left-0 w-full h-full opacity-20" style={{ backgroundImage: "repeating-linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff)", backgroundSize: "40px 40px" }}></div>
 
             <div className="relative z-10 flex flex-col items-center">
-              <h2 className="text-4xl sm:text-[4.5rem] md:text-[6rem] font-black uppercase tracking-tighter leading-none mb-6 text-[#ff90e8]" style={{ textShadow: "4px 4px 0px #fff" }}>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-6 text-[#ff90e8]" style={{ 
+                textShadow: "none",
+                fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+              }}>
                 Ready to<br />go viral?
               </h2>
               <p className="text-base sm:text-xl md:text-2xl font-bold max-w-2xl mb-8 sm:mb-10">
@@ -548,40 +560,42 @@ const LandingPage = () => {
 
       </main>
 
-      {/* Brutalist Footer */}
-      <footer className={`${brutalBorder} border-b-0 border-l-0 border-r-0 bg-[#FFFDF7] relative overflow-hidden`}>
-        <div
-          className="absolute inset-0 opacity-10 pointer-events-none"
-          style={{ backgroundImage: "radial-gradient(#000 1px, transparent 1px)", backgroundSize: "28px 28px" }}
-        />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
+      {/* Enhanced Footer */}
+      <footer className={`${brutalBorder} border-b-0 border-l-0 border-r-0 bg-[#FFFDF7] text-black relative overflow-hidden`}>
+        {/* Background pattern */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+          <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(#000 1px, transparent 1px)", backgroundSize: "28px 28px" }}></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#ff90e8]/10 via-transparent to-[#86efac]/10"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 lg:py-12 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8">
             {/* Brand */}
             <div className="lg:col-span-4">
-              <div className={`${brutalBorder} ${brutalShadow} bg-[#FFFDF7] p-4 sm:p-5`}>
+              <div className={`${brutalBorder} ${brutalShadow} bg-gradient-to-br from-[#ff90e8]/20 to-[#86efac]/20 backdrop-blur-sm p-4 sm:p-6 rounded-2xl`}>
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 ${brutalBorder} bg-white flex items-center justify-center shadow-[4px_4px_0px_#000]`}>
+                  <div className={`w-10 h-10 ${brutalBorder} bg-gradient-to-br from-[#ff90e8] to-[#fde047] flex items-center justify-center shadow-[4px_4px_0px_#000] rounded-xl`}>
                     <Heart className="w-5 h-5 text-black fill-[#ff90e8]" />
                   </div>
                   <div>
-                    <div className="font-black text-xl uppercase tracking-tighter leading-none">Wishlink</div>
-                    <div className="font-bold text-xs text-black/70">Codequil agency tool</div>
+                    <div className="font-black text-xl uppercase tracking-tighter leading-none text-black">Wishlink</div>
+                    <div className="font-bold text-xs text-[#ff90e8]/80">Codequil agency tool</div>
                   </div>
                 </div>
 
-                <p className="mt-3 text-xs sm:text-sm font-bold leading-relaxed text-black/85">
+                <p className="mt-3 text-xs sm:text-sm font-medium leading-relaxed text-black/90">
                   Build animated gifting pages and share your magic link instantly.
                 </p>
 
-                <div className="mt-4 flex flex-wrap gap-3">
+                <div className="mt-4 flex flex-wrap gap-2">
                   <a
-                    className={`text-xs font-black uppercase tracking-widest underline decoration-4 underline-offset-4 hover:text-[#ff90e8]`}
+                    className="text-xs font-black uppercase tracking-widest bg-[#ff90e8] text-black px-3 py-1.5 rounded-lg ${brutalBorder} hover:bg-[#fde047] transition-colors"
                     href="#templates"
                   >
                     Templates
                   </a>
                   <a
-                    className={`text-xs font-black uppercase tracking-widest underline decoration-4 underline-offset-4 hover:text-[#fde047]`}
+                    className="text-xs font-black uppercase tracking-widest bg-[#86efac] text-black px-3 py-1.5 rounded-lg ${brutalBorder} hover:bg-[#fde047] transition-colors"
                     href="#how"
                   >
                     How it works
@@ -594,43 +608,43 @@ const LandingPage = () => {
             <div className="lg:col-span-8">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
                 <div>
-                  <div className="font-black uppercase tracking-widest text-xs mb-2">Product</div>
-                  <ul className="space-y-2 text-sm font-bold">
-                    <li><a className="hover:underline decoration-4 underline-offset-4" href="#features">Features</a></li>
-                    <li><a className="hover:underline decoration-4 underline-offset-4" href="#templates">Templates</a></li>
-                    <li><a className="hover:underline decoration-4 underline-offset-4" href="/create">Create</a></li>
+                  <h3 className="font-black uppercase tracking-widest text-sm sm:text-base mb-2 sm:mb-4 text-[#ff90e8]">Product</h3>
+                  <ul className="space-y-2">
+                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors" href="#features">Features</a></li>
+                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors" href="#templates">Templates</a></li>
+                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors" href="/create">Create</a></li>
                   </ul>
                 </div>
 
                 <div>
-                  <div className="font-black uppercase tracking-widest text-xs mb-2">Resources</div>
-                  <ul className="space-y-2 text-sm font-bold">
-                    <li><a className="hover:underline decoration-4 underline-offset-4" href="/profile">My pages</a></li>
-                    <li><a className="hover:underline decoration-4 underline-offset-4" href="/login">Login</a></li>
-                    <li><a className="hover:underline decoration-4 underline-offset-4" href="/admin">Admin</a></li>
+                  <h3 className="font-black uppercase tracking-widest text-sm sm:text-base mb-2 sm:mb-4 text-[#86efac]">Resources</h3>
+                  <ul className="space-y-2">
+                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors" href="/profile">My pages</a></li>
+                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors" href="/login">Login</a></li>
+                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors" href="/admin">Admin</a></li>
                   </ul>
                 </div>
 
                 <div>
-                  <div className="font-black uppercase tracking-widest text-xs mb-2">Company</div>
-                  <ul className="space-y-2 text-sm font-bold">
+                  <h3 className="font-black uppercase tracking-widest text-sm sm:text-base mb-2 sm:mb-4 text-[#fde047]">Company</h3>
+                  <ul className="space-y-2">
                     <li>
-                      <a className="hover:underline decoration-4 underline-offset-4" href="https://codequil.vercel.app/" target="_blank" rel="noreferrer">
+                      <a className="text-black font-medium hover:text-[#fde047] transition-colors" href="https://codequil.vercel.app/" target="_blank" rel="noreferrer">
                         Codequil
                       </a>
                     </li>
-                    <li><a className="hover:underline decoration-4 underline-offset-4" href="#">Privacy</a></li>
-                    <li><a className="hover:underline decoration-4 underline-offset-4" href="#">Terms</a></li>
+                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors" href="#">Privacy</a></li>
+                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors" href="#">Terms</a></li>
                   </ul>
                 </div>
 
                 <div>
-                  <div className="font-black uppercase tracking-widest text-xs mb-2">Contact</div>
-                  <ul className="space-y-2 text-sm font-bold">
-                    <li className="text-black/80">Email: <span className="underline decoration-4 underline-offset-4">hello@codequil</span></li>
-                    <li className="text-black/80">Hours: <span className="font-black">Mon–Sat</span></li>
+                  <h3 className="font-black uppercase tracking-widest text-sm sm:text-base mb-2 sm:mb-4 text-black">Contact</h3>
+                  <ul className="space-y-2">
+                    <li className="text-black/80 font-medium">Email: <span className="text-[#ff90e8] font-bold">hello@codequil</span></li>
+                    <li className="text-black/80 font-medium">Hours: <span className="font-bold text-[#86efac]">Mon–Sat</span></li>
                     <li>
-                      <a className="hover:underline decoration-4 underline-offset-4" href="#">Support</a>
+                      <a className="text-black font-medium hover:text-[#fde047] transition-colors" href="#">Support</a>
                     </li>
                   </ul>
                 </div>
@@ -638,14 +652,14 @@ const LandingPage = () => {
             </div>
           </div>
 
-          <div className="mt-8 pt-5 border-t-2 border-black/70 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div className="font-black uppercase tracking-widest text-[10px] sm:text-xs">
+          <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-black/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="font-black uppercase tracking-widest text-xs text-black/60">
               © 2026 Wishlink Express
             </div>
-            <div className="font-bold text-xs sm:text-sm">
+            <div className="font-bold text-xs text-black/80">
               Built by{" "}
               <a
-                className="underline decoration-4 underline-offset-4 hover:text-[#ff90e8]"
+                className="text-[#ff90e8] font-black hover:text-[#fde047] transition-colors"
                 href="https://codequil.vercel.app/"
                 target="_blank"
                 rel="noreferrer"
