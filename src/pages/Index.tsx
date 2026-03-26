@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Heart, ArrowRight, Sparkles, Gift, Star, Zap, Camera, MoveRight, Flame, PlayCircle, Palette, Menu, X } from "lucide-react";
+import { Heart, ArrowRight, Sparkles, Gift, Star, Zap, Camera, MoveRight, Flame, PlayCircle, Palette, Menu, X, UserRound } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -64,11 +64,11 @@ const LandingPage = () => {
                 <>
                   <Button
                     onClick={() => navigate("/login")}
-                    className={`bg-[#ff90e8] text-black font-bold uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 sm:h-12 px-4 sm:px-6 text-sm sm:text-base`}
+                    className={`bg-[#ff90e8] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 sm:h-12 px-4 sm:px-6 text-sm sm:text-base inline-flex items-center gap-3`}
                   >
-                    <span className="block leading-none">Login</span>
-                    <span className="block text-[10px] sm:text-xs leading-none opacity-95 tracking-widest font-bold -mt-0.5">
-                      / Sign Up
+                    <UserRound strokeWidth={3} className="w-5 h-5 sm:w-6 sm:h-6" />
+                    <span className="font-black text-base sm:text-lg leading-none whitespace-nowrap">
+                      Login / Sign Up
                     </span>
                   </Button>
                 </>
@@ -85,12 +85,15 @@ const LandingPage = () => {
                   Profile
                 </Button>
               ) : (
-                <Button
-                  onClick={() => navigate("/login")}
-                  className={`bg-[#ff90e8] text-black font-bold uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 px-3 text-sm`}
-                >
-                  Login
-                </Button>
+                  <Button
+                    onClick={() => navigate("/login")}
+                    className={`bg-[#ff90e8] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 px-2 text-xs inline-flex items-center gap-2`}
+                  >
+                    <UserRound strokeWidth={3} className="w-4 h-4" />
+                    <span className="font-black leading-none whitespace-nowrap">
+                      Login / Sign Up
+                    </span>
+                  </Button>
               )}
 
               <Button
@@ -182,18 +185,20 @@ const LandingPage = () => {
                   </Button>
                 </div>
               ) : (
-                <Button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    navigate("/login");
-                  }}
-                  className={`w-full bg-[#ff90e8] text-black font-bold uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-12`}
-                >
-                  <span className="block leading-none">Login</span>
-                  <span className="block text-[10px] leading-none opacity-95 tracking-widest font-bold -mt-0.5">
-                    / Sign Up
-                  </span>
-                </Button>
+                <div className="space-y-3">
+                  <Button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      navigate("/login");
+                    }}
+                    className={`w-full bg-[#ff90e8] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-12 inline-flex items-center gap-3`}
+                  >
+                    <UserRound strokeWidth={3} className="w-5 h-5" />
+                    <span className="font-black text-base leading-none whitespace-nowrap">
+                      Login / Sign Up
+                    </span>
+                  </Button>
+                </div>
               )}
             </div>
           </motion.div>
