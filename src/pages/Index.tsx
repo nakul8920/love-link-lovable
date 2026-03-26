@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Heart, ArrowRight, Sparkles, Gift, Star, Zap, Camera, MoveRight, Flame, PlayCircle, Palette, Menu, X, UserRound } from "lucide-react";
+import { Heart, ArrowRight, Sparkles, Gift, Star, Zap, Camera, MoveRight, Flame, PlayCircle, Palette, Menu, X, UserRound, LogOut } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -46,8 +46,9 @@ const LandingPage = () => {
                   <Button
                     variant="ghost"
                     onClick={() => navigate("/profile")}
-                    className="flex font-bold text-base sm:text-lg hover:underline decoration-4 underline-offset-4 decoration-black bg-transparent hover:bg-transparent text-black px-2 sm:px-4"
+                    className="flex font-bold text-base sm:text-lg hover:underline decoration-4 underline-offset-4 decoration-black bg-transparent hover:bg-transparent text-black px-2 sm:px-4 items-center gap-2"
                   >
+                    <UserRound className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
                     Profile
                   </Button>
                   <Button
@@ -55,8 +56,9 @@ const LandingPage = () => {
                       localStorage.removeItem("token");
                       navigate("/login");
                     }}
-                    className={`bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 sm:h-12 px-4 sm:px-6 text-sm sm:text-base`}
+                    className={`bg-transparent hover:bg-transparent text-black font-bold uppercase ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 sm:h-12 px-4 sm:px-6 text-sm sm:text-base inline-flex items-center gap-3`}
                   >
+                    <LogOut className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
                     Logout
                   </Button>
                 </>
@@ -80,8 +82,9 @@ const LandingPage = () => {
               {isLoggedIn ? (
                 <Button
                   onClick={() => navigate("/profile")}
-                  className={`bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadowHover} transition-all rounded-none h-9 px-2 text-xs`}
+                  className={`bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadowHover} transition-all rounded-none h-9 px-2 text-xs inline-flex items-center gap-2`}
                 >
+                  <UserRound className="w-4 h-4 text-black" />
                   Profile
                 </Button>
               ) : (
@@ -169,8 +172,9 @@ const LandingPage = () => {
                       setMobileMenuOpen(false);
                       navigate("/profile");
                     }}
-                    className={`w-full bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadowHover} transition-all rounded-none h-12`}
+                    className={`w-full bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadowHover} transition-all rounded-none h-12 inline-flex items-center justify-center gap-3`}
                   >
+                    <UserRound className="w-5 h-5 text-black" />
                     Profile
                   </Button>
                   <Button
@@ -179,8 +183,9 @@ const LandingPage = () => {
                       setMobileMenuOpen(false);
                       navigate("/login");
                     }}
-                    className={`w-full bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-12`}
+                    className={`w-full bg-transparent hover:bg-transparent text-black font-bold uppercase ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-12 inline-flex items-center justify-center gap-3`}
                   >
+                    <LogOut className="w-5 h-5 text-black" />
                     Logout
                   </Button>
                 </div>
@@ -433,6 +438,7 @@ const LandingPage = () => {
                 d: "Fill in names, type your heartfelt message, and drop in your favorite photos.",
                 bg: "bg-[#fde047]",
                 icon: Sparkles,
+                accentRgb: "253,224,71",
               },
               {
                 n: "2",
@@ -440,6 +446,7 @@ const LandingPage = () => {
                 d: "Our servers crush the data into a stunning, responsive, fully animated webpage.",
                 bg: "bg-[#93c5fd]",
                 icon: Zap,
+                accentRgb: "147,197,253",
               },
               {
                 n: "3",
@@ -447,42 +454,61 @@ const LandingPage = () => {
                 d: "Copy your magic link and share it anywhere. Watch their jaw drop.",
                 bg: "bg-[#86efac]",
                 icon: Heart,
+                accentRgb: "134,239,172",
               },
-            ].map((s) => {
+            ].map((s, i) => {
               const Icon = s.icon;
               return (
                 <div
                   key={s.n}
-                  className={`relative group ${brutalBorder} ${brutalShadow} bg-white overflow-hidden`}
+                  className={`relative group ${brutalBorder} ${brutalShadow} bg-[#FFFDF7] overflow-hidden transition-all duration-300 hover:-translate-y-1`}
                 >
-                  <div className={`h-2 ${s.bg}`} />
+                  <div className={`h-1.5 ${s.bg}`} />
 
-                  {/* Decorative corner splash */}
+                  {/* Subtle texture (removes "blank white" feel) */}
                   <div
-                    className={`absolute -top-10 -right-10 w-28 h-28 ${s.bg} opacity-90 rotate-12 border-[3px] border-black/70`}
+                    className="absolute inset-0 opacity-10 pointer-events-none"
+                    style={{
+                      backgroundImage:
+                        "repeating-linear-gradient(45deg, rgba(0,0,0,0.22) 0 6px, transparent 6px 16px)",
+                    }}
                     aria-hidden="true"
                   />
 
-                  <div className="relative p-5 sm:p-6">
-                    <div className="flex items-center justify-between gap-4">
-                      <div className={`inline-flex items-center gap-2 px-3 py-1 ${s.bg} ${brutalBorder} border-b-[4px]`}>
-                        <Icon className="w-4 h-4 text-black" />
-                        <span className="font-black uppercase tracking-widest text-[11px]">
-                          Step {s.n}
-                        </span>
-                      </div>
+                  {/* Colored glow blob */}
+                  <div
+                    className="absolute -bottom-12 -left-12 w-44 h-44 rounded-full pointer-events-none"
+                    style={{ backgroundColor: `rgba(${s.accentRgb}, 0.12)` }}
+                    aria-hidden="true"
+                  />
 
-                      <div
-                        className={`w-12 h-12 sm:w-14 sm:h-14 ${brutalBorder} bg-white ${brutalShadow} flex items-center justify-center text-3xl sm:text-4xl font-black`}
-                      >
-                        {s.n}
+                  {i < 2 && (
+                    <div
+                      className="hidden md:block absolute -right-6 top-14 w-12 h-[3px] bg-black/50"
+                      aria-hidden="true"
+                    />
+                  )}
+
+                  <div className="relative p-5 sm:p-6">
+                    <div className="absolute right-3 top-2 text-6xl sm:text-7xl font-black text-black/10 leading-none select-none">
+                      {s.n}
+                    </div>
+
+                    <div className="flex items-start justify-between gap-4">
+                      <div className={`inline-flex items-center gap-2 px-3 py-1 ${s.bg} ${brutalBorder}`}>
+                        <span className="font-black uppercase tracking-widest text-[11px]">Step {s.n}</span>
+                      </div>
+                      <div className={`w-11 h-11 ${brutalBorder} ${s.bg} flex items-center justify-center shadow-[3px_3px_0px_#000]`}>
+                        <Icon className="w-5 h-5 text-black" />
                       </div>
                     </div>
 
-                    <h3 className="mt-4 text-2xl sm:text-3xl font-black uppercase tracking-tight">
+                    <h3 className="mt-5 text-[1.35rem] sm:text-2xl font-black uppercase tracking-tight leading-tight max-w-[90%]">
                       {s.t}
                     </h3>
-                    <p className="mt-3 text-sm sm:text-base font-bold leading-relaxed">{s.d}</p>
+                    <p className="mt-3 text-sm sm:text-[15px] font-bold leading-relaxed text-black/85 pr-2">
+                      {s.d}
+                    </p>
                   </div>
                 </div>
               );
