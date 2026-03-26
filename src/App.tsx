@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound.tsx";
 import Login from "./pages/auth/Login.tsx";
 
 import Profile from "./pages/Profile.tsx";
+import RequireAuth from "@/components/RequireAuth";
 
 const queryClient = new QueryClient();
 
@@ -25,7 +26,14 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
 
-          <Route path="/create" element={<CreatePage />} />
+          <Route
+            path="/create"
+            element={
+              <RequireAuth>
+                <CreatePage />
+              </RequireAuth>
+            }
+          />
           <Route path="/p/:slug" element={<WishViewer />} />
           <Route path="/success/:slug" element={<SuccessPage />} />
           <Route path="/admin" element={<AdminPage />} />

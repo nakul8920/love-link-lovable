@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { GoogleLogin } from "@react-oauth/google";
 import { Sparkles, Heart, Shield } from "lucide-react";
@@ -7,6 +7,17 @@ import { API_BASE_URL } from "@/config";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const next = searchParams.get("next");
+
+  const navigateAfterLogin = () => {
+    // Only allow internal redirects.
+    if (typeof next === "string" && next.startsWith("/")) {
+      navigate(next);
+      return;
+    }
+    navigate("/");
+  };
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
     try {
@@ -21,7 +32,7 @@ const Login = () => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userInfo", JSON.stringify(data));
         toast.success("Login successful!");
-        navigate("/");
+        navigateAfterLogin();
       } else {
         toast.error(data.error ? `Google Error: ${data.error}` : "Google Login failed");
       }

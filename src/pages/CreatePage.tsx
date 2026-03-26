@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Heart, CreditCard, Sparkles, Smile } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ const brutalShadowHover = "hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:tr
 
 const CreatePage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const themeParam = (searchParams.get("theme") as TemplateType) || "valentine";
 
@@ -175,6 +176,16 @@ const CreatePage = () => {
       toast.error("Failed to initiate payment. Try again.");
     }
   };
+
+  // Extra safety: redirect users to login if they try to open this page without auth.
+  // (Even if server APIs are protected, we want the payment UI to be blocked too.)
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      const next = `${location.pathname}${location.search}`;
+      navigate(`/login?next=${encodeURIComponent(next)}`, { replace: true });
+    }
+  }, [location.pathname, location.search, navigate]);
 
   return (
     <>

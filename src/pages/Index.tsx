@@ -358,37 +358,51 @@ const LandingPage = () => {
         </section>
 
         {/* Templates - Brutalist Cards */}
-        <section id="templates" className={`max-w-7xl mx-auto px-6 mb-32 py-24 bg-[#ff90e8] ${brutalBorder} border-l-0 border-r-0`}>
-          <div className="text-center mb-20">
-            <h2 className="text-5xl sm:text-7xl font-black uppercase tracking-tighter text-white" style={{ textShadow: "4px 4px 0px #000" }}>PICK YOUR POISON.</h2>
-            <p className="text-2xl font-bold mt-4 max-w-2xl mx-auto">Choose a theme that matches your vibe.</p>
+        <section
+          id="templates"
+          className={`max-w-7xl mx-auto px-4 sm:px-6 mb-20 sm:mb-24 py-16 sm:py-20 bg-[#ff90e8] ${brutalBorder} border-l-0 border-r-0`}
+        >
+          <div className="text-center mb-12 sm:mb-16">
+            <h2
+              className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tighter text-white"
+              style={{ textShadow: "4px 4px 0px #000" }}
+            >
+              PICK YOUR POISON.
+            </h2>
+            <p className="text-lg sm:text-2xl font-bold mt-3 sm:mt-4 max-w-2xl mx-auto">
+              Choose a theme that matches your vibe.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {[
-              { label: "VALENTINE", available: true, bg: "bg-white", icon: <Heart className="w-16 h-16 fill-[#ff0844]" /> },
-              { label: "BIRTHDAY", available: false, bg: "bg-[#fde047]", icon: <Gift className="w-16 h-16 fill-black" /> },
-              { label: "ANNIVERSARY", available: false, bg: "bg-[#c4b5fd]", icon: <Star className="w-16 h-16 fill-black" /> },
-              { label: "SURPRISE", available: false, bg: "bg-[#86efac]", icon: <Sparkles className="w-16 h-16 fill-black" /> },
+              { label: "VALENTINE", available: true, bg: "bg-white", icon: <Heart className="w-12 h-12 sm:w-16 sm:h-16 fill-[#ff0844]" /> },
+              { label: "BIRTHDAY", available: false, bg: "bg-[#fde047]", icon: <Gift className="w-12 h-12 sm:w-16 sm:h-16 fill-black" /> },
+              { label: "ANNIVERSARY", available: false, bg: "bg-[#c4b5fd]", icon: <Star className="w-12 h-12 sm:w-16 sm:h-16 fill-black" /> },
+              { label: "SURPRISE", available: false, bg: "bg-[#86efac]", icon: <Sparkles className="w-12 h-12 sm:w-16 sm:h-16 fill-black" /> },
             ].map((t, i) => (
               <div
                 key={i}
-                className={`group relative ${t.bg} ${brutalBorder} ${brutalShadow} ${t.available ? brutalShadowHover : 'opacity-70 grayscale'} p-8 transition-all duration-200 cursor-pointer flex flex-col items-center justify-center min-h-[300px] text-center`}
+                className={`group relative ${t.bg} ${brutalBorder} ${brutalShadow} ${
+                  t.available ? brutalShadowHover : "opacity-70 grayscale"
+                } p-5 sm:p-7 lg:p-8 transition-all duration-200 cursor-pointer flex flex-col items-center justify-center min-h-[230px] sm:min-h-[260px] lg:min-h-[300px] text-center`}
                 onClick={() => t.available && navigate(`/create?theme=${t.label.toLowerCase()}`)}
               >
                 {!t.available && (
-                  <div className={`absolute -top-4 -right-4 bg-black text-white px-4 py-2 font-black uppercase tracking-widest text-sm ${brutalBorder} rotate-12`}>
+                  <div className={`absolute -top-3 -right-3 bg-black text-white px-3 py-1 font-black uppercase tracking-widest text-xs sm:text-sm ${brutalBorder} rotate-12`}>
                     Coming Soon!
                   </div>
                 )}
 
-                <div className="mb-8 group-hover:scale-125 transition-transform duration-300">
+                <div className="mb-5 sm:mb-6 group-hover:scale-125 transition-transform duration-300">
                   {t.icon}
                 </div>
 
-                <h3 className="text-3xl font-black tracking-tight">{t.label}</h3>
+                <h3 className="text-2xl sm:text-3xl font-black tracking-tight leading-none">{t.label}</h3>
                 {t.available && (
-                  <div className={`mt-6 bg-black text-white px-6 py-2 font-black uppercase w-full ${brutalBorder} group-hover:bg-[#ff90e8] group-hover:text-black transition-colors`}>
+                  <div
+                    className={`mt-4 sm:mt-6 bg-black text-white px-4 sm:px-6 py-1.5 sm:py-2 text-sm sm:text-base font-black uppercase w-full ${brutalBorder} group-hover:bg-[#ff90e8] group-hover:text-black transition-colors`}
+                  >
                     Use Theme
                   </div>
                 )}
