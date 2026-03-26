@@ -205,16 +205,16 @@ const LandingPage = () => {
         </div>
       )}
 
-      <main className="relative z-10 pt-32 pb-20">
+      <main className="relative z-10 pt-24 sm:pt-32 pb-12 sm:pb-20">
 
         {/* Playful Hero Section */}
-        <section className="relative flex flex-col items-center text-center px-6 max-w-6xl mx-auto min-h-[60vh] justify-center mt-12 mb-20">
+        <section className="relative flex flex-col items-center text-center px-4 sm:px-6 max-w-6xl mx-auto min-h-[44vh] sm:min-h-[60vh] justify-center mt-8 sm:mt-12 mb-14 sm:mb-20">
 
           <motion.div
             initial={{ opacity: 0, y: -20, rotate: -3 }}
             animate={{ opacity: 1, y: 0, rotate: 3 }}
             transition={{ duration: 0.5, type: "spring", bounce: 0.5 }}
-            className={`inline-flex items-center gap-2 px-6 py-2 bg-[#fde047] ${brutalBorder} ${brutalShadow} font-bold text-sm sm:text-base uppercase tracking-wider mb-8 -rotate-3`}
+            className={`inline-flex items-center gap-2 px-4 sm:px-6 py-1.5 sm:py-2 bg-[#fde047] ${brutalBorder} ${brutalShadow} font-bold text-xs sm:text-sm uppercase tracking-wider mb-5 sm:mb-8 -rotate-3`}
           >
             <Flame className="w-5 h-5 text-black fill-black" />
             The internet's most delightful gifting app
@@ -224,7 +224,7 @@ const LandingPage = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl sm:text-7xl lg:text-[7rem] font-black leading-[0.9] tracking-tighter uppercase"
+            className="text-4xl sm:text-6xl lg:text-[7rem] font-black leading-[0.9] tracking-tighter uppercase"
             style={{ textShadow: "4px 4px 0px #000" }}
           >
             <span className="text-[#ff90e8]">Don't text.</span>
@@ -236,7 +236,7 @@ const LandingPage = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-8 text-xl sm:text-2xl text-black font-semibold max-w-3xl leading-snug border-black/10 p-6 bg-white/50 backdrop-blur-sm rounded-xl border-dashed border-4"
+            className="mt-5 sm:mt-8 text-base sm:text-xl text-black font-semibold max-w-3xl leading-snug border-black/10 p-4 sm:p-6 bg-white/50 backdrop-blur-sm rounded-xl border-dashed border-4"
           >
             Build stunning, hyper-personalized animated web pages for Birthdays, Valentines, and Anniversaries. Drop in your photos, mash a button, and share the link instantly.
           </motion.p>
@@ -245,32 +245,32 @@ const LandingPage = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.3, type: "spring", bounce: 0.6 }}
-            className="mt-12 flex flex-col sm:flex-row gap-6 w-full sm:w-auto"
+            className="mt-8 sm:mt-12 flex flex-col sm:flex-row gap-4 sm:gap-6 w-full sm:w-auto"
           >
             <Button
               size="lg"
               onClick={() => { document.getElementById('templates')?.scrollIntoView({ behavior: 'smooth' }); }}
-              className={`w-full sm:w-auto h-16 px-10 bg-[#86efac] text-black text-xl font-black uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200 group`}
+              className={`w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-10 bg-[#86efac] text-lg sm:text-xl font-black uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200 group`}
             >
               Start Creating
-              <MoveRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform" />
+              <MoveRight className="w-5 h-5 sm:w-6 sm:h-6 ml-3 group-hover:translate-x-2 transition-transform" />
             </Button>
             <Button
               variant="outline"
               size="lg"
-              className={`w-full sm:w-auto h-16 px-10 bg-white text-black text-xl font-bold uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200`}
+              className={`w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-10 bg-white text-lg sm:text-xl font-bold uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200`}
             >
-              <PlayCircle className="w-6 h-6 mr-3" />
+              <PlayCircle className="w-5 h-5 sm:w-6 sm:h-6 mr-3" />
               Watch Demo
             </Button>
           </motion.div>
         </section>
 
         {/* Scrolling Marquee - Brutalist style */}
-        <div className={`w-full py-4 bg-[#60a5fa] ${brutalBorder} border-l-0 border-r-0 overflow-hidden flex whitespace-nowrap mb-32`}>
-          <div className="flex animate-marquee min-w-max gap-8 items-center text-black font-black uppercase text-2xl tracking-widest">
+        <div className={`w-full py-3 sm:py-4 bg-[#60a5fa] ${brutalBorder} border-l-0 border-r-0 overflow-hidden flex whitespace-nowrap mb-20 sm:mb-32`}>
+          <div className="flex animate-marquee min-w-max gap-4 sm:gap-8 items-center text-black font-black uppercase text-lg sm:text-2xl tracking-widest">
             {[1, 2].map((i) => (
-              <div key={i} className="flex gap-16 items-center px-8">
+              <div key={i} className="flex gap-10 sm:gap-16 items-center px-4 sm:px-8">
                 <span>★ NO MORE BORING CARDS</span>
                 <span>★ 100% PERSONALIZED</span>
                 <span>★ INSTANT DEPLOYMENT</span>
