@@ -22,55 +22,56 @@ const LandingPage = () => {
 
       {/* Neo-brutalist Navbar */}
       <nav className={`fixed top-0 w-full z-50 bg-[#c4b5fd] ${brutalBorder} border-t-0 border-l-0 border-r-0 transition-all duration-300`}>
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-12 py-3 sm:py-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-3 sm:px-6 md:px-12 py-2 sm:py-3 md:py-4">
           <motion.div
             whileHover={{ rotate: -5, scale: 1.05 }}
-            className={`flex items-center gap-2 cursor-pointer bg-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full ${brutalBorder} ${brutalShadow}`}
+            className={`flex items-center gap-1 sm:gap-2 cursor-pointer bg-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-full ${brutalBorder} ${brutalShadow}`}
             onClick={() => navigate("/")}
           >
-            <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-black fill-[#ff90e8]" />
-            <span className="font-display text-lg sm:text-xl font-bold tracking-tight">WishLink</span>
+            <Heart className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-black fill-[#ff90e8]" />
+            <span className="font-display text-sm sm:text-base md:text-lg lg:text-xl font-bold tracking-tight">WishLink</span>
           </motion.div>
 
-          <div className="hidden md:flex items-center gap-8 font-bold text-lg">
-            <a href="#features" className="hover:underline decoration-4 underline-offset-4 decoration-black">Features</a>
-            <a href="#templates" className="hover:underline decoration-4 underline-offset-4 decoration-black">Templates</a>
-            <a href="#how" className="hover:underline decoration-4 underline-offset-4 decoration-black">How it works</a>
+          <div className="hidden lg:flex items-center gap-6 xl:gap-8 font-bold text-sm md:text-lg">
+            <a href="#features" className="hover:underline decoration-2 sm:decoration-4 underline-offset-2 sm:underline-offset-4 decoration-black text-sm md:text-base">Features</a>
+            <a href="#templates" className="hover:underline decoration-2 sm:decoration-4 underline-offset-2 sm:underline-offset-4 decoration-black text-sm md:text-base">Templates</a>
+            <a href="#how" className="hover:underline decoration-2 sm:decoration-4 underline-offset-2 sm:underline-offset-4 decoration-black text-sm md:text-base">How it works</a>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             {/* Desktop auth buttons */}
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden lg:flex items-center gap-2 sm:gap-4">
               {isLoggedIn ? (
                 <>
                   <Button
                     variant="ghost"
                     onClick={() => navigate("/profile")}
-                    className="flex font-bold text-base sm:text-lg hover:underline decoration-4 underline-offset-4 decoration-black bg-transparent hover:bg-transparent text-black px-2 sm:px-4 items-center gap-2"
+                    className="flex font-bold text-xs sm:text-sm md:text-base lg:text-lg hover:underline decoration-2 sm:decoration-4 underline-offset-2 sm:underline-offset-4 decoration-black bg-transparent hover:bg-transparent text-black px-1 sm:px-2 md:px-4 items-center gap-1 sm:gap-2"
                   >
-                    <UserRound className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
-                    Profile
+                    <UserRound className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-black" />
+                    <span className="hidden sm:inline">Profile</span>
                   </Button>
                   <Button
                     onClick={() => {
                       localStorage.removeItem("token");
                       navigate("/login");
                     }}
-                    className={`bg-transparent hover:bg-transparent text-black font-bold uppercase ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 sm:h-12 px-4 sm:px-6 text-sm sm:text-base inline-flex items-center gap-3`}
+                    className={`bg-transparent hover:bg-transparent text-black font-bold uppercase ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-8 sm:h-10 md:h-12 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base inline-flex items-center gap-1 sm:gap-2`}
                   >
-                    <LogOut className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
-                    Logout
+                    <LogOut className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-black" />
+                    <span className="hidden sm:inline">Logout</span>
                   </Button>
                 </>
               ) : (
                 <>
                   <Button
                     onClick={() => navigate("/login")}
-                    className={`bg-[#ff90e8] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 sm:h-12 px-3 sm:px-6 text-xs sm:text-sm md:text-base inline-flex items-center gap-2`}
+                    className={`bg-[#ff90e8] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-8 sm:h-10 md:h-12 px-2 sm:px-3 md:px-6 text-[10px] sm:text-xs md:text-sm lg:text-base inline-flex items-center gap-1 sm:gap-2`}
                   >
-                    <UserRound strokeWidth={3} className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span className="font-black text-xs sm:text-sm md:text-base leading-none whitespace-nowrap">
-                      Login / Sign Up
+                    <UserRound strokeWidth={3} className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+                    <span className="font-black text-[10px] sm:text-xs md:text-sm lg:text-base leading-none whitespace-nowrap">
+                      <span className="hidden sm:inline">Login / Sign Up</span>
+                      <span className="sm:hidden">Login</span>
                     </span>
                   </Button>
                 </>
@@ -78,22 +79,22 @@ const LandingPage = () => {
             </div>
 
             {/* Mobile hamburger */}
-            <div className="md:hidden flex items-center gap-1.5">
+            <div className="lg:hidden flex items-center gap-1 sm:gap-1.5">
               {isLoggedIn ? (
                 <Button
                   onClick={() => navigate("/profile")}
-                  className={`bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadowHover} transition-all rounded-none h-9 px-2 text-xs inline-flex items-center gap-2`}
+                  className={`bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadowHover} transition-all rounded-none h-7 sm:h-8 md:h-9 px-1.5 sm:px-2 text-[10px] sm:text-xs inline-flex items-center gap-1`}
                 >
-                  <UserRound className="w-4 h-4 text-black" />
-                  Profile
+                  <UserRound className="w-3 h-3 sm:w-4 sm:h-4 text-black" />
+                  <span className="hidden sm:inline">Profile</span>
                 </Button>
               ) : (
                   <Button
                     onClick={() => navigate("/login")}
-                    className={`bg-[#ff90e8] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-9 px-1.5 text-[10px] inline-flex items-center gap-1.5`}
+                    className={`bg-[#ff90e8] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-7 sm:h-8 md:h-9 px-1 sm:px-1.5 text-[8px] sm:text-[10px] inline-flex items-center gap-1`}
                   >
-                    <UserRound strokeWidth={3} className="w-3 h-3" />
-                    <span className="font-black text-[10px] leading-none whitespace-nowrap">
+                    <UserRound strokeWidth={3} className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                    <span className="font-black text-[8px] sm:text-[10px] leading-none whitespace-nowrap">
                       Login
                     </span>
                   </Button>
@@ -102,9 +103,9 @@ const LandingPage = () => {
               <Button
                 onClick={() => setMobileMenuOpen((v) => !v)}
                 aria-label="Open menu"
-                className={`bg-white text-black ${brutalBorder} ${brutalShadow} ${brutalShadowHover} rounded-none w-10 h-9 p-0`}
+                className={`bg-white text-black ${brutalBorder} ${brutalShadow} ${brutalShadowHover} rounded-none w-8 h-7 sm:w-9 sm:h-8 md:w-10 md:h-9 p-0`}
               >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {mobileMenuOpen ? <X className="w-4 h-4 sm:w-5 sm:h-5" /> : <Menu className="w-4 h-4 sm:w-5 sm:h-5" />}
               </Button>
             </div>
           </div>
@@ -229,7 +230,7 @@ const LandingPage = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl xs:text-5xl sm:text-5xl md:text-6xl lg:text-[7rem] font-black leading-[1.2] sm:leading-[0.9] tracking-tighter uppercase"
+            className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[7rem] font-black leading-[1.2] sm:leading-[0.9] tracking-tighter uppercase"
             style={{ 
               fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
               textShadow: "none",
@@ -392,7 +393,7 @@ const LandingPage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
+          <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-6">
             {[
               { label: "VALENTINE", available: true, bg: "bg-white", icon: <Heart className="w-10 h-10 sm:w-14 sm:h-14 fill-[#ff0844]" /> },
               { label: "BIRTHDAY", available: false, bg: "bg-[#fde047]", icon: <Gift className="w-10 h-10 sm:w-14 sm:h-14 fill-black" /> },
@@ -403,7 +404,7 @@ const LandingPage = () => {
                 key={i}
                 className={`group relative ${t.bg} ${brutalBorder} ${brutalShadow} ${
                   t.available ? brutalShadowHover : "opacity-70 grayscale"
-                } p-4 sm:p-5 lg:p-6 transition-all duration-200 cursor-pointer flex flex-col items-center justify-center min-h-[185px] sm:min-h-[205px] lg:min-h-[260px] text-center`}
+                } p-2 sm:p-3 lg:p-6 transition-all duration-200 cursor-pointer flex flex-col items-center justify-center min-h-[120px] xs:min-h-[140px] sm:min-h-[160px] md:min-h-[185px] lg:min-h-[260px] text-center`}
                 onClick={() => t.available && navigate(`/create?theme=${t.label.toLowerCase()}`)}
               >
                 {!t.available && (
@@ -412,15 +413,16 @@ const LandingPage = () => {
                   </div>
                 )}
 
-                <div className="mb-4 sm:mb-5 group-hover:scale-125 transition-transform duration-300">
-                  {t.icon}
+                <div className="mb-2 sm:mb-3 lg:mb-5 group-hover:scale-125 transition-transform duration-300">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-12 lg:w-14 lg:h-14 flex items-center justify-center">
+                    {t.icon}
+                  </div>
                 </div>
 
-                <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-none">{t.label}</h3>
+                <h3 className="text-sm sm:text-base lg:text-xl md:text-lg font-black tracking-tight leading-none">{t.label}</h3>
                 {t.available && (
                   <div
-                    className={`mt-3 sm:mt-4 bg-black text-white px-3 sm:px-4 py-1 text-[12px] sm:text-sm font-black uppercase w-full ${brutalBorder} group-hover:bg-[#ff90e8] group-hover:text-black transition-colors`}
-                  >
+                    className={`mt-1 sm:mt-2 lg:mt-4 bg-black text-white px-1.5 sm:px-2 lg:px-4 py-0.5 sm:py-1 text-[8px] sm:text-[10px] lg:text-sm font-black uppercase w-full ${brutalBorder} group-hover:bg-[#ff90e8] group-hover:text-black transition-colors`}>
                     Use Theme
                   </div>
                 )}
@@ -568,8 +570,8 @@ const LandingPage = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-[#ff90e8]/10 via-transparent to-[#86efac]/10"></div>
         </div>
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 lg:py-12 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 lg:py-12 relative z-10">
+          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-12 gap-2 sm:gap-3 lg:gap-6 lg:gap-8">
             {/* Brand */}
             <div className="lg:col-span-4">
               <div className={`${brutalBorder} ${brutalShadow} bg-gradient-to-br from-[#ff90e8]/20 to-[#86efac]/20 backdrop-blur-sm p-4 sm:p-6 rounded-2xl`}>
@@ -605,46 +607,46 @@ const LandingPage = () => {
             </div>
 
             {/* Links */}
-            <div className="lg:col-span-8">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            <div className="lg:col-span-8 md:col-span-2 sm:col-span-2">
+              <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4 lg:gap-6">
                 <div>
-                  <h3 className="font-black uppercase tracking-widest text-sm sm:text-base mb-2 sm:mb-4 text-[#ff90e8]">Product</h3>
-                  <ul className="space-y-2">
-                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors" href="#features">Features</a></li>
-                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors" href="#templates">Templates</a></li>
-                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors" href="/create">Create</a></li>
+                  <h3 className="font-black uppercase tracking-widest text-[10px] sm:text-xs md:text-base mb-1 sm:mb-2 lg:mb-4 text-[#ff90e8]">Product</h3>
+                  <ul className="space-y-1 sm:space-y-2">
+                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors text-xs sm:text-sm" href="#features">Features</a></li>
+                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors text-xs sm:text-sm" href="#templates">Templates</a></li>
+                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors text-xs sm:text-sm" href="/create">Create</a></li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="font-black uppercase tracking-widest text-sm sm:text-base mb-2 sm:mb-4 text-[#86efac]">Resources</h3>
-                  <ul className="space-y-2">
-                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors" href="/profile">My pages</a></li>
-                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors" href="/login">Login</a></li>
-                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors" href="/admin">Admin</a></li>
+                  <h3 className="font-black uppercase tracking-widest text-[10px] sm:text-xs md:text-base mb-1 sm:mb-2 lg:mb-4 text-[#86efac]">Resources</h3>
+                  <ul className="space-y-1 sm:space-y-2">
+                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors text-xs sm:text-sm" href="/profile">My pages</a></li>
+                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors text-xs sm:text-sm" href="/login">Login</a></li>
+                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors text-xs sm:text-sm" href="/admin">Admin</a></li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="font-black uppercase tracking-widest text-sm sm:text-base mb-2 sm:mb-4 text-[#fde047]">Company</h3>
-                  <ul className="space-y-2">
+                  <h3 className="font-black uppercase tracking-widest text-[10px] sm:text-xs md:text-base mb-1 sm:mb-2 lg:mb-4 text-[#fde047]">Company</h3>
+                  <ul className="space-y-1 sm:space-y-2">
                     <li>
-                      <a className="text-black font-medium hover:text-[#fde047] transition-colors" href="https://codequil.vercel.app/" target="_blank" rel="noreferrer">
+                      <a className="text-black font-medium hover:text-[#fde047] transition-colors text-xs sm:text-sm" href="https://codequil.vercel.app/" target="_blank" rel="noreferrer">
                         Codequil
                       </a>
                     </li>
-                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors" href="#">Privacy</a></li>
-                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors" href="#">Terms</a></li>
+                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors text-xs sm:text-sm" href="#">Privacy</a></li>
+                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors text-xs sm:text-sm" href="#">Terms</a></li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="font-black uppercase tracking-widest text-sm sm:text-base mb-2 sm:mb-4 text-black">Contact</h3>
-                  <ul className="space-y-2">
-                    <li className="text-black/80 font-medium">Email: <span className="text-[#ff90e8] font-bold">hello@codequil</span></li>
-                    <li className="text-black/80 font-medium">Hours: <span className="font-bold text-[#86efac]">Mon–Sat</span></li>
+                  <h3 className="font-black uppercase tracking-widest text-[10px] sm:text-xs md:text-base mb-1 sm:mb-2 lg:mb-4 text-black">Contact</h3>
+                  <ul className="space-y-1 sm:space-y-2">
+                    <li className="text-black/80 font-medium text-xs sm:text-sm">Email: <span className="text-[#ff90e8] font-bold">hello@codequil</span></li>
+                    <li className="text-black/80 font-medium text-xs sm:text-sm">Hours: <span className="font-bold text-[#86efac]">Mon–Sat</span></li>
                     <li>
-                      <a className="text-black font-medium hover:text-[#fde047] transition-colors" href="#">Support</a>
+                      <a className="text-black font-medium hover:text-[#fde047] transition-colors text-xs sm:text-sm" href="#">Support</a>
                     </li>
                   </ul>
                 </div>

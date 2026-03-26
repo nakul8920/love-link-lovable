@@ -196,28 +196,28 @@ const CreatePage = () => {
         <div className="fixed inset-0 z-0 pointer-events-none opacity-20" style={{ backgroundImage: "radial-gradient(#000 1.5px, transparent 1.5px)", backgroundSize: "32px 32px" }}></div>
 
         {/* Sleek Mobile Brutalist Header */}
-        <div className={`relative z-10 w-full bg-[#c4b5fd] border-b-[3px] border-black py-3 px-4 flex justify-between items-center`}>
+        <div className={`relative z-10 w-full bg-[#c4b5fd] border-b-[3px] border-black py-2 sm:py-3 px-3 sm:px-4 flex justify-between items-center`}>
           <button 
             onClick={() => navigate("/")} 
-            className={`flex items-center gap-1 bg-white px-3 py-1.5 font-black uppercase text-xs border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all`}
+            className={`flex items-center gap-1 bg-white px-2 sm:px-3 py-1 sm:py-1.5 font-black uppercase text-[10px] sm:text-xs border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all`}
           >
-            <ArrowLeft className="w-4 h-4 mr-0.5" />
-            <Heart className="w-4 h-4 text-black fill-[#ff0844]" />
+            <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4 mr-0.5" />
+            <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-black fill-[#ff0844]" />
             <span className="hidden sm:inline">HOME</span>
           </button>
           
-          <div className="bg-black text-white px-3 py-1 font-black uppercase text-[10px] tracking-widest flex items-center gap-1.5 rotate-1">
-            <Sparkles className="w-3 h-3 text-[#fde047]" />
+          <div className="bg-black text-white px-2 sm:px-3 py-0.5 sm:py-1 font-black uppercase text-[8px] sm:text-[10px] tracking-widest flex items-center gap-1 sm:gap-1.5 rotate-1">
+            <Sparkles className="w-2 h-2 sm:w-3 sm:h-3 text-[#fde047]" />
             <span>{templateType}</span>
           </div>
         </div>
 
         {/* Main Content Area - Mobile */}
-        <div className="relative z-10 flex-1 flex flex-col max-w-2xl mx-auto w-full px-4 py-6">
+        <div className="relative z-10 flex-1 flex flex-col max-w-xl sm:max-w-2xl mx-auto w-full px-3 sm:px-4 py-4 sm:py-6">
           
           <div className="flex justify-between items-center mb-6 w-full">
-            <div className="bg-white border-[3px] border-black font-black uppercase tracking-widest text-sm px-4 py-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center gap-2">
-              <span className="bg-black text-white px-2 py-0.5 text-xs">STEP {step + 1}</span>
+            <div className="bg-white border-[2px] sm:border-[3px] border-black font-black uppercase tracking-widest text-[10px] sm:text-sm px-3 sm:px-4 py-1 sm:py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center gap-2">
+              <span className="bg-black text-white px-1.5 sm:px-2 py-0.5 text-[8px] sm:text-xs">STEP {step + 1}</span>
               <span>{steps[step]}</span>
             </div>
             
@@ -225,7 +225,7 @@ const CreatePage = () => {
               {steps.map((_, i) => (
                 <div 
                   key={i} 
-                  className={`h-3 w-8 border-2 border-black transition-colors ${
+                  className={`h-2 sm:h-3 w-6 sm:w-8 border-2 border-black transition-colors ${
                     i < step ? 'bg-[#86efac]' : i === step ? 'bg-[#ff90e8]' : 'bg-white'
                   }`}
                 />
@@ -244,7 +244,7 @@ const CreatePage = () => {
               >
                 {step === 0 && (
                   <div className="animate-in fade-in slide-in-from-bottom-4">
-                    <h2 className="text-3xl font-black uppercase tracking-tighter mb-1 bg-[#fde047] inline-block px-3 py-1 border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -rotate-1">
+                    <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tighter mb-1 bg-[#fde047] inline-block px-2 sm:px-3 py-1 border-[2px] sm:border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -rotate-1">
                       THE DETAILS
                     </h2>
                     <p className="text-sm font-bold mt-4 mb-6 text-gray-800 ml-1">
@@ -258,7 +258,7 @@ const CreatePage = () => {
 
                 {step === 1 && (
                   <div className="animate-in fade-in slide-in-from-bottom-4">
-                    <h2 className="text-3xl font-black uppercase tracking-tighter mb-1 bg-[#93c5fd] inline-block px-3 py-1 border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rotate-1">
+                    <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tighter mb-1 bg-[#93c5fd] inline-block px-2 sm:px-3 py-1 border-[2px] sm:border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rotate-1">
                       THE VISUALS
                     </h2>
                     <p className="text-sm font-bold mt-4 mb-6 text-gray-800 ml-1">
@@ -272,19 +272,19 @@ const CreatePage = () => {
 
                 {step === 2 && (
                   <div className="animate-in fade-in slide-in-from-bottom-4 flex flex-col items-center pt-4 text-center w-full max-w-md mx-auto">
-                    <div className={`w-20 h-20 bg-[#86efac] ${brutalBorder} shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center mb-6 rotate-3`}>
-                      <CreditCard className="w-10 h-10 text-black" />
+                    <div className={`w-16 h-16 sm:w-20 sm:h-20 bg-[#86efac] ${brutalBorder} shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center mb-4 sm:mb-6 rotate-3`}>
+                      <CreditCard className="w-8 h-8 sm:w-10 sm:h-10 text-black" />
                     </div>
-                    <h2 className="text-4xl font-black uppercase tracking-tighter mb-3 leading-none" style={{ textShadow: "2px 2px 0px #ff90e8" }}>
+                    <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tighter mb-2 sm:mb-3 leading-none" style={{ textShadow: "2px 2px 0px #ff90e8" }}>
                       SEAL THE DEAL.
                     </h2>
-                    <p className="text-sm font-bold mb-6">One-time payment. Infinite magic.</p>
+                    <p className="text-xs sm:text-sm font-bold mb-4 sm:mb-6">One-time payment. Infinite magic.</p>
                     
-                    <div className={`bg-black text-white px-8 py-3 font-black text-3xl uppercase tracking-widest border-4 border-white shadow-[6px_6px_0px_0px_#fde047] mb-6`}>
+                    <div className={`bg-black text-white px-6 sm:px-8 py-2 sm:py-3 font-black text-2xl sm:text-3xl uppercase tracking-widest border-2 sm:border-4 border-white shadow-[4px_4px_0px_0px_#fde047] sm:shadow-[6px_6px_0px_0px_#fde047] mb-4 sm:mb-6`}>
                       ₹49
                     </div>
                     
-                    <p className="text-xs font-bold uppercase text-gray-500 mb-8 w-full max-w-xs mx-auto">
+                    <p className="text-[10px] sm:text-xs font-bold uppercase text-gray-500 mb-6 sm:mb-8 w-full max-w-xs mx-auto">
                       *Razorpay integration required. Demo mode active.
                     </p>
                     
@@ -292,7 +292,7 @@ const CreatePage = () => {
                       size="lg"
                       onClick={handlePayment}
                       disabled={processing}
-                      className={`w-full h-16 bg-[#ff90e8] text-black text-lg font-black uppercase tracking-widest rounded-none ${brutalBorder} shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${brutalShadowHover} transition-all`}
+                      className={`w-full h-12 sm:h-16 bg-[#ff90e8] text-black text-sm sm:text-lg font-black uppercase tracking-widest rounded-none ${brutalBorder} shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${brutalShadowHover} transition-all`}
                     >
                       {processing ? "MAKING IT..." : "PAY & PUBLISH"}
                     </Button>
@@ -303,21 +303,21 @@ const CreatePage = () => {
           </div>
 
           {step < 2 && (
-            <div className="mt-8 pt-4 border-t-4 border-black border-dashed flex justify-between items-center w-full relative bottom-0">
+            <div className="mt-6 sm:mt-8 pt-3 sm:pt-4 border-t-2 sm:border-t-4 border-black border-dashed flex justify-between items-center w-full relative bottom-0">
               <Button
                 variant="outline"
                 onClick={() => setStep(Math.max(0, step - 1))}
                 disabled={step === 0}
-                className={`h-12 px-6 bg-white text-black font-black uppercase tracking-widest rounded-none border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all disabled:opacity-50 disabled:shadow-none disabled:translate-y-0 disabled:translate-x-0`}
+                className={`h-10 sm:h-12 px-4 sm:px-6 bg-white text-black font-black uppercase tracking-widest rounded-none border-[2px] sm:border-[3px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all disabled:opacity-50 disabled:shadow-none disabled:translate-y-0 disabled:translate-x-0`}
               >
                 BACK
               </Button>
               <Button
                 onClick={() => setStep(step + 1)}
                 disabled={!canNext()}
-                className={`h-12 px-8 bg-[#86efac] text-black font-black uppercase tracking-widest rounded-none border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all disabled:opacity-50 disabled:shadow-none disabled:translate-y-0 disabled:translate-x-0 flex items-center`}
+                className={`h-10 sm:h-12 px-4 sm:px-6 bg-[#86efac] text-black font-black uppercase tracking-widest rounded-none border-[2px] sm:border-[3px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all disabled:opacity-50 disabled:shadow-none disabled:translate-y-0 disabled:translate-x-0 flex items-center`}
               >
-                NEXT <ArrowRight className="w-5 h-5 ml-2" />
+                NEXT <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
               </Button>
             </div>
           )}

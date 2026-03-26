@@ -8,10 +8,10 @@ const WishViewer = () => {
 
   if (!page) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <h1 className="text-4xl font-display font-bold text-foreground mb-2">Page not found</h1>
-          <p className="text-muted-foreground">This wish page doesn't exist or has expired.</p>
+      <div className="min-h-screen flex items-center justify-center bg-[#FFFDF7]">
+        <div className="text-center px-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-black mb-2">Page not found</h1>
+          <p className="text-sm sm:text-base text-gray-600">This wish page doesn't exist or has expired.</p>
         </div>
       </div>
     );
