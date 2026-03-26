@@ -66,10 +66,10 @@ const LandingPage = () => {
                 <>
                   <Button
                     onClick={() => navigate("/login")}
-                    className={`bg-[#ff90e8] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 sm:h-12 px-4 sm:px-6 text-sm sm:text-base inline-flex items-center gap-3`}
+                    className={`bg-[#ff90e8] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 sm:h-12 px-3 sm:px-6 text-xs sm:text-sm md:text-base inline-flex items-center gap-2`}
                   >
-                    <UserRound strokeWidth={3} className="w-5 h-5 sm:w-6 sm:h-6" />
-                    <span className="font-black text-base sm:text-lg leading-none whitespace-nowrap">
+                    <UserRound strokeWidth={3} className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="font-black text-xs sm:text-sm md:text-base leading-none whitespace-nowrap">
                       Login / Sign Up
                     </span>
                   </Button>
@@ -90,11 +90,11 @@ const LandingPage = () => {
               ) : (
                   <Button
                     onClick={() => navigate("/login")}
-                    className={`bg-[#ff90e8] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-9 px-2 text-[11px] inline-flex items-center gap-2`}
+                    className={`bg-[#ff90e8] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-9 px-1.5 text-[10px] inline-flex items-center gap-1.5`}
                   >
-                    <UserRound strokeWidth={3} className="w-4 h-4" />
-                    <span className="font-black leading-none whitespace-nowrap">
-                      Login / Sign Up
+                    <UserRound strokeWidth={3} className="w-3 h-3" />
+                    <span className="font-black text-[10px] leading-none whitespace-nowrap">
+                      Login
                     </span>
                   </Button>
               )}
@@ -196,10 +196,10 @@ const LandingPage = () => {
                       setMobileMenuOpen(false);
                       navigate("/login");
                     }}
-                    className={`w-full bg-[#ff90e8] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-12 inline-flex items-center gap-3`}
+                    className={`w-full bg-[#ff90e8] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-12 inline-flex items-center justify-center gap-2`}
                   >
-                    <UserRound strokeWidth={3} className="w-5 h-5" />
-                    <span className="font-black text-base leading-none whitespace-nowrap">
+                    <UserRound strokeWidth={3} className="w-4 h-4" />
+                    <span className="font-black text-sm leading-none whitespace-nowrap">
                       Login / Sign Up
                     </span>
                   </Button>
@@ -250,23 +250,25 @@ const LandingPage = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.3, type: "spring", bounce: 0.6 }}
-            className="mt-8 sm:mt-12 flex flex-row gap-3 sm:gap-6 w-full"
+            className="mt-8 sm:mt-12 flex flex-row gap-2 sm:gap-4 lg:gap-6 w-full justify-center"
           >
             <Button
               size="lg"
               onClick={() => { document.getElementById('templates')?.scrollIntoView({ behavior: 'smooth' }); }}
-              className={`w-1/2 sm:w-auto h-12 sm:h-16 px-6 sm:px-10 bg-[#86efac] text-black hover:text-black text-base sm:text-xl font-black uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200 group`}
+              className={`flex-1 sm:flex-none h-10 sm:h-12 lg:h-16 px-2 sm:px-6 lg:px-10 bg-[#86efac] text-black hover:text-black text-xs sm:text-sm lg:text-xl font-black uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200 group`}
             >
-              Start Creating
-              <MoveRight className="w-5 h-5 sm:w-6 sm:h-6 ml-3 group-hover:translate-x-2 transition-transform" />
+              <span className="font-black text-xs sm:text-sm lg:text-xl leading-none whitespace-nowrap">
+                Start Creating
+              </span>
+              <MoveRight className="w-3 h-3 sm:w-4 sm:h-4 lg:w-6 lg:h-6 ml-1 sm:ml-2 lg:ml-3 group-hover:translate-x-1 sm:group-hover:translate-x-2 transition-transform" />
             </Button>
             <Button
               variant="outline"
               size="lg"
-              className={`w-1/2 sm:w-auto h-12 sm:h-16 px-6 sm:px-10 bg-white text-base sm:text-xl font-bold uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200`}
+              className={`flex-1 sm:flex-none h-10 sm:h-12 lg:h-16 px-2 sm:px-6 lg:px-10 bg-white text-xs sm:text-sm lg:text-xl font-bold uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all duration-200`}
             >
-              <PlayCircle className="w-5 h-5 sm:w-6 sm:h-6 mr-3" />
-              Watch Demo
+              <PlayCircle className="w-3 h-3 sm:w-4 sm:h-4 lg:w-6 lg:h-6 mr-1 sm:mr-2 lg:mr-3" />
+              <span className="font-bold text-xs sm:text-sm lg:text-xl">Watch Demo</span>
             </Button>
           </motion.div>
         </section>
@@ -531,7 +533,7 @@ const LandingPage = () => {
               <Button
                 size="lg"
                 onClick={() => { document.getElementById('templates')?.scrollIntoView({ behavior: 'smooth' }); }}
-                className={`h-14 sm:h-20 px-8 sm:px-12 bg-[#fde047] text-black text-lg sm:text-2xl font-black uppercase tracking-widest rounded-none ${brutalBorder} shadow-[8px_8px_0px_#fff] hover:shadow-[2px_2px_0px_#fff] hover:translate-x-[6px] hover:translate-y-[6px] transition-all duration-200`}
+                className={`h-12 sm:h-16 lg:h-20 px-6 sm:px-10 lg:px-12 bg-[#fde047] text-black text-base sm:text-lg lg:text-2xl font-black uppercase tracking-widest rounded-none ${brutalBorder} shadow-[8px_8px_0px_#fff] hover:shadow-[2px_2px_0px_#fff] hover:translate-x-[6px] hover:translate-y-[6px] transition-all duration-200`}
               >
                 CREATE NOW
               </Button>
