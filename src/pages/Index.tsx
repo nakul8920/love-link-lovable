@@ -411,28 +411,82 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* How It Works - Step by Step Brutalist Style */}
-        <section id="how" className="max-w-6xl mx-auto px-6 mb-32">
-          <div className="mb-16">
-            <h2 className="text-5xl sm:text-7xl font-black uppercase tracking-tighter text-white" style={{ textShadow: "4px 4px 0px #000" }}>HOW IT WORKS.</h2>
+        {/* How It Works - New Brutalist Cards */}
+        <section id="how" className="max-w-6xl mx-auto px-4 sm:px-6 mb-28 sm:mb-36">
+          <div className="mb-10 sm:mb-14">
+            <h2
+              className="text-4xl sm:text-6xl font-black uppercase tracking-tighter text-white leading-none"
+              style={{ textShadow: "4px 4px 0px #000" }}
+            >
+              HOW IT WORKS.
+            </h2>
+            <p className="mt-3 text-sm sm:text-base font-bold max-w-3xl text-black/90">
+              Three brutal steps from blank to shareable.
+            </p>
           </div>
 
-          <div className="space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             {[
-              { n: "1", t: "BUILD THE MAGIC", d: "Fill in names, type your heartfelt message, and drop in your favorite photos.", bg: "bg-[#fde047]" },
-              { n: "2", t: "WE DO THE HEAVY LIFTING", d: "Our servers crush the data into a stunning, responsive, fully animated webpage.", bg: "bg-[#93c5fd]" },
-              { n: "3", t: "SHARE THE LOVE", d: "Copy your magic link and share it anywhere. Watch their jaw drop.", bg: "bg-[#86efac]" },
-            ].map((s, i) => (
-              <div key={s.n} className={`flex flex-col md:flex-row items-center gap-8 ${s.bg} ${brutalBorder} ${brutalShadow} p-8 md:p-12`}>
-                <div className={`w-24 h-24 shrink-0 bg-white ${brutalBorder} ${brutalShadow} flex items-center justify-center text-5xl font-black`}>
-                  {s.n}
+              {
+                n: "1",
+                t: "BUILD THE MAGIC",
+                d: "Fill in names, type your heartfelt message, and drop in your favorite photos.",
+                bg: "bg-[#fde047]",
+                icon: Sparkles,
+              },
+              {
+                n: "2",
+                t: "WE DO THE HEAVY LIFTING",
+                d: "Our servers crush the data into a stunning, responsive, fully animated webpage.",
+                bg: "bg-[#93c5fd]",
+                icon: Zap,
+              },
+              {
+                n: "3",
+                t: "SHARE THE LOVE",
+                d: "Copy your magic link and share it anywhere. Watch their jaw drop.",
+                bg: "bg-[#86efac]",
+                icon: Heart,
+              },
+            ].map((s) => {
+              const Icon = s.icon;
+              return (
+                <div
+                  key={s.n}
+                  className={`relative group ${brutalBorder} ${brutalShadow} bg-white overflow-hidden`}
+                >
+                  <div className={`h-2 ${s.bg}`} />
+
+                  {/* Decorative corner splash */}
+                  <div
+                    className={`absolute -top-10 -right-10 w-28 h-28 ${s.bg} opacity-90 rotate-12 border-[3px] border-black/70`}
+                    aria-hidden="true"
+                  />
+
+                  <div className="relative p-5 sm:p-6">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className={`inline-flex items-center gap-2 px-3 py-1 ${s.bg} ${brutalBorder} border-b-[4px]`}>
+                        <Icon className="w-4 h-4 text-black" />
+                        <span className="font-black uppercase tracking-widest text-[11px]">
+                          Step {s.n}
+                        </span>
+                      </div>
+
+                      <div
+                        className={`w-12 h-12 sm:w-14 sm:h-14 ${brutalBorder} bg-white ${brutalShadow} flex items-center justify-center text-3xl sm:text-4xl font-black`}
+                      >
+                        {s.n}
+                      </div>
+                    </div>
+
+                    <h3 className="mt-4 text-2xl sm:text-3xl font-black uppercase tracking-tight">
+                      {s.t}
+                    </h3>
+                    <p className="mt-3 text-sm sm:text-base font-bold leading-relaxed">{s.d}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-4xl font-black uppercase tracking-tight mb-4">{s.t}</h3>
-                  <p className="text-xl font-bold">{s.d}</p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 
@@ -462,19 +516,106 @@ const LandingPage = () => {
       </main>
 
       {/* Brutalist Footer */}
-      <footer className={`${brutalBorder} border-b-0 border-l-0 border-r-0 py-12 px-6 bg-white`}>
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-          <div>
-            <span className="font-black text-3xl uppercase tracking-tighter">WISHLINK INC.</span>
-            <p className="font-bold mt-2">Putting the fun back into gifting.</p>
+      <footer className={`${brutalBorder} border-b-0 border-l-0 border-r-0 bg-white`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
+            {/* Brand */}
+            <div className="lg:col-span-4">
+              <div className={`${brutalBorder} ${brutalShadow} bg-[#FFFDF7] p-4 sm:p-5`}>
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 ${brutalBorder} bg-white flex items-center justify-center shadow-[4px_4px_0px_#000]`}>
+                    <Heart className="w-5 h-5 text-black fill-[#ff90e8]" />
+                  </div>
+                  <div>
+                    <div className="font-black text-xl uppercase tracking-tighter leading-none">Wishlink</div>
+                    <div className="font-bold text-xs text-black/70">Codequil agency tool</div>
+                  </div>
+                </div>
+
+                <p className="mt-3 text-xs sm:text-sm font-bold leading-relaxed text-black/85">
+                  Build animated gifting pages and share your magic link instantly.
+                </p>
+
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <a
+                    className={`text-xs font-black uppercase tracking-widest underline decoration-4 underline-offset-4 hover:text-[#ff90e8]`}
+                    href="#templates"
+                  >
+                    Templates
+                  </a>
+                  <a
+                    className={`text-xs font-black uppercase tracking-widest underline decoration-4 underline-offset-4 hover:text-[#fde047]`}
+                    href="#how"
+                  >
+                    How it works
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Links */}
+            <div className="lg:col-span-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+                <div>
+                  <div className="font-black uppercase tracking-widest text-xs mb-2">Product</div>
+                  <ul className="space-y-2 text-sm font-bold">
+                    <li><a className="hover:underline decoration-4 underline-offset-4" href="#features">Features</a></li>
+                    <li><a className="hover:underline decoration-4 underline-offset-4" href="#templates">Templates</a></li>
+                    <li><a className="hover:underline decoration-4 underline-offset-4" href="/create">Create</a></li>
+                  </ul>
+                </div>
+
+                <div>
+                  <div className="font-black uppercase tracking-widest text-xs mb-2">Resources</div>
+                  <ul className="space-y-2 text-sm font-bold">
+                    <li><a className="hover:underline decoration-4 underline-offset-4" href="/profile">My pages</a></li>
+                    <li><a className="hover:underline decoration-4 underline-offset-4" href="/login">Login</a></li>
+                    <li><a className="hover:underline decoration-4 underline-offset-4" href="/admin">Admin</a></li>
+                  </ul>
+                </div>
+
+                <div>
+                  <div className="font-black uppercase tracking-widest text-xs mb-2">Company</div>
+                  <ul className="space-y-2 text-sm font-bold">
+                    <li>
+                      <a className="hover:underline decoration-4 underline-offset-4" href="https://codequil.vercel.app/" target="_blank" rel="noreferrer">
+                        Codequil
+                      </a>
+                    </li>
+                    <li><a className="hover:underline decoration-4 underline-offset-4" href="#">Privacy</a></li>
+                    <li><a className="hover:underline decoration-4 underline-offset-4" href="#">Terms</a></li>
+                  </ul>
+                </div>
+
+                <div>
+                  <div className="font-black uppercase tracking-widest text-xs mb-2">Contact</div>
+                  <ul className="space-y-2 text-sm font-bold">
+                    <li className="text-black/80">Email: <span className="underline decoration-4 underline-offset-4">hello@codequil</span></li>
+                    <li className="text-black/80">Hours: <span className="font-black">Mon–Sat</span></li>
+                    <li>
+                      <a className="hover:underline decoration-4 underline-offset-4" href="#">Support</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="text-xl font-black uppercase border-2 border-black px-4 py-2">
-            © 2026 DO NOT STEAL
-          </div>
-          <div className="flex flex-wrap justify-center gap-6 text-lg font-bold uppercase underline decoration-4 underline-offset-4">
-            <a href="#" className="hover:text-[#ff90e8]">Privacy</a>
-            <a href="#" className="hover:text-[#fde047]">Terms</a>
-            <a href="#" className="hover:text-[#60a5fa]">Twitter</a>
+
+          <div className="mt-8 pt-5 border-t-2 border-black/70 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="font-black uppercase tracking-widest text-[10px] sm:text-xs">
+              © 2026 Wishlink Express
+            </div>
+            <div className="font-bold text-xs sm:text-sm">
+              Built by{" "}
+              <a
+                className="underline decoration-4 underline-offset-4 hover:text-[#ff90e8]"
+                href="https://codequil.vercel.app/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Codequil
+              </a>
+            </div>
           </div>
         </div>
       </footer>
