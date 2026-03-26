@@ -22,14 +22,14 @@ const LandingPage = () => {
 
       {/* Neo-brutalist Navbar */}
       <nav className={`fixed top-0 w-full z-50 bg-[#c4b5fd] ${brutalBorder} border-t-0 border-l-0 border-r-0 transition-all duration-300`}>
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 sm:px-12 py-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-12 py-3 sm:py-4">
           <motion.div
             whileHover={{ rotate: -5, scale: 1.05 }}
-            className={`flex items-center gap-2 cursor-pointer bg-white px-4 py-2 rounded-full ${brutalBorder} ${brutalShadow}`}
+            className={`flex items-center gap-2 cursor-pointer bg-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full ${brutalBorder} ${brutalShadow}`}
             onClick={() => navigate("/")}
           >
-            <Heart className="w-5 h-5 text-black fill-[#ff90e8]" />
-            <span className="font-display text-xl font-bold tracking-tight">WishLink</span>
+            <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-black fill-[#ff90e8]" />
+            <span className="font-display text-lg sm:text-xl font-bold tracking-tight">WishLink</span>
           </motion.div>
 
           <div className="hidden md:flex items-center gap-8 font-bold text-lg">
@@ -76,18 +76,18 @@ const LandingPage = () => {
             </div>
 
             {/* Mobile hamburger */}
-            <div className="md:hidden flex items-center gap-2">
+            <div className="md:hidden flex items-center gap-1.5">
               {isLoggedIn ? (
                 <Button
                   onClick={() => navigate("/profile")}
-                  className={`bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadowHover} transition-all rounded-none h-10 px-3 text-sm`}
+                  className={`bg-white text-black font-bold uppercase ${brutalBorder} ${brutalShadowHover} transition-all rounded-none h-9 px-2 text-xs`}
                 >
                   Profile
                 </Button>
               ) : (
                   <Button
                     onClick={() => navigate("/login")}
-                    className={`bg-[#ff90e8] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-10 px-2 text-xs inline-flex items-center gap-2`}
+                    className={`bg-[#ff90e8] text-black font-black uppercase tracking-widest ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-9 px-2 text-[11px] inline-flex items-center gap-2`}
                   >
                     <UserRound strokeWidth={3} className="w-4 h-4" />
                     <span className="font-black leading-none whitespace-nowrap">
@@ -99,7 +99,7 @@ const LandingPage = () => {
               <Button
                 onClick={() => setMobileMenuOpen((v) => !v)}
                 aria-label="Open menu"
-                className={`bg-white text-black ${brutalBorder} ${brutalShadow} ${brutalShadowHover} rounded-none w-12 h-10 p-0`}
+                className={`bg-white text-black ${brutalBorder} ${brutalShadow} ${brutalShadowHover} rounded-none w-10 h-9 p-0`}
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </Button>
@@ -122,7 +122,7 @@ const LandingPage = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.18 }}
-            className="relative mx-4 mt-20 mb-6 bg-white border border-gray-100 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.25)] overflow-hidden"
+            className="relative mx-4 mt-16 mb-4 bg-white border border-gray-100 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.25)] overflow-hidden"
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
               <div className="flex items-center gap-2">
@@ -205,7 +205,7 @@ const LandingPage = () => {
         </div>
       )}
 
-      <main className="relative z-10 pt-24 sm:pt-32 pb-12 sm:pb-20">
+      <main className="relative z-10 pt-20 sm:pt-28 pb-12 sm:pb-20">
 
         {/* Playful Hero Section */}
         <section className="relative flex flex-col items-center text-center px-4 sm:px-6 max-w-6xl mx-auto min-h-[44vh] sm:min-h-[60vh] justify-center mt-8 sm:mt-12 mb-14 sm:mb-20">
@@ -374,34 +374,34 @@ const LandingPage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
             {[
-              { label: "VALENTINE", available: true, bg: "bg-white", icon: <Heart className="w-12 h-12 sm:w-16 sm:h-16 fill-[#ff0844]" /> },
-              { label: "BIRTHDAY", available: false, bg: "bg-[#fde047]", icon: <Gift className="w-12 h-12 sm:w-16 sm:h-16 fill-black" /> },
-              { label: "ANNIVERSARY", available: false, bg: "bg-[#c4b5fd]", icon: <Star className="w-12 h-12 sm:w-16 sm:h-16 fill-black" /> },
-              { label: "SURPRISE", available: false, bg: "bg-[#86efac]", icon: <Sparkles className="w-12 h-12 sm:w-16 sm:h-16 fill-black" /> },
+              { label: "VALENTINE", available: true, bg: "bg-white", icon: <Heart className="w-10 h-10 sm:w-14 sm:h-14 fill-[#ff0844]" /> },
+              { label: "BIRTHDAY", available: false, bg: "bg-[#fde047]", icon: <Gift className="w-10 h-10 sm:w-14 sm:h-14 fill-black" /> },
+              { label: "ANNIVERSARY", available: false, bg: "bg-[#c4b5fd]", icon: <Star className="w-10 h-10 sm:w-14 sm:h-14 fill-black" /> },
+              { label: "SURPRISE", available: false, bg: "bg-[#86efac]", icon: <Sparkles className="w-10 h-10 sm:w-14 sm:h-14 fill-black" /> },
             ].map((t, i) => (
               <div
                 key={i}
                 className={`group relative ${t.bg} ${brutalBorder} ${brutalShadow} ${
                   t.available ? brutalShadowHover : "opacity-70 grayscale"
-                } p-5 sm:p-7 lg:p-8 transition-all duration-200 cursor-pointer flex flex-col items-center justify-center min-h-[230px] sm:min-h-[260px] lg:min-h-[300px] text-center`}
+                } p-4 sm:p-5 lg:p-6 transition-all duration-200 cursor-pointer flex flex-col items-center justify-center min-h-[185px] sm:min-h-[205px] lg:min-h-[260px] text-center`}
                 onClick={() => t.available && navigate(`/create?theme=${t.label.toLowerCase()}`)}
               >
                 {!t.available && (
-                  <div className={`absolute -top-3 -right-3 bg-black text-white px-3 py-1 font-black uppercase tracking-widest text-xs sm:text-sm ${brutalBorder} rotate-12`}>
+                  <div className={`absolute -top-2 -right-2 bg-black text-white px-2 py-0.5 font-black uppercase tracking-widest text-[10px] sm:text-xs ${brutalBorder} rotate-12`}>
                     Coming Soon!
                   </div>
                 )}
 
-                <div className="mb-5 sm:mb-6 group-hover:scale-125 transition-transform duration-300">
+                <div className="mb-4 sm:mb-5 group-hover:scale-125 transition-transform duration-300">
                   {t.icon}
                 </div>
 
-                <h3 className="text-2xl sm:text-3xl font-black tracking-tight leading-none">{t.label}</h3>
+                <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-none">{t.label}</h3>
                 {t.available && (
                   <div
-                    className={`mt-4 sm:mt-6 bg-black text-white px-4 sm:px-6 py-1.5 sm:py-2 text-sm sm:text-base font-black uppercase w-full ${brutalBorder} group-hover:bg-[#ff90e8] group-hover:text-black transition-colors`}
+                    className={`mt-3 sm:mt-4 bg-black text-white px-3 sm:px-4 py-1 text-[12px] sm:text-sm font-black uppercase w-full ${brutalBorder} group-hover:bg-[#ff90e8] group-hover:text-black transition-colors`}
                   >
                     Use Theme
                   </div>
