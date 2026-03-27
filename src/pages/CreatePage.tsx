@@ -284,10 +284,6 @@ const CreatePage = () => {
                       ₹49
                     </div>
                     
-                    <p className="text-[10px] sm:text-xs font-bold uppercase text-gray-500 mb-6 sm:mb-8 w-full max-w-xs mx-auto">
-                      *Razorpay integration required. Demo mode active.
-                    </p>
-                    
                     <Button
                       size="lg"
                       onClick={handlePayment}
@@ -429,10 +425,6 @@ const CreatePage = () => {
                 >
                   {processing ? "PROCESSING..." : "PAY & DEPLOY"}
                 </Button>
-                
-                <p className="mt-8 text-xl font-bold uppercase tracking-widest text-[#ff0844] bg-white px-4 border-2 border-black inline-block rotate-2">
-                  *Demonstration Mode Active
-                </p>
              </div>
           </div>
         </motion.div>
