@@ -206,7 +206,7 @@ const SupportPage = () => {
           Support
         </h1>
         <p className="text-sm sm:text-base font-bold text-black/80 mb-8 max-w-xl">
-          Form bharo — Send pe WhatsApp khulega, message ready milega. Bas wahan send kar dena (Gmail / server par mail nahi jati).
+          Fill the form and we will get back to you soon.
         </p>
 
         <form onSubmit={handleSubmit} className={`bg-white ${brutalBorder} ${brutalShadow} p-4 sm:p-8 space-y-6`}>
