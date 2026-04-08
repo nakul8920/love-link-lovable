@@ -1,5 +1,6 @@
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
+const PaymentVerification = require('../models/PaymentVerification');
 
 const createOrder = async (req, res) => {
   try {
@@ -45,6 +46,18 @@ const verifyPayment = async (req, res) => {
       .digest("hex");
 
     if (razorpay_signature === expectedSign) {
+      await PaymentVerification.findOneAndUpdate(
+        { orderId: razorpay_order_id },
+        {
+          user: req.user._id,
+          orderId: razorpay_order_id,
+          paymentId: razorpay_payment_id,
+          verified: true,
+          consumed: false,
+        },
+        { upsert: true, new: true, setDefaultsOnInsert: true }
+      );
+
       return res.status(200).json({ message: "Payment verified successfully" });
     } else {
       return res.status(400).json({ message: "Invalid signature sent!" });

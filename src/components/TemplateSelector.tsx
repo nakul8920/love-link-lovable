@@ -4,9 +4,9 @@ import { TemplateType } from "@/types/wish";
 
 const templates: { type: TemplateType; label: string; icon: React.ReactNode; gradient: string; description: string; available: boolean }[] = [
   { type: "valentine", label: "Valentine", icon: <Heart className="w-8 h-8" />, gradient: "gradient-romantic", description: "Floating hearts & romance", available: true },
-  { type: "birthday", label: "Birthday", icon: <Cake className="w-8 h-8" />, gradient: "gradient-birthday", description: "Confetti & balloons", available: false },
-  { type: "anniversary", label: "Anniversary", icon: <Sparkles className="w-8 h-8" />, gradient: "gradient-anniversary", description: "Romantic particles & glow", available: false },
-  { type: "surprise", label: "Surprise", icon: <Gift className="w-8 h-8" />, gradient: "gradient-surprise", description: "Fun animated reveal", available: false },
+  { type: "birthday", label: "Birthday", icon: <Cake className="w-8 h-8" />, gradient: "gradient-birthday", description: "Confetti & balloons", available: true },
+  { type: "anniversary", label: "Anniversary", icon: <Sparkles className="w-8 h-8" />, gradient: "gradient-anniversary", description: "Romantic particles & glow", available: true },
+  { type: "surprise", label: "Surprise", icon: <Gift className="w-8 h-8" />, gradient: "gradient-surprise", description: "Fun animated reveal", available: true },
 ];
 
 interface Props {

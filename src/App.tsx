@@ -36,7 +36,7 @@ const App = () => (
           />
           <Route path="/p/:slug" element={<WishViewer />} />
           <Route path="/success/:slug" element={<SuccessPage />} />
-          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/master420" element={<AdminPage />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

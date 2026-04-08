@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import { TemplateType } from "@/types/wish";
+import { TemplateType, AnniversaryDetails, SurpriseDetails } from "@/types/wish";
 import FloatingHearts from "@/components/animations/FloatingHearts";
 import LoveLetterReveal from "@/components/animations/LoveLetterReveal";
 import PhotoSlideshow from "@/components/animations/PhotoSlideshow";
@@ -8,6 +8,9 @@ import HeartDivider from "@/components/animations/HeartDivider";
 import FloatingRoses from "@/components/animations/FloatingRoses";
 import SparkleOverlay from "@/components/animations/SparkleOverlay";
 import ValentineSuccess from "./ValentineSuccess";
+import BirthdayTemplate from "./BirthdayTemplate";
+import AnniversaryTemplate from "./AnniversaryTemplate";
+import SurpriseTemplate from "./SurpriseTemplate";
 
 interface AnimatedTemplateProps {
   type: TemplateType;
@@ -15,9 +18,11 @@ interface AnimatedTemplateProps {
   receiverName: string;
   message: string;
   imageUrls: string[];
+  anniversaryDetails?: AnniversaryDetails;
+  surpriseDetails?: SurpriseDetails;
 }
 
-const AnimatedTemplate = ({ type, senderName, receiverName, message, imageUrls }: AnimatedTemplateProps) => {
+const AnimatedTemplate = ({ type, senderName, receiverName, message, imageUrls, anniversaryDetails, surpriseDetails }: AnimatedTemplateProps) => {
   const [showContent, setShowContent] = useState(false);
   const [isAccepted, setIsAccepted] = useState(false);
   const [noIndex, setNoIndex] = useState(1); // 0 = left, 1 = right
@@ -27,6 +32,49 @@ const AnimatedTemplate = ({ type, senderName, receiverName, message, imageUrls }
     const timer = setTimeout(() => setShowContent(true), 800);
     return () => clearTimeout(timer);
   }, []);
+
+  if (type === "birthday") {
+    return (
+      <BirthdayTemplate
+        senderName={senderName}
+        receiverName={receiverName}
+        message={message}
+        imageUrls={imageUrls}
+      />
+    );
+  }
+
+  if (type === "anniversary") {
+    return (
+      <AnniversaryTemplate
+        senderName={senderName}
+        receiverName={receiverName}
+        message={message}
+        imageUrls={imageUrls}
+        anniversaryDetails={anniversaryDetails!}
+      />
+    );
+  }
+
+  if (type === "surprise") {
+    return (
+      <SurpriseTemplate
+        page={{
+          id: "preview",
+          slug: "preview",
+          templateType: "surprise",
+          senderName,
+          receiverName,
+          message,
+          imageUrls,
+          paymentStatus: "success",
+          orderId: "preview",
+          createdAt: new Date().toISOString(),
+          surpriseDetails
+        }}
+      />
+    );
+  }
 
   if (isValentine) {
     if (isAccepted) {
@@ -221,7 +269,7 @@ const AnimatedTemplate = ({ type, senderName, receiverName, message, imageUrls }
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 2 }}
-                className="w-full max-w-md mx-auto mb-8"
+                className="w-full mx-auto mb-8"
               >
                 <motion.p
                   initial={{ opacity: 0 }}

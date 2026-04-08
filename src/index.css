@@ -134,5 +134,11 @@
   .shadow-card-hover {
     box-shadow: var(--shadow-card-hover);
   }
+  .hide-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
-

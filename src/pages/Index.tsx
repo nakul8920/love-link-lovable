@@ -396,9 +396,9 @@ const LandingPage = () => {
           <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-6">
             {[
               { label: "VALENTINE", available: true, bg: "bg-white", icon: <Heart className="w-10 h-10 sm:w-14 sm:h-14 fill-[#ff0844]" /> },
-              { label: "BIRTHDAY", available: false, bg: "bg-[#fde047]", icon: <Gift className="w-10 h-10 sm:w-14 sm:h-14 fill-black" /> },
-              { label: "ANNIVERSARY", available: false, bg: "bg-[#c4b5fd]", icon: <Star className="w-10 h-10 sm:w-14 sm:h-14 fill-black" /> },
-              { label: "SURPRISE", available: false, bg: "bg-[#86efac]", icon: <Sparkles className="w-10 h-10 sm:w-14 sm:h-14 fill-black" /> },
+              { label: "BIRTHDAY", available: true, bg: "bg-[#fde047]", icon: <Gift className="w-10 h-10 sm:w-14 sm:h-14 fill-black" /> },
+              { label: "ANNIVERSARY", available: true, bg: "bg-[#c4b5fd]", icon: <Star className="w-10 h-10 sm:w-14 sm:h-14 fill-black" /> },
+              { label: "SURPRISE", available: true, bg: "bg-[#86efac]", icon: <Sparkles className="w-10 h-10 sm:w-14 sm:h-14 fill-black" /> },
             ].map((t, i) => (
               <div
                 key={i}
@@ -623,7 +623,6 @@ const LandingPage = () => {
                   <ul className="space-y-1 sm:space-y-2">
                     <li><a className="text-black font-medium hover:text-[#fde047] transition-colors text-xs sm:text-sm" href="/profile">My pages</a></li>
                     <li><a className="text-black font-medium hover:text-[#fde047] transition-colors text-xs sm:text-sm" href="/login">Login</a></li>
-                    <li><a className="text-black font-medium hover:text-[#fde047] transition-colors text-xs sm:text-sm" href="/admin">Admin</a></li>
                   </ul>
                 </div>
 

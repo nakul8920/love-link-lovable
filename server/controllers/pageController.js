@@ -1,4 +1,5 @@
 const Page = require('../models/Page');
+const PaymentVerification = require('../models/PaymentVerification');
 
 // @desc    Create or update user page configuration
 // @route   POST /api/page
@@ -21,6 +22,23 @@ const createOrUpdatePage = async (req, res) => {
       const updatedPage = await page.save();
       res.json(updatedPage);
     } else {
+      const orderId = content?.orderId;
+
+      if (!orderId) {
+        return res.status(400).json({ message: 'Payment is required before creating a link.' });
+      }
+
+      const verifiedPayment = await PaymentVerification.findOne({
+        user: req.user._id,
+        orderId,
+        verified: true,
+        consumed: false,
+      });
+
+      if (!verifiedPayment) {
+        return res.status(402).json({ message: 'Valid payment not found. Please complete payment first.' });
+      }
+
       // Create new page
       page = new Page({
         user: req.user._id,
@@ -30,6 +48,8 @@ const createOrUpdatePage = async (req, res) => {
       });
 
       const createdPage = await page.save();
+      verifiedPayment.consumed = true;
+      await verifiedPayment.save();
       res.status(201).json(createdPage);
     }
   } catch (error) {
