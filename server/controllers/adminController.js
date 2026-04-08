@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const Page = require('../models/Page');
-const generateToken = require('../utils/generateToken');
+const { generateAdminToken } = require('../utils/generateToken');
 
 // @desc    Admin login
 // @route   POST /api/admin/login
@@ -18,7 +18,7 @@ const adminLogin = (req, res) => {
   if (username === validUsername && password === validPassword) {
     res.json({
       username: validUsername,
-      token: generateToken('admin_user'), // using a specific id for admin
+      token: generateAdminToken(),
     });
   } else {
     res.status(401).json({ message: 'Invalid admin credentials' });

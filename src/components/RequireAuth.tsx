@@ -11,7 +11,7 @@ const RequireAuth = ({ children }: RequireAuthProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   useEffect(() => {
     if (!token) {

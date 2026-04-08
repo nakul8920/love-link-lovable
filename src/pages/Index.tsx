@@ -14,7 +14,7 @@ const brutalBorder = "border-[3px] border-black";
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const isLoggedIn = !!localStorage.getItem("token");
+  const isLoggedIn = !!sessionStorage.getItem("token");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -56,7 +56,8 @@ const LandingPage = () => {
                   </Button>
                   <Button
                     onClick={() => {
-                      localStorage.removeItem("token");
+                      sessionStorage.removeItem("token");
+                      sessionStorage.removeItem("userInfo");
                       navigate("/login");
                     }}
                     className={`bg-transparent hover:bg-transparent text-black font-bold uppercase ${brutalBorder} ${brutalShadow} ${brutalShadowHover} transition-all rounded-none h-8 sm:h-10 md:h-12 px-2 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base inline-flex items-center gap-1 sm:gap-2`}
@@ -183,7 +184,8 @@ const LandingPage = () => {
                   </Button>
                   <Button
                     onClick={() => {
-                      localStorage.removeItem("token");
+                      sessionStorage.removeItem("token");
+                      sessionStorage.removeItem("userInfo");
                       setMobileMenuOpen(false);
                       navigate("/login");
                     }}

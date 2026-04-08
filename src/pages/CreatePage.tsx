@@ -140,7 +140,7 @@ const CreatePage = () => {
 
       savePage(pageData);
 
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) {
         throw new Error("Auth token missing");
       }
@@ -185,7 +185,7 @@ const CreatePage = () => {
   // Extra safety: redirect users to login if they try to open this page without auth.
   // (Even if server APIs are protected, we want the payment UI to be blocked too.)
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) {
       const next = `${location.pathname}${location.search}`;
       navigate(`/login?next=${encodeURIComponent(next)}`, { replace: true });

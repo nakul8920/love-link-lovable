@@ -9,9 +9,12 @@ const brutalBorder = "border-[3px] border-black";
 const brutalShadow = "shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]";
 const brutalShadowHover = "hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px]";
 
+const ADMIN_TOKEN_KEY = "adminToken";
+
 export default function AdminPage() {
   const navigate = useNavigate();
-  const [token, setToken] = useState<string>(localStorage.getItem("adminToken") || "");
+  // Tab/window close clears sessionStorage → admin must log in again next visit
+  const [token, setToken] = useState<string>(() => sessionStorage.getItem(ADMIN_TOKEN_KEY) || "");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,7 +38,7 @@ export default function AdminPage() {
       const data = await res.json();
       if (res.ok) {
         setToken(data.token);
-        localStorage.setItem("adminToken", data.token);
+        sessionStorage.setItem(ADMIN_TOKEN_KEY, data.token);
         toast.success("Logged in successfully");
       } else {
         toast.error(data.message || "Login failed");
@@ -49,7 +52,7 @@ export default function AdminPage() {
 
   const handleLogout = () => {
     setToken("");
-    localStorage.removeItem("adminToken");
+    sessionStorage.removeItem(ADMIN_TOKEN_KEY);
     toast.success("Logged out");
   };
 
@@ -61,8 +64,9 @@ export default function AdminPage() {
       if (res.ok) {
         const data = await res.json();
         setStats(data);
-      } else {
-        if (res.status === 401) handleLogout();
+      } else if (res.status === 401) {
+        toast.error("Session expired — please log in again");
+        handleLogout();
       }
     } catch (err) {
       console.error(err);

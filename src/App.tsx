@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -17,7 +18,19 @@ import RequireAuth from "@/components/RequireAuth";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+/** App data lives in sessionStorage only; strip legacy keys from localStorage on load. */
+const LEGACY_LOCAL_KEYS = ["token", "userInfo", "adminToken", "wishlink_pages"] as const;
+
+const App = () => {
+  useEffect(() => {
+    try {
+      LEGACY_LOCAL_KEYS.forEach((k) => localStorage.removeItem(k));
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  return (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
@@ -45,6 +58,7 @@ const App = () => (
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;

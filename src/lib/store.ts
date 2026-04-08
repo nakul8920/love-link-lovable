@@ -4,7 +4,7 @@ const STORAGE_KEY = "wishlink_pages";
 
 const loadPages = (): Map<string, WishPage> => {
   try {
-    const data = localStorage.getItem(STORAGE_KEY);
+    const data = sessionStorage.getItem(STORAGE_KEY);
     if (data) {
       const arr: WishPage[] = JSON.parse(data);
       return new Map(arr.map((p) => [p.slug, p]));
@@ -14,7 +14,7 @@ const loadPages = (): Map<string, WishPage> => {
 };
 
 const persistPages = (pages: Map<string, WishPage>) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(pages.values())));
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(pages.values())));
 };
 
 let pages = loadPages();
@@ -25,7 +25,6 @@ export const savePage = (page: WishPage) => {
 };
 
 export const getPage = (slug: string): WishPage | undefined => {
-  // Reload from storage in case another tab saved
   pages = loadPages();
   return pages.get(slug);
 };

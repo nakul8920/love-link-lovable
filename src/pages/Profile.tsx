@@ -28,7 +28,7 @@ const Profile = () => {
   }, []);
 
   const fetchProfileData = async () => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) {
       toast.error("Please login to view your profile");
       navigate("/login");
@@ -67,8 +67,8 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userInfo");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("userInfo");
     navigate("/login");
   };
 
