@@ -10,6 +10,7 @@ const uploadRoutes = require('./routes/uploadRoutes');
 const pageRoutes = require('./routes/pageRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const supportRoutes = require('./routes/supportRoutes');
 
 // Load environment variables
 // Important: use an explicit path so production start command from repo root works.
@@ -57,6 +58,7 @@ app.use('/api/upload', uploadRoutes); // Use as: /api/upload (POST)
 app.use('/api/page', pageRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/support', supportRoutes);
 
 const PORT = process.env.PORT || 5000;
 

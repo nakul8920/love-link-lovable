@@ -2,7 +2,10 @@ import { motion } from "framer-motion";
 import { Heart, ArrowRight, Sparkles, Gift, Star, Zap, Camera, MoveRight, Flame, PlayCircle, Palette, Menu, X, UserRound, LogOut } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+const supportEmail =
+  (import.meta.env.VITE_SUPPORT_EMAIL as string | undefined)?.trim() || "hello@codequil.com";
 
 // Neo-Brutalist shadow classes for reusability
 const brutalShadow = "shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]";
@@ -395,17 +398,17 @@ const LandingPage = () => {
 
           <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-6">
             {[
-              { label: "VALENTINE", available: true, bg: "bg-white", icon: <Heart className="w-10 h-10 sm:w-14 sm:h-14 fill-[#ff0844]" /> },
-              { label: "BIRTHDAY", available: true, bg: "bg-[#fde047]", icon: <Gift className="w-10 h-10 sm:w-14 sm:h-14 fill-black" /> },
-              { label: "ANNIVERSARY", available: true, bg: "bg-[#c4b5fd]", icon: <Star className="w-10 h-10 sm:w-14 sm:h-14 fill-black" /> },
-              { label: "SURPRISE", available: true, bg: "bg-[#86efac]", icon: <Sparkles className="w-10 h-10 sm:w-14 sm:h-14 fill-black" /> },
+              { label: "VALENTINE", theme: "valentine", available: true, bg: "bg-white", icon: <Heart className="w-10 h-10 sm:w-14 sm:h-14 fill-[#ff0844]" /> },
+              { label: "BIRTHDAY", theme: "birthday", available: true, bg: "bg-[#fde047]", icon: <Gift className="w-10 h-10 sm:w-14 sm:h-14 fill-black" /> },
+              { label: "ANNIVERSARY", theme: "anniversary", available: true, bg: "bg-[#c4b5fd]", icon: <Star className="w-10 h-10 sm:w-14 sm:h-14 fill-black" /> },
+              { label: "CUSTOM", theme: "surprise", available: true, bg: "bg-[#86efac]", icon: <Sparkles className="w-10 h-10 sm:w-14 sm:h-14 fill-black" /> },
             ].map((t, i) => (
               <div
                 key={i}
                 className={`group relative ${t.bg} ${brutalBorder} ${brutalShadow} ${
                   t.available ? brutalShadowHover : "opacity-70 grayscale"
                 } p-2 sm:p-3 lg:p-6 transition-all duration-200 cursor-pointer flex flex-col items-center justify-center min-h-[120px] xs:min-h-[140px] sm:min-h-[160px] md:min-h-[185px] lg:min-h-[260px] text-center`}
-                onClick={() => t.available && navigate(`/create?theme=${t.label.toLowerCase()}`)}
+                onClick={() => t.available && navigate(`/create?theme=${t.theme}`)}
               >
                 {!t.available && (
                   <div className={`absolute -top-2 -right-2 bg-black text-white px-2 py-0.5 font-black uppercase tracking-widest text-[10px] sm:text-xs ${brutalBorder} rotate-12`}>
@@ -642,10 +645,18 @@ const LandingPage = () => {
                 <div>
                   <h3 className="font-black uppercase tracking-widest text-[10px] sm:text-xs md:text-base mb-1 sm:mb-2 lg:mb-4 text-black">Contact</h3>
                   <ul className="space-y-1 sm:space-y-2">
-                    <li className="text-black/80 font-medium text-xs sm:text-sm">Email: <span className="text-[#ff90e8] font-bold">hello@codequil</span></li>
+                    <li className="text-black/80 font-medium text-xs sm:text-sm">
+                      Email:{" "}
+                      <span className="text-[#ff90e8] font-bold">{supportEmail}</span>
+                    </li>
                     <li className="text-black/80 font-medium text-xs sm:text-sm">Hours: <span className="font-bold text-[#86efac]">Mon–Sat</span></li>
                     <li>
-                      <a className="text-black font-medium hover:text-[#fde047] transition-colors text-xs sm:text-sm" href="#">Support</a>
+                      <Link
+                        className="text-black font-medium hover:text-[#fde047] transition-colors text-xs sm:text-sm underline underline-offset-2"
+                        to="/support"
+                      >
+                        Support
+                      </Link>
                     </li>
                   </ul>
                 </div>
