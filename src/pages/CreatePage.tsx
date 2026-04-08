@@ -16,14 +16,6 @@ import SurpriseForm from "@/components/SurpriseForm";
 import SurpriseBuilder from "@/components/SurpriseBuilder";
 const steps = ["Details", "Photos", "Publish"];
 
-declare global {
-  interface Window {
-    Razorpay: new (options: Record<string, unknown>) => {
-      open: () => void;
-    };
-  }
-}
-
 // Responsive brutal classes for mobile only
 const brutalBorder = "border-[3px] border-black md:border-[4px]";
 const brutalShadowHover = "hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px]";
@@ -97,90 +89,10 @@ const CreatePage = () => {
     if (field === "message") setMessage(value);
   };
 
-  const createRazorpayOrder = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) throw new Error("Please login first.");
-
-    const response = await fetch(`${API_BASE_URL}/api/payment/create-order`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      const data = await response.json().catch(() => ({}));
-      throw new Error(data?.message || "Failed to create payment order.");
-    }
-
-    return response.json();
-  };
-
-  const openRazorpayCheckout = (order: {
-    id: string;
-    amount: number;
-    currency: string;
-    key_id: string;
-  }) =>
-    new Promise<{ razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }>((resolve, reject) => {
-      if (!window.Razorpay) {
-        reject(new Error("Payment gateway failed to load. Please refresh and try again."));
-        return;
-      }
-
-      const rzp = new window.Razorpay({
-        key: order.key_id,
-        amount: order.amount,
-        currency: order.currency,
-        order_id: order.id,
-        name: "Wishlink Express",
-        description: "Unlock your shareable wish link",
-        handler: (response: {
-          razorpay_order_id: string;
-          razorpay_payment_id: string;
-          razorpay_signature: string;
-        }) => resolve(response),
-        modal: {
-          ondismiss: () => reject(new Error("Payment was cancelled.")),
-        },
-        theme: { color: "#111111" },
-      });
-
-      rzp.open();
-    });
-
-  const verifyRazorpayPayment = async (paymentData: {
-    razorpay_order_id: string;
-    razorpay_payment_id: string;
-    razorpay_signature: string;
-  }) => {
-    const token = localStorage.getItem("token");
-    if (!token) throw new Error("Please login first.");
-
-    const response = await fetch(`${API_BASE_URL}/api/payment/verify`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(paymentData),
-    });
-
-    if (!response.ok) {
-      const data = await response.json().catch(() => ({}));
-      throw new Error(data?.message || "Payment verification failed.");
-    }
-  };
-
-  const handlePayment = async () => {
+  const handlePublish = async () => {
     setProcessing(true);
 
     try {
-      const order = await createRazorpayOrder();
-      const paymentResult = await openRazorpayCheckout(order);
-      await verifyRazorpayPayment(paymentResult);
-
       const slug = generateSlug();
       const uploadedImageUrls: string[] = [];
 
@@ -221,7 +133,7 @@ const CreatePage = () => {
         imageUrls: finalImages,
         createdAt: new Date().toISOString(),
         paymentStatus: "success" as const,
-        orderId: paymentResult.razorpay_order_id,
+        orderId: "free_publish",
         ...(templateType === "anniversary" && { anniversaryDetails }),
         ...(templateType === "surprise" && { surpriseDetails })
       };
@@ -247,7 +159,7 @@ const CreatePage = () => {
               receiverName,
               message,
               paymentStatus: "success",
-              orderId: paymentResult.razorpay_order_id,
+              orderId: "free_publish",
               ...(templateType === "anniversary" && { anniversaryDetails }),
               ...(templateType === "surprise" && { surpriseDetails })
             },
@@ -256,15 +168,16 @@ const CreatePage = () => {
         });
 
       if (!pageSaveRes.ok) {
-        throw new Error("Failed to save page on server");
+        const data = await pageSaveRes.json().catch(() => ({}));
+        throw new Error(data?.message || "Failed to save page on server");
       }
 
       setProcessing(false);
       navigate(`/success/${slug}`);
     } catch (err) {
-      console.error("Payment flow failed:", err);
+      console.error("Publish flow failed:", err);
       setProcessing(false);
-      const message = err instanceof Error ? err.message : "Payment failed. Please try again.";
+      const message = err instanceof Error ? err.message : "Publishing failed. Please try again.";
       toast.error(message);
     }
   };
@@ -310,11 +223,11 @@ const CreatePage = () => {
                  </Button>
                  <Button
                    size="lg"
-                   onClick={handlePayment}
+                   onClick={handlePublish}
                    disabled={processing}
                    className="h-16 md:h-24 bg-black text-white text-xl md:text-3xl font-black uppercase tracking-widest rounded-none border-[4px] md:border-[6px] border-black hover:bg-[#ff0844] transition-colors shadow-[6px_6px_0_0_#fff] md:shadow-[10px_10px_0_0_#fff] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none w-full md:w-auto md:min-w-[400px]"
                  >
-                      {processing ? "PROCESSING..." : "PAY & PUBLISH"}
+                      {processing ? "PROCESSING..." : "PUBLISH LINK"}
                  </Button>
               </div>
            </div>
@@ -432,19 +345,19 @@ const CreatePage = () => {
                     <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tighter mb-2 sm:mb-3 leading-none" style={{ textShadow: "2px 2px 0px #ff90e8" }}>
                       SEAL THE DEAL.
                     </h2>
-                    <p className="text-xs sm:text-sm font-bold mb-4 sm:mb-6">Secure payment required to publish. 🎉</p>
+                    <p className="text-xs sm:text-sm font-bold mb-4 sm:mb-6">Ready to publish your link. 🎉</p>
                     
                     <div className={`bg-black text-white px-6 sm:px-8 py-2 sm:py-3 font-black text-2xl sm:text-3xl uppercase tracking-widest border-2 sm:border-4 border-white shadow-[4px_4px_0px_0px_#fde047] sm:shadow-[6px_6px_0px_0px_#fde047] mb-4 sm:mb-6`}>
-                      ₹49
+                      FREE
                     </div>
                     
                     <Button
                       size="lg"
-                      onClick={handlePayment}
+                      onClick={handlePublish}
                       disabled={processing}
                       className={`w-full h-12 sm:h-16 bg-[#ff90e8] text-black text-sm sm:text-lg font-black uppercase tracking-widest rounded-none ${brutalBorder} shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${brutalShadowHover} transition-all`}
                     >
-                      {processing ? "PUBLISHING..." : "PAY & PUBLISH LINK"}
+                      {processing ? "PUBLISHING..." : "PUBLISH LINK"}
                     </Button>
                   </div>
                 )}
@@ -592,18 +505,18 @@ const CreatePage = () => {
                 </h1>
                 
                 <div className="flex items-center gap-6 mb-12 bg-white border-[6px] border-black px-10 py-6 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] -rotate-1 tracking-widest">
-                   <span className="text-4xl font-bold uppercase">PAY</span>
-                   <span className="text-6xl font-black bg-black text-white px-6 py-2">₹49</span>
-                   <span className="text-4xl font-bold uppercase">TO PUBLISH.</span>
+                   <span className="text-4xl font-bold uppercase">PUBLISH</span>
+                   <span className="text-6xl font-black bg-black text-white px-6 py-2">FREE</span>
+                   <span className="text-4xl font-bold uppercase">NOW.</span>
                 </div>
 
                 <Button
                   size="lg"
-                  onClick={handlePayment}
+                  onClick={handlePublish}
                   disabled={processing}
                   className={`min-w-[400px] h-28 bg-black text-white text-4xl font-black uppercase tracking-widest rounded-none border-[6px] border-black hover:bg-[#ff0844] hover:text-white transition-colors shadow-[12px_12px_0px_0px_rgba(255,255,255,1)] hover:translate-x-[6px] hover:translate-y-[6px] hover:shadow-none`}
                 >
-                  {processing ? "PROCESSING..." : "PAY & PUBLISH"}
+                  {processing ? "PROCESSING..." : "PUBLISH LINK"}
                 </Button>
              </div>
           </div>
