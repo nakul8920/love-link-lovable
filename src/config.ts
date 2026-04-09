@@ -1,8 +1,29 @@
 const configuredApiUrl = import.meta.env.VITE_API_URL?.trim();
 
-// In local development, always use local backend to avoid stale deployed API behavior.
-const resolvedApiUrl = import.meta.env.DEV
-  ? "http://localhost:5000"
-  : configuredApiUrl || window.location.origin;
+const normalizeUrl = (value: string) => value.trim().replace(/\/$/, "");
 
-export const API_BASE_URL = resolvedApiUrl.replace(/\/$/, "");
+const buildApiCandidates = (): string[] => {
+  // In local development, always use local backend to avoid stale deployed API behavior.
+  if (import.meta.env.DEV) return ["http://localhost:5000"];
+
+  const out: string[] = [];
+  const pushUnique = (url?: string | null) => {
+    if (!url) return;
+    const normalized = normalizeUrl(url);
+    if (!normalized || out.includes(normalized)) return;
+    out.push(normalized);
+  };
+
+  pushUnique(configuredApiUrl);
+  pushUnique(window.location.origin);
+
+  // Railway typo/rename guard: if env accidentally has "-production", also try non-production host.
+  if (configuredApiUrl?.includes("-production.up.railway.app")) {
+    pushUnique(configuredApiUrl.replace("-production.up.railway.app", ".up.railway.app"));
+  }
+
+  return out.length ? out : [normalizeUrl(window.location.origin)];
+};
+
+export const API_BASE_URL_CANDIDATES = buildApiCandidates();
+export const API_BASE_URL = API_BASE_URL_CANDIDATES[0];

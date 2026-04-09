@@ -3,13 +3,12 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { GoogleLogin } from "@react-oauth/google";
 import { Sparkles, Heart, Shield } from "lucide-react";
-import { API_BASE_URL } from "@/config";
+import { API_BASE_URL_CANDIDATES } from "@/config";
 
 const Login = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const next = searchParams.get("next");
-  const fallbackApiBase = window.location.origin.replace(/\/$/, "");
 
   const navigateAfterLogin = () => {
     // Only allow internal redirects.
@@ -29,26 +28,43 @@ const Login = () => {
         body: JSON.stringify({ credential: credentialResponse.credential }),
       };
 
-      let res: Response;
-      try {
-        res = await fetch(`${API_BASE_URL}/api/auth/google`, requestInit);
-      } catch (primaryErr) {
-        // If configured API host is unreachable (DNS/network), try same-origin API as fallback.
-        if (API_BASE_URL === fallbackApiBase) throw primaryErr;
-        res = await fetch(`${fallbackApiBase}/api/auth/google`, requestInit);
+      let res: Response | null = null;
+      for (const baseUrl of API_BASE_URL_CANDIDATES) {
+        try {
+          const attempt = await fetch(`${baseUrl}/api/auth/google`, requestInit);
+          // Static hosts often answer POST /api/* with 404/405; keep trying other candidates.
+          if ((attempt.status === 404 || attempt.status === 405) && API_BASE_URL_CANDIDATES.length > 1) {
+            continue;
+          }
+          res = attempt;
+          break;
+        } catch {
+          // Try next candidate on network/DNS failure.
+        }
       }
 
-      const data = await res.json();
+      if (!res) {
+        throw new Error("Could not reach auth server");
+      }
+
+      const raw = await res.text();
+      let data: any = {};
+      try {
+        data = raw ? JSON.parse(raw) : {};
+      } catch {
+        data = {};
+      }
       if (res.ok) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userInfo", JSON.stringify(data));
         toast.success("Login successful!");
         navigateAfterLogin();
       } else {
-        toast.error(data.error ? `Google Error: ${data.error}` : "Google Login failed");
+        const serverMessage = data?.error || data?.message;
+        toast.error(serverMessage ? `Google Error: ${serverMessage}` : "Google Login failed");
       }
     } catch (error) {
-      toast.error("Network error.");
+      toast.error("Login failed. Please try again in a moment.");
       console.error(error);
     }
   };
