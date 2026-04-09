@@ -65,7 +65,7 @@ const SupportPage = () => {
   const [sent, setSent] = useState(false);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) return;
 
     (async () => {

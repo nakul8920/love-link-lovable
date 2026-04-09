@@ -14,7 +14,7 @@ const brutalBorder = "border-[3px] border-black";
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const isLoggedIn = !!sessionStorage.getItem("token");
+  const isLoggedIn = !!localStorage.getItem("token");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -56,6 +56,8 @@ const LandingPage = () => {
                   </Button>
                   <Button
                     onClick={() => {
+                      localStorage.removeItem("token");
+                      localStorage.removeItem("userInfo");
                       sessionStorage.removeItem("token");
                       sessionStorage.removeItem("userInfo");
                       navigate("/login");
@@ -184,6 +186,8 @@ const LandingPage = () => {
                   </Button>
                   <Button
                     onClick={() => {
+                      localStorage.removeItem("token");
+                      localStorage.removeItem("userInfo");
                       sessionStorage.removeItem("token");
                       sessionStorage.removeItem("userInfo");
                       setMobileMenuOpen(false);

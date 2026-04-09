@@ -29,8 +29,8 @@ const Login = () => {
       });
       const data = await res.json();
       if (res.ok) {
-        sessionStorage.setItem("token", data.token);
-        sessionStorage.setItem("userInfo", JSON.stringify(data));
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userInfo", JSON.stringify(data));
         toast.success("Login successful!");
         navigateAfterLogin();
       } else {
