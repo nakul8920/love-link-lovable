@@ -4,6 +4,9 @@ const cors = require('cors');
 const path = require('path');
 const connectDB = require('./config/db');
 
+// Load environment variables before importing routes/controllers that read process.env at module load.
+dotenv.config({ path: path.join(__dirname, '.env') });
+
 // Route files
 const authRoutes = require('./routes/authRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
@@ -11,10 +14,6 @@ const pageRoutes = require('./routes/pageRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const supportRoutes = require('./routes/supportRoutes');
-
-// Load environment variables
-// Important: use an explicit path so production start command from repo root works.
-dotenv.config({ path: path.join(__dirname, '.env') });
 
 
 // Connect to database
