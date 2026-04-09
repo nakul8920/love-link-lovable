@@ -9,6 +9,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const next = searchParams.get("next");
+  const fallbackApiBase = window.location.origin.replace(/\/$/, "");
 
   const navigateAfterLogin = () => {
     // Only allow internal redirects.
@@ -21,12 +22,22 @@ const Login = () => {
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/auth/google`, {
+      const requestInit: RequestInit = {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ credential: credentialResponse.credential }),
-      });
+      };
+
+      let res: Response;
+      try {
+        res = await fetch(`${API_BASE_URL}/api/auth/google`, requestInit);
+      } catch (primaryErr) {
+        // If configured API host is unreachable (DNS/network), try same-origin API as fallback.
+        if (API_BASE_URL === fallbackApiBase) throw primaryErr;
+        res = await fetch(`${fallbackApiBase}/api/auth/google`, requestInit);
+      }
+
       const data = await res.json();
       if (res.ok) {
         localStorage.setItem("token", data.token);
