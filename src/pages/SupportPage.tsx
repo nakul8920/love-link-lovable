@@ -129,7 +129,7 @@ const SupportPage = () => {
       }
 
       setSent(true);
-      toast.success("WhatsApp khul gaya — wahan Send dabao, team reply karegi.");
+      toast.success("WhatsApp opened - click Send to message our team.");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
@@ -147,13 +147,13 @@ const SupportPage = () => {
             <CheckCircle2 className="w-10 h-10 text-black" />
           </div>
           <h1 className="text-3xl sm:text-4xl font-black uppercase tracking-tighter mb-4" style={{ textShadow: "3px 3px 0 #ff90e8" }}>
-            Got it!
+            Message Sent!
           </h1>
           <p className="text-base sm:text-lg font-bold text-black/90 mb-2">
-            Almost done — message WhatsApp par bhej do.
+            Almost done - send the message on WhatsApp.
           </p>
           <p className="text-sm font-medium text-black/70 mb-10">
-            Agar WhatsApp na khula ho to popup blocker band karke dubara try karo. Team jald reply karegi.
+            If WhatsApp doesn't open, disable your popup blocker and try again. Our team will respond soon.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 w-full justify-center">
             <Button
