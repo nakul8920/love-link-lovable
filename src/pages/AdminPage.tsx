@@ -43,8 +43,13 @@ export default function AdminPage() {
       } else {
         toast.error(data.message || "Login failed");
       }
-    } catch (err) {
-      toast.error("Network error");
+    } catch (err: any) {
+      console.error('Admin login error:', err);
+      if (err.message?.includes('fetch')) {
+        toast.error("Network error - unable to connect to server");
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }

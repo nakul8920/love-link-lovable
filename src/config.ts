@@ -14,13 +14,16 @@ const buildApiCandidates = (): string[] => {
     out.push(normalized);
   };
 
-  pushUnique(configuredApiUrl);
-  pushUnique(window.location.origin);
-
-  // Railway typo/rename guard: if env accidentally has "-production", also try non-production host.
+  // Railway typo/rename guard: if env has "-production", use corrected URL first
   if (configuredApiUrl?.includes("-production.up.railway.app")) {
-    pushUnique(configuredApiUrl.replace("-production.up.railway.app", ".up.railway.app"));
+    const correctedUrl = configuredApiUrl.replace("-production.up.railway.app", ".up.railway.app");
+    pushUnique(correctedUrl);
+    pushUnique(configuredApiUrl); // fallback
+  } else {
+    pushUnique(configuredApiUrl);
   }
+
+  pushUnique(window.location.origin);
 
   return out.length ? out : [normalizeUrl(window.location.origin)];
 };

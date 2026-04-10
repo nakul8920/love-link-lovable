@@ -27,6 +27,8 @@ app.use(cors({
   origin: [
     'https://love-link-lovable.vercel.app',
     'https://love-link-creator.vercel.app',
+    'https://love-link-lovable-production.up.railway.app',
+    'https://love-link-lovable.up.railway.app',
     'http://localhost:5173',
     'http://localhost:8080',
   ],
