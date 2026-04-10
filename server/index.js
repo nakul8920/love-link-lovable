@@ -29,6 +29,7 @@ app.use(cors({
     'https://love-link-creator.vercel.app',
     'https://love-link-lovable-production.up.railway.app',
     'https://love-link-lovable.up.railway.app',
+    'https://wishlink-express.up.railway.app',
     'http://localhost:5173',
     'http://localhost:8080',
   ],

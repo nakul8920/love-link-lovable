@@ -23,6 +23,11 @@ const buildApiCandidates = (): string[] => {
     pushUnique(configuredApiUrl);
   }
 
+  // Add fallback Railway URLs in case the main one doesn't work
+  pushUnique("https://love-link-lovable-production.up.railway.app");
+  pushUnique("https://love-link-lovable.up.railway.app");
+  pushUnique("https://wishlink-express.up.railway.app");
+  
   pushUnique(window.location.origin);
 
   return out.length ? out : [normalizeUrl(window.location.origin)];
