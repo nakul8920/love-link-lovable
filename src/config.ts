@@ -14,22 +14,24 @@ const buildApiCandidates = (): string[] => {
     out.push(normalized);
   };
 
-  // Railway typo/rename guard: if env has "-production", use corrected URL first
-  if (configuredApiUrl?.includes("-production.up.railway.app")) {
-    const correctedUrl = configuredApiUrl.replace("-production.up.railway.app", ".up.railway.app");
-    pushUnique(correctedUrl);
-    pushUnique(configuredApiUrl); // fallback
-  } else {
-    pushUnique(configuredApiUrl);
+  // Always prioritize the configured API URL if it's set
+  if (configuredApiUrl) {
+    // Railway typo/rename guard: if env has "-production", use corrected URL first
+    if (configuredApiUrl.includes("-production.up.railway.app")) {
+      const correctedUrl = configuredApiUrl.replace("-production.up.railway.app", ".up.railway.app");
+      pushUnique(correctedUrl);
+      pushUnique(configuredApiUrl); // fallback
+    } else {
+      pushUnique(configuredApiUrl);
+    }
   }
 
-  // Add fallback Railway URLs in case the main one doesn't work
-  pushUnique("https://love-link-lovable-production.up.railway.app");
-  pushUnique("https://love-link-lovable.up.railway.app");
-  pushUnique("https://wishlink-express.up.railway.app");
-  
-  // Fallback to Vercel API routes
-  pushUnique(window.location.origin);
+  // Add fallback Railway URLs only if no configured URL
+  if (!configuredApiUrl) {
+    pushUnique("https://wishlink-express.up.railway.app");
+    pushUnique("https://love-link-lovable.up.railway.app");
+    pushUnique("https://love-link-lovable-production.up.railway.app");
+  }
 
   return out.length ? out : [normalizeUrl(window.location.origin)];
 };

@@ -29,6 +29,7 @@ export default function AdminPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    console.log('Attempting login to:', `${API_BASE_URL}/api/admin/login`);
     try {
       const res = await fetch(`${API_BASE_URL}/api/admin/login`, {
         method: "POST",
