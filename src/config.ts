@@ -1,6 +1,13 @@
 const configuredApiUrl = import.meta.env.VITE_API_URL?.trim();
 
-const normalizeUrl = (value: string) => value.trim().replace(/\/$/, "");
+const normalizeUrl = (value: string) => {
+  const trimmed = value.trim().replace(/\/$/, "");
+  // Ensure absolute URL with protocol
+  if (!trimmed.startsWith('http://') && !trimmed.startsWith('https://')) {
+    return `https://${trimmed}`;
+  }
+  return trimmed;
+};
 
 const buildApiCandidates = (): string[] => {
   // In local development, always use local backend to avoid stale deployed API behavior.
@@ -26,14 +33,12 @@ const buildApiCandidates = (): string[] => {
     }
   }
 
-  // Add fallback Railway URLs only if no configured URL
-  if (!configuredApiUrl) {
-    pushUnique("https://wishlink-express.up.railway.app");
-    pushUnique("https://love-link-lovable.up.railway.app");
-    pushUnique("https://love-link-lovable-production.up.railway.app");
-  }
+  // Always add Railway URLs as fallbacks
+  pushUnique("https://wishlink-express.up.railway.app");
+  pushUnique("https://love-link-lovable.up.railway.app");
+  pushUnique("https://love-link-lovable-production.up.railway.app");
 
-  return out.length ? out : [normalizeUrl(window.location.origin)];
+  return out.length ? out : [normalizeUrl("https://wishlink-express.up.railway.app")];
 };
 
 export const API_BASE_URL_CANDIDATES = buildApiCandidates();

@@ -36,14 +36,15 @@ export default function AdminPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
       });
-      const data = await res.json();
-      if (res.ok) {
-        setToken(data.token);
-        sessionStorage.setItem(ADMIN_TOKEN_KEY, data.token);
-        toast.success("Logged in successfully");
-      } else {
-        toast.error(data.message || "Login failed");
+      
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
       }
+      
+      const data = await res.json();
+      setToken(data.token);
+      sessionStorage.setItem(ADMIN_TOKEN_KEY, data.token);
+      toast.success("Logged in successfully");
     } catch (err: any) {
       console.error('Admin login error:', err);
       if (err.message?.includes('fetch')) {
