@@ -28,6 +28,7 @@ const buildApiCandidates = (): string[] => {
   pushUnique("https://love-link-lovable.up.railway.app");
   pushUnique("https://wishlink-express.up.railway.app");
   
+  // Fallback to Vercel API routes
   pushUnique(window.location.origin);
 
   return out.length ? out : [normalizeUrl(window.location.origin)];
