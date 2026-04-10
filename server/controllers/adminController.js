@@ -17,11 +17,16 @@ const adminLogin = (req, res) => {
 
   if (username === validUsername && password === validPassword) {
     res.json({
+      success: true,
+      message: 'Login successful',
       username: validUsername,
       token: generateAdminToken(),
     });
   } else {
-    res.status(401).json({ message: 'Invalid admin credentials' });
+    res.status(401).json({ 
+      success: false,
+      message: 'Invalid admin credentials' 
+    });
   }
 };
 
