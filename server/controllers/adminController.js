@@ -11,6 +11,9 @@ const adminLogin = (req, res) => {
   const validUsername = process.env.ADMIN_USERNAME;
   const validPassword = process.env.ADMIN_PASSWORD;
 
+  // Debug logging (remove in production)
+  console.log('Admin login attempt:', { username, validUsername: !!validUsername, validPassword: !!validPassword });
+
   if (!validUsername || !validPassword) {
     return res.status(500).json({ message: 'Admin credentials not configured on server' });
   }
