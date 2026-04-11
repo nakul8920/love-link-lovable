@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { API_BASE_URL_CANDIDATES } from "@/config";
+import { API_BASE_URL } from "@/config";
 
 type RequireAuthProps = {
   children: ReactNode;
@@ -28,24 +28,16 @@ const RequireAuth = ({ children }: RequireAuthProps) => {
       // Validate token with server
       try {
         let res: Response | null = null;
-        for (const baseUrl of API_BASE_URL_CANDIDATES) {
-          try {
-            const attempt = await fetch(`${baseUrl}/api/auth/profile`, {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-              },
-            });
-            
-            if ((attempt.status === 404 || attempt.status === 405) && API_BASE_URL_CANDIDATES.length > 1) {
-              continue;
-            }
-            res = attempt;
-            break;
-          } catch {
-            // Try next candidate
-          }
+        try {
+          res = await fetch(`${API_BASE_URL}/api/auth/profile`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            },
+          });
+        } catch {
+          // Network or DNS error
         }
 
         if (res && res.ok) {
