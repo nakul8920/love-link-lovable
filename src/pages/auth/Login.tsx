@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { GoogleLogin } from "@react-oauth/google";
 import { Sparkles, Heart, Shield, Mail, Lock, User } from "lucide-react";
-import { API_BASE_URL_CANDIDATES } from "@/config";
+import { API_BASE_URL } from "@/config";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -37,18 +37,10 @@ const Login = () => {
       };
 
       let res: Response | null = null;
-      for (const baseUrl of API_BASE_URL_CANDIDATES) {
-        try {
-          const attempt = await fetch(`${baseUrl}/api/auth/google`, requestInit);
-          // Static hosts often answer POST /api/* with 404/405; keep trying other candidates.
-          if ((attempt.status === 404 || attempt.status === 405) && API_BASE_URL_CANDIDATES.length > 1) {
-            continue;
-          }
-          res = attempt;
-          break;
-        } catch {
-          // Try next candidate on network/DNS failure.
-        }
+      try {
+        res = await fetch(`${API_BASE_URL}/api/auth/google`, requestInit);
+      } catch (err) {
+        // network error
       }
 
       if (!res) {
@@ -99,23 +91,15 @@ const Login = () => {
         : { username: formData.username, email: formData.email, password: formData.password };
 
       let res: Response | null = null;
-      for (const baseUrl of API_BASE_URL_CANDIDATES) {
-        try {
-          const attempt = await fetch(`${baseUrl}${endpoint}`, {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-          });
-          
-          if ((attempt.status === 404 || attempt.status === 405) && API_BASE_URL_CANDIDATES.length > 1) {
-            continue;
-          }
-          res = attempt;
-          break;
-        } catch {
-          // Try next candidate
-        }
+      try {
+        res = await fetch(`${API_BASE_URL}${endpoint}`, {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+      } catch (err) {
+        // network error
       }
 
       if (!res) {
