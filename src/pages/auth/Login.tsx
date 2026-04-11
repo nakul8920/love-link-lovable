@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { GoogleLogin } from "@react-oauth/google";
-import { Sparkles, Heart, Shield } from "lucide-react";
+import { Sparkles, Heart, Shield, Mail, Lock, User } from "lucide-react";
 import { API_BASE_URL_CANDIDATES } from "@/config";
 
 const Login = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const next = searchParams.get("next");
+  
+  const [isLogin, setIsLogin] = useState(true);
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigateAfterLogin = () => {
     // Only allow internal redirects.
@@ -71,6 +79,65 @@ const Login = () => {
 
   const handleGoogleError = () => {
     toast.error("Google Login failed");
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleEmailAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
+      const body = isLogin 
+        ? { email: formData.email, password: formData.password }
+        : { username: formData.username, email: formData.email, password: formData.password };
+
+      let res: Response | null = null;
+      for (const baseUrl of API_BASE_URL_CANDIDATES) {
+        try {
+          const attempt = await fetch(`${baseUrl}${endpoint}`, {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          });
+          
+          if ((attempt.status === 404 || attempt.status === 405) && API_BASE_URL_CANDIDATES.length > 1) {
+            continue;
+          }
+          res = attempt;
+          break;
+        } catch {
+          // Try next candidate
+        }
+      }
+
+      if (!res) {
+        throw new Error("Could not reach auth server");
+      }
+
+      const data = await res.json();
+      
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userInfo", JSON.stringify(data));
+        toast.success(isLogin ? "Login successful!" : "Registration successful!");
+        navigateAfterLogin();
+      } else {
+        toast.error(data.message || `${isLogin ? 'Login' : 'Registration'} failed`);
+      }
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -142,10 +209,83 @@ const Login = () => {
             <div className="w-8 h-1.5 bg-gray-200 rounded-full mx-auto mb-4 sm:mb-6 lg:hidden shrink-0"></div>
             
             <div className="w-full text-center lg:text-left mb-6 sm:mb-8 shrink-0">
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 tracking-tight mb-1 sm:mb-2">Join the Magic</h1>
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 tracking-tight mb-1 sm:mb-2">
+                {isLogin ? 'Welcome Back' : 'Join the Magic'}
+              </h1>
               <p className="text-gray-500 text-xs sm:text-sm lg:text-base font-medium leading-snug">
-                Select your registered Gmail account if you already have one. New users can simply log in with their Gmail to automatically create an account!
+                {isLogin 
+                  ? 'Sign in to your account to continue creating magical wishes.'
+                  : 'Create your account and start sending digital gifts today!'
+                }
               </p>
+            </div>
+
+            {/* Email/Password Form */}
+            <form onSubmit={handleEmailAuth} className="w-full space-y-4 mb-6">
+              {!isLogin && (
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <User className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleInputChange}
+                    placeholder="Username"
+                    required={!isLogin}
+                    className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  />
+                </div>
+              )}
+              
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="Email address"
+                  required
+                  className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                />
+              </div>
+              
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  placeholder="Password"
+                  required
+                  minLength={6}
+                  className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}
+              </button>
+            </form>
+
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">Or continue with</span>
+              </div>
             </div>
 
             {/* Google Signup Box */}
@@ -173,6 +313,16 @@ const Login = () => {
                   />
                 </div>
               </div>
+            </div>
+
+            <div className="w-full text-center mb-4">
+              <button
+                type="button"
+                onClick={() => setIsLogin(!isLogin)}
+                className="text-indigo-600 hover:text-indigo-700 font-medium text-sm"
+              >
+                {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+              </button>
             </div>
 
             <div className="w-full text-center mt-auto pb-2 shrink-0">
