@@ -5,6 +5,24 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { API_BASE_URL } from "@/config";
 
+const getValidImages = (page: any) => {
+  let imgs: string[] = [];
+  if (page.images && Array.isArray(page.images)) {
+    imgs = [...imgs, ...page.images];
+  }
+  if (page.content?.imageUrls && Array.isArray(page.content.imageUrls)) {
+    imgs = [...imgs, ...page.content.imageUrls];
+  }
+  if (page.content?.surpriseDetails?.sections) {
+    page.content.surpriseDetails.sections.forEach((s: any) => {
+      if (s.images && Array.isArray(s.images)) {
+        imgs = [...imgs, ...s.images];
+      }
+    });
+  }
+  return imgs.filter(img => img && img.trim() !== "");
+};
+
 const brutalBorder = "border-[3px] border-black";
 const brutalShadow = "shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]";
 const brutalShadowHover = "hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px]";
@@ -37,11 +55,11 @@ export default function AdminPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
       });
-      
+
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}: ${res.statusText}`);
       }
-      
+
       const data = await res.json();
       setToken(data.token);
       localStorage.setItem(ADMIN_TOKEN_KEY, data.token);
@@ -223,30 +241,27 @@ export default function AdminPage() {
       </nav>
 
       <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-8">
-        
+
         {/* Sidebar */}
         <div className="w-full md:w-64 shrink-0 flex flex-col gap-3">
           <button
             onClick={() => setActiveTab("dashboard")}
-            className={`w-full flex items-center gap-3 px-4 py-3 font-black uppercase text-sm transition-all ${brutalBorder} ${
-              activeTab === "dashboard" ? "bg-[#fde047] translate-x-1 translate-y-1 shadow-none" : `bg-white ${brutalShadow} ${brutalShadowHover}`
-            }`}
+            className={`w-full flex items-center gap-3 px-4 py-3 font-black uppercase text-sm transition-all ${brutalBorder} ${activeTab === "dashboard" ? "bg-[#fde047] translate-x-1 translate-y-1 shadow-none" : `bg-white ${brutalShadow} ${brutalShadowHover}`
+              }`}
           >
             <LayoutDashboard className="w-5 h-5" /> Dashboard
           </button>
           <button
             onClick={() => setActiveTab("users")}
-            className={`w-full flex items-center gap-3 px-4 py-3 font-black uppercase text-sm transition-all ${brutalBorder} ${
-              activeTab === "users" ? "bg-[#93c5fd] translate-x-1 translate-y-1 shadow-none" : `bg-white ${brutalShadow} ${brutalShadowHover}`
-            }`}
+            className={`w-full flex items-center gap-3 px-4 py-3 font-black uppercase text-sm transition-all ${brutalBorder} ${activeTab === "users" ? "bg-[#93c5fd] translate-x-1 translate-y-1 shadow-none" : `bg-white ${brutalShadow} ${brutalShadowHover}`
+              }`}
           >
             <Users className="w-5 h-5" /> Users ({stats.totalUsers})
           </button>
           <button
             onClick={() => setActiveTab("pages")}
-            className={`w-full flex items-center gap-3 px-4 py-3 font-black uppercase text-sm transition-all ${brutalBorder} ${
-              activeTab === "pages" ? "bg-[#ff90e8] translate-x-1 translate-y-1 shadow-none" : `bg-white ${brutalShadow} ${brutalShadowHover}`
-            }`}
+            className={`w-full flex items-center gap-3 px-4 py-3 font-black uppercase text-sm transition-all ${brutalBorder} ${activeTab === "pages" ? "bg-[#ff90e8] translate-x-1 translate-y-1 shadow-none" : `bg-white ${brutalShadow} ${brutalShadowHover}`
+              }`}
           >
             <FileText className="w-5 h-5" /> Links ({stats.totalPages})
           </button>
@@ -258,13 +273,13 @@ export default function AdminPage() {
             <div className="animate-in fade-in slide-in-from-bottom-4">
               <h2 className="text-3xl font-black uppercase tracking-tight mb-6">Platform Overview</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xl:gap-8">
-                
+
                 <div className={`bg-[#93c5fd] p-6 ${brutalBorder} ${brutalShadow} relative overflow-hidden group`}>
                   <Users className="absolute -right-4 -bottom-4 w-32 h-32 opacity-20 group-hover:scale-110 transition-transform" />
                   <p className="text-sm font-black uppercase tracking-widest relative z-10">Total Users</p>
                   <p className="text-5xl font-black mt-2 relative z-10">{stats.totalUsers}</p>
                 </div>
-                
+
                 <div className={`bg-[#ff90e8] p-6 ${brutalBorder} ${brutalShadow} relative overflow-hidden group`}>
                   <FileText className="absolute -right-4 -bottom-4 w-32 h-32 opacity-20 group-hover:scale-110 transition-transform" />
                   <p className="text-sm font-black uppercase tracking-widest relative z-10">Total Links</p>
@@ -299,9 +314,9 @@ export default function AdminPage() {
                         <p className="font-black text-lg truncate">{user.username}</p>
                         <p className="text-sm font-bold text-gray-600 truncate">{user.email}</p>
                         <div className="flex items-center gap-3 mt-1 text-xs font-bold text-gray-500">
-                           <span>{user.pageCount} Pages Created</span>
-                           <span>•</span>
-                           <span>Joined {new Date(user.createdAt).toLocaleDateString()}</span>
+                          <span>{user.pageCount} Pages Created</span>
+                          <span>•</span>
+                          <span>Joined {new Date(user.createdAt).toLocaleDateString()}</span>
                         </div>
                       </div>
                       <div className="flex gap-2">
@@ -342,39 +357,57 @@ export default function AdminPage() {
                 {pagesList.length === 0 ? (
                   <p className="text-gray-500 font-bold">No pages found.</p>
                 ) : (
-                  pagesList.map((page) => (
-                    <div key={page._id} className={`bg-white p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${brutalBorder} hover:bg-gray-50 transition-colors`}>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="bg-black text-[#fde047] text-[10px] font-black uppercase px-2 py-0.5 whitespace-nowrap">
-                            {page.content?.templateType || "Unknown"}
-                          </span>
-                          <span className="font-black truncate block">
-                            {page.content?.senderName || 'Anonymous'} → {page.content?.receiverName || 'Someone'}
-                          </span>
+                  pagesList.map((page) => {
+                    const pageImages = getValidImages(page);
+                    return (
+                      <div key={page._id} className={`bg-white p-4 flex flex-col gap-4 ${brutalBorder} hover:bg-gray-50 transition-colors`}>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="bg-black text-[#fde047] text-[10px] font-black uppercase px-2 py-0.5 whitespace-nowrap">
+                                {page.content?.templateType || "Unknown"}
+                              </span>
+                              <span className="font-black truncate block">
+                                {page.content?.senderName || 'Anonymous'} → {page.content?.receiverName || 'Someone'}
+                              </span>
+                            </div>
+                            <p className="text-sm font-bold text-gray-600 mb-1">/{page.customUrlData}</p>
+                            <p className="text-xs font-bold text-gray-500">
+                              By: {page.user?.username || page.user} • Created {new Date(page.createdAt).toLocaleDateString()}
+                            </p>
+                          </div>
+                          <div className="flex gap-2 shrink-0">
+                            <Button
+                              onClick={() => window.open(`/p/${page.customUrlData}`, "_blank")}
+                              className={`rounded-none bg-white text-black font-black uppercase tracking-wider border-2 border-black shadow-[2px_2px_0px_#000] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]`}
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              onClick={() => handleDeletePage(page._id)}
+                              variant="destructive"
+                              className={`rounded-none bg-[#ff0844] text-white font-black uppercase tracking-wider border-2 border-black shadow-[2px_2px_0px_#000] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]`}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
                         </div>
-                        <p className="text-sm font-bold text-gray-600 mb-1">/{page.customUrlData}</p>
-                        <p className="text-xs font-bold text-gray-500">
-                          By: {page.user?.username || page.user} • Created {new Date(page.createdAt).toLocaleDateString()}
-                        </p>
+
+                        {pageImages.length > 0 && (
+                          <div className="border-t-2 border-dashed border-gray-200 mt-2 pt-3">
+                            <p className="text-xs font-black uppercase tracking-widest text-gray-500 mb-2">Images ({pageImages.length})</p>
+                            <div className="flex flex-wrap gap-2">
+                              {pageImages.map((img, idx) => (
+                                <a href={img} target="_blank" rel="noreferrer" key={idx}>
+                                  <img src={img} className="w-12 h-12 sm:w-16 sm:h-16 object-cover border-2 border-black hover:scale-110 transition-transform" alt="thumbnail" />
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      <div className="flex gap-2 shrink-0">
-                        <Button
-                          onClick={() => window.open(`/p/${page.customUrlData}`, "_blank")}
-                          className={`rounded-none bg-white text-black font-black uppercase tracking-wider border-2 border-black shadow-[2px_2px_0px_#000] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]`}
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          onClick={() => handleDeletePage(page._id)}
-                          variant="destructive"
-                          className={`rounded-none bg-[#ff0844] text-white font-black uppercase tracking-wider border-2 border-black shadow-[2px_2px_0px_#000] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]`}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))
+                    )
+                  })
                 )}
               </div>
             </div>
@@ -392,16 +425,40 @@ export default function AdminPage() {
               >
                 <ArrowLeft className="w-4 h-4 mr-2" /> Back to Users
               </Button>
-              
-              <div className={`bg-[#93c5fd] p-6 mb-8 ${brutalBorder} ${brutalShadow}`}>
+
+              <div className={`bg-[#ff90e8] p-6 mb-8 ${brutalBorder} ${brutalShadow}`}>
                 <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight mb-3 bg-black text-white px-3 py-1 inline-block -rotate-1">{selectedUser.username}</h2>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="font-black uppercase text-sm w-20">Email:</span>
-                  <span className="font-bold border-l-[4px] border-black pl-3">{selectedUser.email}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-black uppercase text-sm w-20">Joined:</span>
-                  <span className="font-bold border-l-[4px] border-black pl-3">{new Date(selectedUser.createdAt).toLocaleDateString()}</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="font-black uppercase text-sm w-20">Email:</span>
+                      <span className="font-bold border-l-[4px] border-black pl-3">{selectedUser.email}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-black uppercase text-sm w-20">Joined:</span>
+                      <span className="font-bold border-l-[4px] border-black pl-3">{new Date(selectedUser.createdAt).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-4 items-center">
+                    {(() => {
+                      const userPages = pagesList.filter((page) => (page.user?._id || page.user) === selectedUser._id);
+                      const totalLinks = userPages.length;
+                      const paidLinks = userPages.filter(p => p.content?.paymentStatus === 'success').length;
+                      const totalSpent = paidLinks * 49;
+                      return (
+                        <>
+                          <div className={`bg-white ${brutalBorder} p-3 text-center shadow-[2px_2px_0_0_#000] flex-1`}>
+                            <p className="text-[10px] font-black uppercase tracking-widest border-b-2 border-black pb-1 mb-1">Total Links</p>
+                            <p className="text-xl font-black">{totalLinks}</p>
+                          </div>
+                          <div className={`bg-[#86efac] ${brutalBorder} p-3 text-center shadow-[2px_2px_0_0_#000] flex-1`}>
+                            <p className="text-[10px] font-black uppercase tracking-widest border-b-2 border-black pb-1 mb-1">Spent</p>
+                            <p className="text-xl font-black">₹{totalSpent}</p>
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
                 </div>
               </div>
 
@@ -415,39 +472,57 @@ export default function AdminPage() {
                 ) : (
                   pagesList
                     .filter((page) => (page.user?._id || page.user) === selectedUser._id)
-                    .map((page) => (
-                      <div key={page._id} className={`bg-white p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${brutalBorder} hover:bg-gray-50 transition-colors`}>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="bg-black text-[#fde047] text-[10px] font-black uppercase px-2 py-0.5 whitespace-nowrap">
-                              {page.content?.templateType || "Unknown"}
-                            </span>
-                            <span className="font-black truncate block">
-                              {page.content?.senderName || 'Anonymous'} → {page.content?.receiverName || 'Someone'}
-                            </span>
+                    .map((page) => {
+                      const pageImages = getValidImages(page);
+                      return (
+                        <div key={page._id} className={`bg-white p-4 flex flex-col gap-4 ${brutalBorder} hover:bg-gray-50 transition-colors`}>
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="bg-black text-[#fde047] text-[10px] font-black uppercase px-2 py-0.5 whitespace-nowrap">
+                                  {page.content?.templateType || "Unknown"}
+                                </span>
+                                <span className="font-black truncate block">
+                                  {page.content?.senderName || 'Anonymous'} → {page.content?.receiverName || 'Someone'}
+                                </span>
+                              </div>
+                              <p className="text-sm font-bold text-gray-600 mb-1">/{page.customUrlData}</p>
+                              <p className="text-xs font-bold text-gray-500">
+                                By: {page.user?.username || page.user} • Created {new Date(page.createdAt).toLocaleDateString()}
+                              </p>
+                            </div>
+                            <div className="flex gap-2 shrink-0">
+                              <Button
+                                onClick={() => window.open(`/p/${page.customUrlData}`, "_blank")}
+                                className={`rounded-none bg-white text-black font-black uppercase tracking-wider border-2 border-black shadow-[2px_2px_0px_#000] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]`}
+                              >
+                                <ExternalLink className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                onClick={() => handleDeletePage(page._id)}
+                                variant="destructive"
+                                className={`rounded-none bg-[#ff0844] text-white font-black uppercase tracking-wider border-2 border-black shadow-[2px_2px_0px_#000] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]`}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
                           </div>
-                          <p className="text-sm font-bold text-gray-600 mb-1">/{page.customUrlData}</p>
-                          <p className="text-xs font-bold text-gray-500">
-                            By: {page.user?.username || page.user} • Created {new Date(page.createdAt).toLocaleDateString()}
-                          </p>
+
+                          {pageImages.length > 0 && (
+                            <div className="border-t-2 border-dashed border-gray-200 mt-2 pt-3">
+                              <p className="text-xs font-black uppercase tracking-widest text-gray-500 mb-2">Images ({pageImages.length})</p>
+                              <div className="flex flex-wrap gap-2">
+                                {pageImages.map((img, idx) => (
+                                  <a href={img} target="_blank" rel="noreferrer" key={idx}>
+                                    <img src={img} className="w-12 h-12 sm:w-16 sm:h-16 object-cover border-2 border-black hover:scale-110 transition-transform" alt="thumbnail" />
+                                  </a>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
-                        <div className="flex gap-2 shrink-0">
-                          <Button
-                            onClick={() => window.open(`/p/${page.customUrlData}`, "_blank")}
-                            className={`rounded-none bg-white text-black font-black uppercase tracking-wider border-2 border-black shadow-[2px_2px_0px_#000] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]`}
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            onClick={() => handleDeletePage(page._id)}
-                            variant="destructive"
-                            className={`rounded-none bg-[#ff0844] text-white font-black uppercase tracking-wider border-2 border-black shadow-[2px_2px_0px_#000] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]`}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))
+                      )
+                    })
                 )}
               </div>
             </div>
