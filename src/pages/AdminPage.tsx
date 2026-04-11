@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Heart, Trash2, ExternalLink, LayoutDashboard, Users, FileText, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { API_BASE_URL } from "@/config";
+import { API_BASE_URL, API_BASE_URL_CANDIDATES } from "@/config";
 
 const brutalBorder = "border-[3px] border-black";
 const brutalShadow = "shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]";
@@ -14,7 +14,8 @@ const ADMIN_TOKEN_KEY = "adminToken";
 export default function AdminPage() {
   const navigate = useNavigate();
   // Tab/window close clears sessionStorage → admin must log in again next visit
-  const [token, setToken] = useState<string>(() => sessionStorage.getItem(ADMIN_TOKEN_KEY) || "");
+  // Changed to localStorage to keep admin logged in permanently
+  const [token, setToken] = useState<string>(() => localStorage.getItem(ADMIN_TOKEN_KEY) || "");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,19 +32,41 @@ export default function AdminPage() {
     setLoading(true);
     console.log('Attempting login to:', `${API_BASE_URL}/api/admin/login`);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/admin/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-      });
-      
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+      let data: any;
+      let resOk = false;
+      let resStatus = 500;
+      let resText = "Unknown error";
+
+      for (const baseUrl of API_BASE_URL_CANDIDATES) {
+        try {
+          const res = await fetch(`${baseUrl}/api/admin/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+          });
+          
+          if ((res.status === 404 || res.status === 405) && API_BASE_URL_CANDIDATES.length > 1) {
+            continue; // likely static host interception, try next
+          }
+
+          resOk = res.ok;
+          resStatus = res.status;
+          resText = res.statusText;
+          if (resOk) {
+            data = await res.json();
+            break;
+          }
+        } catch {
+          // try next on DNS failure
+        }
+      }
+
+      if (!resOk) {
+        throw new Error(`HTTP ${resStatus}: ${resText}`);
       }
       
-      const data = await res.json();
       setToken(data.token);
-      sessionStorage.setItem(ADMIN_TOKEN_KEY, data.token);
+      localStorage.setItem(ADMIN_TOKEN_KEY, data.token);
       toast.success("Logged in successfully");
     } catch (err: any) {
       console.error('Admin login error:', err);
@@ -59,7 +82,7 @@ export default function AdminPage() {
 
   const handleLogout = () => {
     setToken("");
-    sessionStorage.removeItem(ADMIN_TOKEN_KEY);
+    localStorage.removeItem(ADMIN_TOKEN_KEY);
     toast.success("Logged out");
   };
 

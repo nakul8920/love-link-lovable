@@ -33,12 +33,12 @@ const buildApiCandidates = (): string[] => {
     }
   }
 
-  // Always add Railway URLs as fallbacks
-  pushUnique("https://wishlink-express.up.railway.app");
-  pushUnique("https://love-link-lovable.up.railway.app");
+  // Always add Railway URLs as fallbacks, prioritizing newest first
   pushUnique("https://love-link-lovable-production.up.railway.app");
+  pushUnique("https://love-link-lovable.up.railway.app");
+  pushUnique("https://wishlink-express.up.railway.app");
 
-  return out.length ? out : [normalizeUrl("https://wishlink-express.up.railway.app")];
+  return out.length ? out : [normalizeUrl("https://love-link-lovable-production.up.railway.app")];
 };
 
 export const API_BASE_URL_CANDIDATES = buildApiCandidates();
