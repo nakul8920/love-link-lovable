@@ -33,10 +33,11 @@ const googleAuth = async (req, res) => {
     });
     const payload = ticket.getPayload();
     const { email, name } = payload;
-    
+
+    let isNewUser = false;
     let user = await User.findOne({ email });
     if (!user) {
-      // Create user if not exists
+      isNewUser = true;
       const baseName = name ? name.replace(/\s+/g, '').toLowerCase() : email.split('@')[0].toLowerCase();
       user = await User.create({
         username: baseName + Math.floor(Math.random() * 10000),
@@ -49,6 +50,7 @@ const googleAuth = async (req, res) => {
       username: user.username,
       email: user.email,
       token: generateToken(user._id),
+      isNewUser,
     });
   } catch (error) {
     console.error('Google Auth Error:', error);
