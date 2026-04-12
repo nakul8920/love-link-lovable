@@ -7,7 +7,7 @@
  * Frontend: leave VITE_API_URL unset so API_BASE_URL is "" (same-origin).
  */
 export const config = {
-  runtime: "nodejs" as const,
+  runtime: "nodejs",
   matcher: ["/api/:path*", "/uploads/:path*"],
 };
 
