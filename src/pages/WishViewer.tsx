@@ -3,7 +3,16 @@ import { useParams } from "react-router-dom";
 import { getPage } from "@/lib/store";
 import AnimatedTemplate from "@/components/AnimatedTemplate";
 import { API_BASE_URL } from "@/config";
+import { resolveMediaUrls, resolveSurpriseDetailsMedia } from "@/lib/mediaUrl";
 import { WishPage } from "@/types/wish";
+
+function normalizeFetchedPage(p: WishPage): WishPage {
+  return {
+    ...p,
+    imageUrls: resolveMediaUrls(p.imageUrls),
+    surpriseDetails: resolveSurpriseDetailsMedia(p.surpriseDetails),
+  };
+}
 
 const WishViewer = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -23,6 +32,11 @@ const WishViewer = () => {
         if (res.ok) {
           const data = await res.json();
           const content = data?.content || {};
+          const rawImages = Array.isArray(data?.images) ? data.images : [];
+          const fromContent = Array.isArray(content.imageUrls) ? content.imageUrls : [];
+          const merged = rawImages.length ? rawImages : fromContent;
+          const imageUrls = resolveMediaUrls(merged);
+          const surpriseDetails = resolveSurpriseDetailsMedia(content.surpriseDetails);
           setPage({
             id: data?._id || slug,
             slug: data?.customUrlData || slug,
@@ -30,21 +44,21 @@ const WishViewer = () => {
             senderName: content.senderName || "",
             receiverName: content.receiverName || "",
             message: content.message || "",
-            imageUrls: Array.isArray(data?.images) ? data.images : [],
+            imageUrls,
             createdAt: data?.createdAt || new Date().toISOString(),
             paymentStatus: content.paymentStatus || "success",
             orderId: content.orderId || "unknown",
             anniversaryDetails: content.anniversaryDetails,
-            surpriseDetails: content.surpriseDetails,
+            surpriseDetails,
           });
         } else {
           // Fallback for locally-created pages not pushed to backend.
           const localPage = getPage(slug);
-          setPage(localPage || null);
+          setPage(localPage ? normalizeFetchedPage(localPage) : null);
         }
       } catch {
         const localPage = getPage(slug);
-        setPage(localPage || null);
+        setPage(localPage ? normalizeFetchedPage(localPage) : null);
       } finally {
         setLoading(false);
       }

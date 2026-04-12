@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, User, ExternalLink, RefreshCw, Copy, Check, Heart, Sparkles, Image as ImageIcon, Flame, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { WishPage } from "@/types/wish";
 import { API_BASE_URL } from "@/config";
+import { resolveMediaUrl } from "@/lib/mediaUrl";
 
 interface UserProfile {
   username: string;
@@ -22,6 +22,7 @@ const Profile = () => {
   const [pages, setPages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
+  const [thumbFailedById, setThumbFailedById] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     fetchProfileData();
@@ -81,6 +82,29 @@ const Profile = () => {
     toast.success("Link copied to clipboard!");
     setTimeout(() => setCopiedSlug(null), 2000);
   };
+
+  const getThumbnail = useCallback((p: Record<string, unknown>) => {
+    const firstNonEmpty = (arr: unknown): string | null => {
+      if (!Array.isArray(arr)) return null;
+      const found = arr.find((img) => typeof img === "string" && img.trim() !== "");
+      return typeof found === "string" ? resolveMediaUrl(found) : null;
+    };
+    const fromRoot = firstNonEmpty(p.images as string[]);
+    if (fromRoot) return fromRoot;
+    const content = p.content as Record<string, unknown> | undefined;
+    if (content?.imageUrls) {
+      const u = firstNonEmpty(content.imageUrls as string[]);
+      if (u) return u;
+    }
+    const surprise = content?.surpriseDetails as { sections?: { images?: string[] }[] } | undefined;
+    if (surprise?.sections) {
+      for (const section of surprise.sections) {
+        const u = firstNonEmpty(section.images);
+        if (u) return u;
+      }
+    }
+    return null;
+  }, []);
 
   if (loading) {
     return (
@@ -190,26 +214,9 @@ const Profile = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8 mt-4 sm:mt-6 lg:mt-0">
             {pages.map((page) => {
-              const getThumbnail = (p: any) => {
-                if (p.images && Array.isArray(p.images)) {
-                  const found = p.images.find((img: string) => img && img.trim() !== "");
-                  if (found) return found;
-                }
-                if (p.content?.imageUrls && Array.isArray(p.content.imageUrls)) {
-                  const found = p.content.imageUrls.find((img: string) => img && img.trim() !== "");
-                  if (found) return found;
-                }
-                if (p.content?.surpriseDetails?.sections) {
-                  for (const section of p.content.surpriseDetails.sections) {
-                    if (section.images && Array.isArray(section.images)) {
-                      const found = section.images.find((img: string) => img && img.trim() !== "");
-                      if (found) return found;
-                    }
-                  }
-                }
-                return null;
-              };
               const thumbnail = getThumbnail(page);
+              const pageId = String(page._id);
+              const showThumb = Boolean(thumbnail) && !thumbFailedById[pageId];
 
               const isPaid = page.content?.paymentStatus === 'success';
 
@@ -217,8 +224,18 @@ const Profile = () => {
                 <div key={page._id} className={`bg-white ${brutalBorder} ${brutalShadow} transition-all duration-300 flex flex-col group`}>
                   {/* Card Image Area */}
                   <div className={`h-20 sm:h-32 lg:h-48 relative overflow-hidden w-full ${brutalBorder} border-t-0 border-l-0 border-r-0`}>
-                    {thumbnail ? (
-                      <img src={thumbnail} alt="Thumbnail" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    {showThumb ? (
+                      <img
+                        src={thumbnail!}
+                        alt="Thumbnail"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        loading="lazy"
+                        decoding="async"
+                        referrerPolicy="no-referrer"
+                        onError={() =>
+                          setThumbFailedById((prev) => ({ ...prev, [pageId]: true }))
+                        }
+                      />
                     ) : (
                       <div className="w-full h-full bg-[#c4b5fd] flex items-center justify-center">
                         <ImageIcon className="w-6 h-6 sm:w-10 sm:h-12 lg:w-16 lg:h-16 text-black opacity-30" />
@@ -254,7 +271,9 @@ const Profile = () => {
                     <div className="flex flex-col xl:flex-row items-stretch xl:items-center gap-1.5 sm:gap-2 lg:gap-4 mt-auto">
                       <Button
                         className={`flex-1 h-6 sm:h-10 lg:h-12 bg-white text-black font-black uppercase tracking-tight sm:tracking-widest rounded-none border-[1.5px] sm:border-[2px] lg:${brutalBorder} hover:bg-[#86efac] transition-colors p-0 sm:px-4 text-[8px] sm:text-xs lg:text-sm`}
-                        onClick={() => window.open(`/p/${page.customUrlData}`, "_blank")}
+                        onClick={() =>
+                          window.open(`${window.location.origin}/p/${page.customUrlData}`, "_blank", "noopener,noreferrer")
+                        }
                       >
                         <ExternalLink className="w-2.5 h-2.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 mr-1 sm:mr-2" /> View
                       </Button>

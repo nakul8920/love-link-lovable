@@ -123,6 +123,23 @@ const CreatePage = () => {
         ? uploadedImageUrls 
         : imagesToUpload.map((f) => f ? URL.createObjectURL(f) : "");
 
+      const hasBlob = (urls: string[]) => urls.some((s) => typeof s === "string" && s.startsWith("blob:"));
+      if (hasBlob(finalImages)) {
+        toast.error("Photos are still uploading. Wait a few seconds and tap Publish again.");
+        setProcessing(false);
+        return;
+      }
+      if (templateType === "surprise") {
+        const blobInSurprise = surpriseDetails.sections?.some((s) =>
+          s.images?.some((img) => typeof img === "string" && img.startsWith("blob:"))
+        );
+        if (blobInSurprise) {
+          toast.error("Photos are still uploading. Wait a few seconds and tap Publish again.");
+          setProcessing(false);
+          return;
+        }
+      }
+
       const pageData = {
         id: slug,
         slug,
