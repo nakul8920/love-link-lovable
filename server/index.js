@@ -22,21 +22,52 @@ connectDB();
 
 const app = express();
 
-// Middleware
-app.use(cors({
-  origin: [
-    'https://love-link-lovable.vercel.app',
-    'https://love-link-creator.vercel.app',
-    'https://love-link-lovable-production.up.railway.app',
-    'https://love-link-lovable.up.railway.app',
-    'https://wishlink-express.up.railway.app',
-    'http://localhost:5173',
-    'http://localhost:8080',
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+const parseOriginList = (value) =>
+  (value || '')
+    .split(',')
+    .map((s) => s.trim().replace(/\/$/, ''))
+    .filter(Boolean);
+
+const defaultAllowedOrigins = [
+  'https://love-link-lovable.vercel.app',
+  'https://love-link-creator.vercel.app',
+  'https://love-link-lovable-production.up.railway.app',
+  'https://love-link-lovable.up.railway.app',
+  'https://wishlink-express.up.railway.app',
+  'http://localhost:5173',
+  'http://localhost:8080',
+];
+
+const extraFromEnv = [
+  ...parseOriginList(process.env.ALLOWED_ORIGINS),
+  ...parseOriginList(process.env.FRONTEND_URL),
+  ...parseOriginList(process.env.CLIENT_URL),
+  ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL}`] : []),
+];
+
+const allowedOrigins = new Set([...defaultAllowedOrigins, ...extraFromEnv]);
+const corsAllowAny = process.env.CORS_ALLOW_ANY === 'true' || process.env.CORS_ALLOW_ANY === '1';
+
+// Middleware — add your live site URL via FRONTEND_URL or ALLOWED_ORIGINS on the server (comma-separated).
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin) {
+        return callback(null, true);
+      }
+      if (corsAllowAny || allowedOrigins.has(origin)) {
+        return callback(null, true);
+      }
+      console.warn(
+        `[CORS] Blocked origin: ${origin}. Set FRONTEND_URL or ALLOWED_ORIGINS (or CORS_ALLOW_ANY=true for testing only).`
+      );
+      return callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
 
 // COOP header bhi add kar (Google Login fix)
 app.use((req, res, next) => {

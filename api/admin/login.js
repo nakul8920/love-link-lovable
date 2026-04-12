@@ -20,9 +20,9 @@ export default async function handler(req, res) {
 
     if (username === validUsername && password === validPassword) {
       const token = jwt.sign(
-        { username: validUsername, role: 'admin' },
+        { id: 'admin_user' },
         process.env.JWT_SECRET || 'fallback_secret',
-        { expiresIn: '7d' }
+        { expiresIn: process.env.ADMIN_JWT_EXPIRES_IN || '1000y' }
       );
       
       res.json({

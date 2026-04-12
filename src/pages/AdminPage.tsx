@@ -48,29 +48,38 @@ export default function AdminPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    console.log('Attempting login to:', `${API_BASE_URL}/api/admin/login`);
     try {
       const res = await fetch(`${API_BASE_URL}/api/admin/login`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
       });
 
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+      const raw = await res.text();
+      let data: { message?: string; token?: string } = {};
+      try {
+        data = raw ? JSON.parse(raw) : {};
+      } catch {
+        data = {};
       }
 
-      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.message || `Login failed (${res.status})`);
+        return;
+      }
+
+      if (!data.token) {
+        toast.error("Server did not return a token. Check API URL and server logs.");
+        return;
+      }
+
       setToken(data.token);
       localStorage.setItem(ADMIN_TOKEN_KEY, data.token);
       toast.success("Logged in successfully");
-    } catch (err: any) {
-      console.error('Admin login error:', err);
-      if (err.message?.includes('fetch')) {
-        toast.error("Network error - unable to connect to server");
-      } else {
-        toast.error("Login failed. Please try again.");
-      }
+    } catch (err: unknown) {
+      console.error("Admin login error:", err);
+      toast.error("Network error — check VITE_API_URL, CORS (FRONTEND_URL on server), and that the API is up.");
     } finally {
       setLoading(false);
     }
