@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Heart, ArrowRight, Sparkles, Gift, Star, Zap, Camera, MoveRight, Flame, PlayCircle, Palette, Menu, X, UserRound, LogOut } from "lucide-react";
+import { Heart, ArrowRight, Sparkles, Gift, Star, Zap, Camera, MoveRight, Flame, PlayCircle, Palette, Menu, X, UserRound, LogOut, MessageSquareHeart, Send } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
@@ -565,6 +565,88 @@ const LandingPage = () => {
               >
                 CREATE NOW
               </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* Feedback — below viral CTA */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 mb-16 sm:mb-20 mt-10 sm:mt-14" aria-labelledby="home-feedback-heading">
+          <div className={`relative ${brutalBorder} ${brutalShadow} bg-white overflow-hidden`}>
+            <div
+              className="absolute inset-0 opacity-[0.07] pointer-events-none"
+              style={{
+                backgroundImage: "radial-gradient(#000 1px, transparent 1px)",
+                backgroundSize: "24px 24px",
+              }}
+              aria-hidden="true"
+            />
+            <div
+              className="h-2 sm:h-2.5 w-full bg-gradient-to-r from-[#ff90e8] via-[#c4b5fd] to-[#86efac]"
+              aria-hidden="true"
+            />
+
+            <div className="relative p-6 sm:p-10 md:p-12 flex flex-col lg:flex-row lg:items-stretch gap-8 lg:gap-12">
+              <div className="flex-1 min-w-0 flex flex-col justify-center">
+                <div className={`inline-flex items-center gap-2 px-3 py-1.5 bg-[#c4b5fd] ${brutalBorder} w-fit mb-4 shadow-[3px_3px_0px_#000]`}>
+                  <MessageSquareHeart className="w-4 h-4 shrink-0" strokeWidth={2.5} />
+                  <span className="font-black uppercase tracking-widest text-[10px] sm:text-xs">We read every message</span>
+                </div>
+
+                <h2
+                  id="home-feedback-heading"
+                  className="text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tighter leading-[0.95] mb-4 sm:[text-shadow:4px_4px_0_#ff90e8]"
+                >
+                  Love it? Hate a bug?
+                  <span className="block mt-1 sm:mt-2 text-[#ff0844]">Tell the team.</span>
+                </h2>
+
+                <p className="text-sm sm:text-base md:text-lg font-bold text-black/80 max-w-xl mb-6 leading-relaxed">
+                  Share ideas, report issues, or send a quick note — add screenshots if that helps. Your feedback shapes what we build next.
+                </p>
+
+                <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+                  <Button
+                    asChild
+                    size="lg"
+                    className={`h-12 sm:h-14 px-6 sm:px-8 bg-black text-white text-sm sm:text-base font-black uppercase tracking-widest rounded-none ${brutalBorder} ${brutalShadow} ${brutalShadowHover} hover:bg-[#ff0844]`}
+                  >
+                    <Link to="/feedback" className="inline-flex items-center justify-center gap-2">
+                      <Send className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
+                      Send feedback
+                    </Link>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="lg"
+                    className={`h-12 sm:h-14 px-6 sm:px-8 rounded-none ${brutalBorder} font-black uppercase tracking-widest bg-white hover:bg-[#fde047]`}
+                  >
+                    <Link to="/support">Need help instead?</Link>
+                  </Button>
+                </div>
+              </div>
+
+              <div className="lg:w-[min(100%,320px)] shrink-0 flex flex-col gap-3">
+                <p className="font-black uppercase tracking-widest text-[10px] text-black/50 lg:text-right">What you can send</p>
+                {[
+                  { icon: MessageSquareHeart, label: "Honest thoughts & feature ideas", bg: "bg-[#ff90e8]" },
+                  { icon: Camera, label: "Screenshots & photos (optional)", bg: "bg-[#fde047]" },
+                  { icon: Sparkles, label: "Straight to our product inbox", bg: "bg-[#86efac]" },
+                ].map((row) => {
+                  const Icon = row.icon;
+                  return (
+                    <div
+                      key={row.label}
+                      className={`flex items-center gap-3 p-4 ${brutalBorder} ${row.bg} shadow-[4px_4px_0px_#000]`}
+                    >
+                      <div className={`w-10 h-10 shrink-0 bg-white ${brutalBorder} flex items-center justify-center`}>
+                        <Icon className="w-5 h-5 text-black" strokeWidth={2.25} />
+                      </div>
+                      <span className="font-bold text-sm sm:text-base leading-tight">{row.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>
