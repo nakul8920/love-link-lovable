@@ -12,7 +12,7 @@ const normalizeUrl = (value: string) => {
 const getBaseUrl = () => {
   if (import.meta.env.DEV) return "http://localhost:5000";
   if (configuredApiUrl) return normalizeUrl(configuredApiUrl);
-  return "https://wishlink-express.up.railway.app";
+  return "https://love-link-lovable-production.up.railway.app";
 };
 
 export const API_BASE_URL = getBaseUrl();
