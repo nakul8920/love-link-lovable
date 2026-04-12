@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Page = require('../models/Page');
+const Feedback = require('../models/Feedback');
 const { generateAdminToken } = require('../utils/generateToken');
 
 // @desc    Admin login
@@ -37,7 +38,8 @@ const getStats = async (req, res) => {
   try {
     const totalUsers = await User.countDocuments({});
     const totalPages = await Page.countDocuments({});
-    
+    const totalFeedback = await Feedback.countDocuments({});
+
     // Revenue estimation logic based on total pages * 49 INR
     const totalRevenue = totalPages * 49;
 
@@ -45,6 +47,7 @@ const getStats = async (req, res) => {
       totalUsers,
       totalPages,
       totalRevenue,
+      totalFeedback,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -664,6 +664,14 @@ const LandingPage = () => {
                         Support
                       </Link>
                     </li>
+                    <li>
+                      <Link
+                        className="text-black font-medium hover:text-[#fde047] transition-colors text-xs sm:text-sm underline underline-offset-2"
+                        to="/feedback"
+                      >
+                        Feedback
+                      </Link>
+                    </li>
                   </ul>
                 </div>
               </div>

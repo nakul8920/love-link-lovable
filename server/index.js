@@ -14,6 +14,7 @@ const pageRoutes = require('./routes/pageRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const supportRoutes = require('./routes/supportRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes');
 
 
 // Connect to database
@@ -92,6 +93,7 @@ app.use('/api/page', pageRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/support', supportRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 const PORT = process.env.PORT || 5000;
 

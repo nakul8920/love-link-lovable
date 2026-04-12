@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Heart, Trash2, ExternalLink, LayoutDashboard, Users, FileText, LogOut } from "lucide-react";
+import { ArrowLeft, Heart, Trash2, ExternalLink, LayoutDashboard, Users, FileText, LogOut, MessageSquareHeart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { API_BASE_URL } from "@/config";
@@ -29,6 +29,11 @@ const brutalShadowHover = "hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:tr
 
 const ADMIN_TOKEN_KEY = "adminToken";
 
+function feedbackImageSrc(url: string) {
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  return `${API_BASE_URL}${url.startsWith("/") ? "" : "/"}${url}`;
+}
+
 export default function AdminPage() {
   const navigate = useNavigate();
   // Tab/window close clears sessionStorage → admin must log in again next visit
@@ -38,12 +43,13 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [activeTab, setActiveTab] = useState<"dashboard" | "users" | "pages" | "user_profile">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "users" | "pages" | "feedback" | "user_profile">("dashboard");
   const [selectedUser, setSelectedUser] = useState<any | null>(null);
 
-  const [stats, setStats] = useState({ totalUsers: 0, totalPages: 0, totalRevenue: 0 });
+  const [stats, setStats] = useState({ totalUsers: 0, totalPages: 0, totalRevenue: 0, totalFeedback: 0 });
   const [usersList, setUsersList] = useState<any[]>([]);
   const [pagesList, setPagesList] = useState<any[]>([]);
+  const [feedbackList, setFeedbackList] = useState<any[]>([]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,6 +136,17 @@ export default function AdminPage() {
     }
   };
 
+  const fetchFeedback = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/admin/feedback`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) setFeedbackList(await res.json());
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleDeleteUser = async (id: string) => {
     if (!window.confirm("Are you sure? This deletes the user and all their pages.")) return;
     try {
@@ -143,6 +160,25 @@ export default function AdminPage() {
         fetchStats();
       } else {
         toast.error("Failed to delete user");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDeleteFeedback = async (id: string) => {
+    if (!window.confirm("Delete this feedback entry?")) return;
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/admin/feedback/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        toast.success("Feedback removed");
+        fetchFeedback();
+        fetchStats();
+      } else {
+        toast.error("Failed to delete");
       }
     } catch (err) {
       console.error(err);
@@ -173,6 +209,7 @@ export default function AdminPage() {
       fetchStats();
       fetchUsers();
       fetchPages();
+      fetchFeedback();
     }
   }, [token]);
 
@@ -274,6 +311,13 @@ export default function AdminPage() {
           >
             <FileText className="w-5 h-5" /> Links ({stats.totalPages})
           </button>
+          <button
+            onClick={() => setActiveTab("feedback")}
+            className={`w-full flex items-center gap-3 px-4 py-3 font-black uppercase text-sm transition-all ${brutalBorder} ${activeTab === "feedback" ? "bg-[#86efac] translate-x-1 translate-y-1 shadow-none" : `bg-white ${brutalShadow} ${brutalShadowHover}`
+              }`}
+          >
+            <MessageSquareHeart className="w-5 h-5" /> Feedback ({stats.totalFeedback ?? feedbackList.length})
+          </button>
         </div>
 
         {/* Content Area */}
@@ -281,7 +325,7 @@ export default function AdminPage() {
           {activeTab === "dashboard" && (
             <div className="animate-in fade-in slide-in-from-bottom-4">
               <h2 className="text-3xl font-black uppercase tracking-tight mb-6">Platform Overview</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xl:gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 xl:gap-6">
 
                 <div className={`bg-[#93c5fd] p-6 ${brutalBorder} ${brutalShadow} relative overflow-hidden group`}>
                   <Users className="absolute -right-4 -bottom-4 w-32 h-32 opacity-20 group-hover:scale-110 transition-transform" />
@@ -299,6 +343,12 @@ export default function AdminPage() {
                   <span className="absolute -right-4 -bottom-8 text-9xl opacity-20 font-black group-hover:scale-110 transition-transform">₹</span>
                   <p className="text-sm font-black uppercase tracking-widest relative z-10">Est. Revenue</p>
                   <p className="text-5xl font-black mt-2 relative z-10">₹{stats.totalRevenue}</p>
+                </div>
+
+                <div className={`bg-[#fde047] p-6 ${brutalBorder} ${brutalShadow} relative overflow-hidden group`}>
+                  <MessageSquareHeart className="absolute -right-4 -bottom-4 w-32 h-32 opacity-20 group-hover:scale-110 transition-transform" />
+                  <p className="text-sm font-black uppercase tracking-widest relative z-10">Feedback</p>
+                  <p className="text-5xl font-black mt-2 relative z-10">{stats.totalFeedback ?? 0}</p>
                 </div>
 
               </div>
@@ -349,6 +399,86 @@ export default function AdminPage() {
                       </div>
                     </div>
                   ))
+                )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "feedback" && (
+            <div className="animate-in fade-in slide-in-from-bottom-4">
+              <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
+                <h2 className="text-3xl font-black uppercase tracking-tight">User feedback</h2>
+                <div className="bg-[#fde047] text-black px-3 py-1 font-black text-xs uppercase border-2 border-black">
+                  {feedbackList.length} entries
+                </div>
+              </div>
+              <div className="space-y-4">
+                {feedbackList.length === 0 ? (
+                  <p className="text-gray-500 font-bold">No feedback yet.</p>
+                ) : (
+                  feedbackList.map((fb) => {
+                    const imgs: string[] = Array.isArray(fb.images) ? fb.images.filter(Boolean) : [];
+                    const u = fb.user;
+                    return (
+                      <div key={fb._id} className={`bg-white p-4 sm:p-6 ${brutalBorder} hover:bg-gray-50 transition-colors`}>
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+                          <div className="min-w-0 space-y-1">
+                            <p className="text-xs font-black uppercase tracking-widest text-gray-500">
+                              {new Date(fb.createdAt).toLocaleString()}
+                            </p>
+                            <p className="font-black text-lg">
+                              {fb.name?.trim() || "Anonymous"}
+                              {fb.email?.trim() ? (
+                                <span className="font-bold text-sm text-gray-600 block sm:inline sm:ml-2">
+                                  · {fb.email.trim()}
+                                </span>
+                              ) : null}
+                            </p>
+                            {u && (
+                              <p className="text-sm font-bold text-gray-600">
+                                Account: {u.username || "—"} {u.email ? `(${u.email})` : ""}
+                              </p>
+                            )}
+                          </div>
+                          <Button
+                            onClick={() => handleDeleteFeedback(fb._id)}
+                            variant="destructive"
+                            size="sm"
+                            className={`rounded-none bg-[#ff0844] text-white font-black uppercase tracking-wider border-2 border-black shadow-[2px_2px_0px_#000] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] shrink-0`}
+                          >
+                            <Trash2 className="w-4 h-4 mr-1" /> Remove
+                          </Button>
+                        </div>
+                        <div className={`border-l-4 border-black pl-4 py-1 mb-4 bg-[#FFFDF7]`}>
+                          <p className="text-sm sm:text-base font-bold whitespace-pre-wrap break-words">{fb.message}</p>
+                        </div>
+                        {imgs.length > 0 && (
+                          <div className="border-t-2 border-dashed border-gray-200 pt-4">
+                            <p className="text-xs font-black uppercase tracking-widest text-gray-500 mb-2">
+                              Images ({imgs.length})
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                              {imgs.map((img: string, idx: number) => (
+                                <a
+                                  key={idx}
+                                  href={feedbackImageSrc(img)}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="block"
+                                >
+                                  <img
+                                    src={feedbackImageSrc(img)}
+                                    alt=""
+                                    className="w-20 h-20 sm:w-28 sm:h-28 object-cover border-2 border-black hover:opacity-90 transition-opacity"
+                                  />
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })
                 )}
               </div>
             </div>

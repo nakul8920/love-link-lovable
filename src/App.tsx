@@ -13,6 +13,7 @@ import Login from "./pages/auth/Login.tsx";
 
 import Profile from "./pages/Profile.tsx";
 import SupportPage from "./pages/SupportPage.tsx";
+import FeedbackPage from "./pages/FeedbackPage.tsx";
 import RequireAuth from "@/components/RequireAuth";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => {
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/support" element={<SupportPage />} />
+          <Route path="/feedback" element={<FeedbackPage />} />
 
           <Route
             path="/create"

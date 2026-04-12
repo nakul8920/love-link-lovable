@@ -41,6 +41,26 @@ const protect = async (req, res, next) => {
   }
 };
 
+/** Sets req.user when a valid user JWT is present; otherwise continues (for optional public flows). */
+const optionalUser = async (req, res, next) => {
+  if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer')) {
+    return next();
+  }
+  const token = req.headers.authorization.split(' ')[1];
+  if (!token) return next();
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret');
+    if (decoded.id === 'admin_user') {
+      return next();
+    }
+    const user = await User.findById(decoded.id).select('-password');
+    if (user) req.user = user;
+  } catch {
+    /* anonymous feedback */
+  }
+  next();
+};
+
 const adminProtect = async (req, res, next) => {
   if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer')) {
     return res.status(401).json({ message: 'Not authorized, no token' });
@@ -60,4 +80,4 @@ const adminProtect = async (req, res, next) => {
   }
 };
 
-module.exports = { protect, adminProtect };
+module.exports = { protect, adminProtect, optionalUser };
