@@ -95,6 +95,9 @@ app.use('/api/support', supportRoutes);
 
 const PORT = process.env.PORT || 5000;
 
+// Bind 0.0.0.0 so Railway / Docker can route to the container (not just localhost).
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+  console.log(
+    `Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`
+  );
 });
