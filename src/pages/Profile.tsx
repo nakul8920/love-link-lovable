@@ -231,7 +231,6 @@ const Profile = () => {
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         loading="lazy"
                         decoding="async"
-                        referrerPolicy="no-referrer"
                         onError={() =>
                           setThumbFailedById((prev) => ({ ...prev, [pageId]: true }))
                         }

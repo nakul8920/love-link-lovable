@@ -4,7 +4,20 @@ import { getPage } from "@/lib/store";
 import AnimatedTemplate from "@/components/AnimatedTemplate";
 import { API_BASE_URL } from "@/config";
 import { resolveMediaUrls, resolveSurpriseDetailsMedia } from "@/lib/mediaUrl";
-import { WishPage } from "@/types/wish";
+import { WishPage, type SurpriseDetails } from "@/types/wish";
+
+function coerceSurpriseDetails(raw: unknown): SurpriseDetails | undefined {
+  if (raw == null) return undefined;
+  if (typeof raw === "string") {
+    try {
+      return JSON.parse(raw) as SurpriseDetails;
+    } catch {
+      return undefined;
+    }
+  }
+  if (typeof raw === "object") return raw as SurpriseDetails;
+  return undefined;
+}
 
 function normalizeFetchedPage(p: WishPage): WishPage {
   return {
@@ -36,7 +49,7 @@ const WishViewer = () => {
           const fromContent = Array.isArray(content.imageUrls) ? content.imageUrls : [];
           const merged = rawImages.length ? rawImages : fromContent;
           const imageUrls = resolveMediaUrls(merged);
-          const surpriseDetails = resolveSurpriseDetailsMedia(content.surpriseDetails);
+          const surpriseDetails = resolveSurpriseDetailsMedia(coerceSurpriseDetails(content.surpriseDetails));
           setPage({
             id: data?._id || slug,
             slug: data?.customUrlData || slug,

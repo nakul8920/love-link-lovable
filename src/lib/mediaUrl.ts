@@ -8,15 +8,20 @@ import type { SurpriseDetails } from "@/types/wish";
  */
 export function resolveMediaUrl(url: string | undefined | null): string {
   if (url == null || typeof url !== "string") return "";
-  const u = url.trim();
+  let u = url.trim();
   if (!u) return "";
   if (u.startsWith("blob:") || u.startsWith("data:")) return u;
+
+  // DB sometimes stores without leading slash
+  if (u.startsWith("uploads/")) u = `/${u}`;
 
   const uploadsIdx = u.indexOf("/uploads/");
   if (uploadsIdx !== -1) {
     const pathAndQuery = u.slice(uploadsIdx);
     const base = API_BASE_URL.replace(/\/$/, "");
-    return base ? `${base}${pathAndQuery}` : pathAndQuery;
+    // Production same-origin (Vercel → proxied /uploads): relative path avoids wrong host.
+    if (!base) return pathAndQuery;
+    return `${base}${pathAndQuery}`;
   }
 
   return u;

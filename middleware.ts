@@ -5,9 +5,10 @@
  * Vercel → Settings → Environment Variables:
  *   RAILWAY_API_BASE_URL = https://YOUR-SERVICE.up.railway.app  (no trailing slash)
  * Frontend: leave VITE_API_URL unset so API_BASE_URL is "" (same-origin).
+ *
+ * Edge runtime only (do not set runtime: "nodejs" — that can break middleware on Vercel).
  */
 export const config = {
-  runtime: "nodejs",
   matcher: ["/api/:path*", "/uploads/:path*"],
 };
 
@@ -51,6 +52,13 @@ export default async function middleware(request: Request): Promise<Response> {
     if (HOP_BY_HOP.has(k) || k === "host") return;
     headers.set(key, value);
   });
+
+  // So Railway can rewrite /uploads URLs to the same host the user opened (e.g. Vercel),
+  // not the raw *.up.railway.app host — fixes broken images & profile thumbnails after deploy.
+  const incomingHost = request.headers.get("host") || src.host;
+  const incomingProto = (src.protocol || "https:").replace(/:$/, "");
+  headers.set("X-Forwarded-Host", incomingHost);
+  headers.set("X-Forwarded-Proto", incomingProto);
 
   const method = request.method;
   const hasBody = method !== "GET" && method !== "HEAD";

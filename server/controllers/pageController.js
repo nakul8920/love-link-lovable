@@ -1,4 +1,5 @@
 const Page = require('../models/Page');
+const { getPublicAssetBase, normalizePageForResponse } = require('../utils/mediaUrls');
 
 // @desc    Create or update user page configuration
 // @route   POST /api/page
@@ -19,7 +20,7 @@ const createOrUpdatePage = async (req, res) => {
       page.images = images || page.images;
 
       const updatedPage = await page.save();
-      res.json(updatedPage);
+      res.json(normalizePageForResponse(updatedPage, getPublicAssetBase(req)));
     } else {
       // Create new page
       page = new Page({
@@ -30,7 +31,7 @@ const createOrUpdatePage = async (req, res) => {
       });
 
       const createdPage = await page.save();
-      res.status(201).json(createdPage);
+      res.status(201).json(normalizePageForResponse(createdPage, getPublicAssetBase(req)));
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -45,7 +46,7 @@ const getPageByUrl = async (req, res) => {
     const page = await Page.findOne({ customUrlData: req.params.customUrlData }).populate('user', 'username');
 
     if (page) {
-      res.json(page);
+      res.json(normalizePageForResponse(page, getPublicAssetBase(req)));
     } else {
       res.status(404).json({ message: 'Page not found' });
     }
@@ -60,7 +61,8 @@ const getPageByUrl = async (req, res) => {
 const getUserPages = async (req, res) => {
   try {
     const pages = await Page.find({ user: req.user._id }).sort({ createdAt: -1 });
-    res.json(pages);
+    const base = getPublicAssetBase(req);
+    res.json(pages.map((p) => normalizePageForResponse(p, base)));
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

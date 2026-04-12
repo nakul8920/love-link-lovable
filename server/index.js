@@ -23,6 +23,9 @@ connectDB();
 
 const app = express();
 
+// Respect X-Forwarded-* when behind Vercel / Railway proxy (used for public image URLs in API JSON).
+app.set('trust proxy', 1);
+
 const parseOriginList = (value) =>
   (value || '')
     .split(',')
