@@ -225,7 +225,7 @@ const CreatePage = () => {
               
               <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 mb-8 md:mb-12 bg-white border-[4px] md:border-[6px] border-black px-6 md:px-10 py-4 md:py-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] md:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] -rotate-1 tracking-widest text-center mx-4">
                  <span className="text-2xl md:text-4xl font-bold uppercase">PAY</span>
-                 <span className="text-4xl md:text-6xl font-black bg-black text-white px-4 md:px-6 py-2">₹49</span>
+                 <span className="text-4xl md:text-6xl font-black bg-black text-white px-4 md:px-6 py-2">₹ 0</span>
                  <span className="text-2xl md:text-4xl font-bold uppercase">TO PUBLISH.</span>
               </div>
 
