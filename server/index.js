@@ -34,7 +34,7 @@ const parseOriginList = (value) =>
 
 const defaultAllowedOrigins = [
   'https://love-link-lovable.vercel.app',
-  'https://love-link-creator.vercel.app',
+  'https://lovelinkcreator.vercel.app',
   'https://love-link-lovable-production.up.railway.app',
   'https://love-link-lovable.up.railway.app',
   'https://wishlink-express.up.railway.app',
